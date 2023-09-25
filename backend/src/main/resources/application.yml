@@ -1,6 +1,8 @@
 spring:
   profiles:
     active: local
+  main:
+    allow-bean-definition-overriding: true
 
 # 로그 레벨 설정
 logging:
