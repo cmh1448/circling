@@ -8,7 +8,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableAsync
 public class CircleApplication {
 
-
 	public static void main(String[] args) {
 		SpringApplication.run(CircleApplication.class, args);
 	}
