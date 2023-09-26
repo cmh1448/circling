@@ -33,7 +33,7 @@ input:focus {
 }
 
 .apply-scrollbar::-webkit-scrollbar-thumb {
-    background-color: theme(colors.gray.300);
+    background-color: #d1d5db;
     background-clip: content-box;
 
     border: solid 4px transparent;
@@ -42,7 +42,7 @@ input:focus {
 
 .apply-scrollbar::-webkit-scrollbar-thumb:hover,
 .apply-scrollbar::-webkit-scrollbar-thumb:active {
-    background-color: theme(colors.gray.400);
+    background-color: #9ca3af;
 }
 
 .apply-scrollbar::-webkit-scrollbar-corner {
