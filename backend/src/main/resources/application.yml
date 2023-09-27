@@ -13,7 +13,7 @@ logging:
 server:
   port: 8080
   servlet:
-    context-path: '/circle'
+    context-path: '/circling'
 
 jwt:
   token:

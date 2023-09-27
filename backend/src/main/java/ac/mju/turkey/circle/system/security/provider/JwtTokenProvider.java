@@ -3,6 +3,7 @@ package ac.mju.turkey.circle.system.security.provider;
 import ac.mju.turkey.circle.system.exception.model.ErrorCode;
 import ac.mju.turkey.circle.system.exception.model.RestException;
 import ac.mju.turkey.circle.system.security.model.CircleUserDetails;
+import ac.mju.turkey.circle.system.security.service.UserLoadService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
@@ -27,21 +28,17 @@ import java.util.Date;
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {
-
-    private static Key secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final UserLoadService userLoadService;
+    private static final Key secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     @Value("${jwt.token.expire-hours}")
     private long expire_hours;
 
     public String generateToken(CircleUserDetails userDetails) {
-        ObjectMapper mapper = new ObjectMapper();
         Claims claims = null;
 
-        try {
-            claims = Jwts.claims().setSubject(mapper.writeValueAsString(userDetails));
-        } catch (JsonProcessingException e) {
-            throw new RestException(ErrorCode.AUTH_CANNOT_GENERATE_TOKEN);
-        }
+        claims = Jwts.claims().setSubject(userDetails.getEmail());
+
 
         Date expiresIn = Date.from(LocalDateTime.now().plusHours(expire_hours).atZone(ZoneId.systemDefault()).toInstant());
 
@@ -54,16 +51,13 @@ public class JwtTokenProvider {
     }
 
     public Authentication getAuthentication(String token) {
-        String json = Jwts.parserBuilder().setSigningKey(secretKey).build()
+        String email = Jwts.parserBuilder().setSigningKey(secretKey).build()
                 .parseClaimsJws(token).getBody().getSubject();
 
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            CircleUserDetails user = mapper.readValue(json, CircleUserDetails.class);
-            return new UsernamePasswordAuthenticationToken(user, "", Collections.singletonList(new SimpleGrantedAuthority("User")));
-        } catch (JsonProcessingException e) {
-            throw new RestException(ErrorCode.AUTH_TOKEN_INVALID);
-        }
+        CircleUserDetails user = userLoadService.loadUserByEmail(email);
+
+        return new UsernamePasswordAuthenticationToken(user, "", Collections.singletonList(new SimpleGrantedAuthority("User")));
+
     }
 
     public String resolveToken(HttpServletRequest req) {

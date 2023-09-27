@@ -31,7 +31,7 @@ public class AuthService {
 
         String token = jwtTokenProvider.generateToken(CircleUserDetails.from(found));
 
-        return AuthDto.TokenResponse.of(token, LocalDateTime.now().plusDays(1));
+        return AuthDto.TokenResponse.of(token, found, LocalDateTime.now().plusDays(1));
     }
 
     @Transactional

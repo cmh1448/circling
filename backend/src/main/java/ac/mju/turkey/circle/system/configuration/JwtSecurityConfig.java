@@ -16,8 +16,8 @@ public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurity
         JwtTokenFilter jwtTokenFilter = new JwtTokenFilter(jwtTokenProvider);
 
         jwtTokenFilter
-                .ignorePattern("/circle/api/auth/sign-in")
-                .ignorePattern("/circle/api/auth/sign-up");
+                .ignorePattern("/api/auth/sign-in")
+                .ignorePattern("/api/auth/sign-up");
 
         builder.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }

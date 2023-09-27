@@ -1,5 +1,6 @@
 package ac.mju.turkey.circle.domain.auth.dto;
 
+import ac.mju.turkey.circle.domain.user.dto.UserDto;
 import ac.mju.turkey.circle.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -50,11 +51,13 @@ public class AuthDto {
     @Data
     @Builder
     public static class TokenResponse {
+        private UserDto.UserResponse user;
         private String token;
         private LocalDateTime expireAt;
 
-        public static TokenResponse of(String token, LocalDateTime expireAt) {
+        public static TokenResponse of(String token, User user, LocalDateTime expireAt) {
             return TokenResponse.builder()
+                    .user(UserDto.UserResponse.from(user))
                     .token(token)
                     .expireAt(expireAt)
                     .build();

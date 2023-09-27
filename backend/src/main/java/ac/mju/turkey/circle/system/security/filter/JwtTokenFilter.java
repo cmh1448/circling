@@ -30,10 +30,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String token = jwtTokenProvider.resolveToken(request);
 
         boolean ignore = ignorePatterns.stream()
-                .anyMatch(s -> matcher.match(s, request.getRequestURI()));
-
-        String requestURI = request.getRequestURI();
-
+                .anyMatch(s -> matcher.match(s, request.getServletPath()));
+        
         if(ignore) {
             filterChain.doFilter(request, response);
             return;
