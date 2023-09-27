@@ -4,12 +4,16 @@ import Logo from "@components/Logo.tsx";
 import mjuSymbol from "@assets/images/mju_symbol.png";
 import Divider from "@/components/base/Divider";
 import { useNavigate } from "react-router-dom";
+import { useStore } from "zustand";
+import { authStore } from "@/stores/authStore";
 
 export default function WelcomePage() {
+  const authContext = useStore(authStore);
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    navigate("/login");
+  const handleStart = () => {
+    if (authContext.isAuthenticated()) navigate("/feeds");
+    else navigate("/login");
   };
 
   return (
@@ -32,9 +36,18 @@ export default function WelcomePage() {
         <br />
       </div>
       <div className="flex gap-4 py-5">
-        <Button variant={"primary"} className="gap-2" onClick={handleLogin}>
-          <Icon icon="login" />
-          로그인하여 계속
+        <Button variant={"primary"} className="gap-2" onClick={handleStart}>
+          {authContext.isAuthenticated() ? (
+            <div className="flex gap-1">
+              <Icon icon="resume" fill />
+              <span>
+                <span className=" font-bold">{authContext.user?.lastName}</span>
+                님으로 계속
+              </span>
+            </div>
+          ) : (
+            "로그인하여 시작하기"
+          )}
         </Button>
         <Button variant={"third"}>더 알아보기</Button>
       </div>

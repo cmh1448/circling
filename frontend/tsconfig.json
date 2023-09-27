@@ -28,7 +28,8 @@
       "@api/*": ["src/api/*"],
       "@components/*": ["src/components/*"],
       "@features/*": ["src/features/*"],
-      "@stores/*": ["src/stores/*"]
+      "@stores/*": ["src/stores/*"],
+      "@models/*": ["src/models/*"]
     }
   },
   "include": ["src"],

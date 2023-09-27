@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 export interface CardProps {
   children: ReactNode;
-  className: string;
+  className?: string;
 }
 
 export default function Card(props: CardProps) {

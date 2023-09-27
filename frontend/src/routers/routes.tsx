@@ -1,6 +1,8 @@
 import { RouteObject } from "react-router-dom";
 import WelcomePage from "@features/welcome/pages/WelcomePage.tsx";
 import LoginPage from "@/features/login/pages/LoginPage";
+import FeedPage from "@/features/feed/pages/FeedPage";
+import ExplorePage from "@/features/explore/pages/ExplorePage";
 
 export type RouteContext = "NotLogin" | "Login";
 
@@ -10,6 +12,18 @@ export const routes: Record<RouteContext, RouteObject[]> = {
       path: "/",
       element: <WelcomePage />,
     },
+    {
+      path: "/login",
+      element: <LoginPage />,
+    },
+    {
+      path: "/feeds",
+      element: <FeedPage />,
+    },
+    {
+      path: "/explore",
+      element: <ExplorePage />,
+    },
   ],
   NotLogin: [
     {
@@ -17,7 +31,7 @@ export const routes: Record<RouteContext, RouteObject[]> = {
       element: <WelcomePage />,
     },
     {
-      path: "/login",
+      path: "/*",
       element: <LoginPage />,
     },
   ],

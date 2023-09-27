@@ -9,8 +9,14 @@ export interface IconProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export default function Icon(props: IconProps) {
-  const { icon, fill = false, weight = 300, grad = 0, opsz = 40 } = props;
-
+  const {
+    icon,
+    fill = false,
+    weight = 300,
+    grad = 0,
+    opsz = 40,
+    ...rest
+  } = props;
   const iconStyle = () =>
     `'FILL' ${Number(fill)},
     'wght' ${weight},
@@ -19,7 +25,7 @@ export default function Icon(props: IconProps) {
 
   return (
     <span
-      {...props}
+      {...rest}
       className={` material-symbols-outlined transition-all ${props.className}`}
       style={{
         fontVariationSettings: iconStyle(),
