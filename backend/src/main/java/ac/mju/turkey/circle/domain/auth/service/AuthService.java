@@ -36,9 +36,16 @@ public class AuthService {
 
     @Transactional
     public UserDto.UserResponse signUp(AuthDto.SignUpRequest request) {
+        cannotCreateDuplicatedEmailUser(request);
+
         User toSave = request.toEntity(passwordEncoder);
         User saved = userRepository.save(toSave);
 
         return UserDto.UserResponse.from(saved);
+    }
+
+    private void cannotCreateDuplicatedEmailUser(AuthDto.SignUpRequest request) {
+        if(userRepository.existsById(request.getEmail()))
+            throw new RestException(ErrorCode.GLOBAL_ALREADY_EXIST);
     }
 }
