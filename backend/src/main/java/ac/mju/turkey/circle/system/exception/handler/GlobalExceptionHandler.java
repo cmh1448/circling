@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -16,11 +17,19 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
     @ExceptionHandler({HttpMessageConversionException.class})
     public ResponseEntity<ErrorDto.ErrorResponse> handleRestException(HttpMessageConversionException exception) {
-        log.error("{Internal Exception}: " + exception.getMessage());
+//        log.error("{Internal Exception}: " + exception.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ErrorDto.ErrorResponse.from(ErrorCode.GLOBAL_BAD_REQUEST));
+    }
+
+    @ExceptionHandler({HttpRequestMethodNotSupportedException.class})
+    public ResponseEntity<ErrorDto.ErrorResponse> handleMethodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
+
+        return ResponseEntity
+                .status(HttpStatus.METHOD_NOT_ALLOWED)
+                .body(ErrorDto.ErrorResponse.from(ErrorCode.GLOBAL_METHOD_NOT_ALLOWED));
     }
 
     @ExceptionHandler({RestException.class})
