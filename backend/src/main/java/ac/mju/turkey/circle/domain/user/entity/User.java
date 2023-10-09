@@ -1,7 +1,11 @@
 package ac.mju.turkey.circle.domain.user.entity;
 
+import ac.mju.turkey.circle.domain.circle.entity.Circle;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
