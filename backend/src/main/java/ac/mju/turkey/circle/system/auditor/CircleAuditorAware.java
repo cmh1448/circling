@@ -22,6 +22,7 @@ public class CircleAuditorAware implements AuditorAware<User> {
         Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
 
         return Optional.ofNullable(authentication)
+                .map(Authentication::getPrincipal)
                 .map(CircleUserDetails.class::cast)
                 .map(CircleUserDetails::getUser);
     }
