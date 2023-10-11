@@ -7,6 +7,9 @@ import fs from "fs";
 export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   base: "/circling",
+  build: {
+    outDir: "../backend/src/main/resources/static",
+  },
   server: {
     port: 3000,
     proxy: {

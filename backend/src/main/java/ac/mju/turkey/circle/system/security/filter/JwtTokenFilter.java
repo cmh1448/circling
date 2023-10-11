@@ -22,17 +22,16 @@ import java.util.Objects;
 public class JwtTokenFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
     private final List<String> ignorePatterns = new ArrayList<>();
+    private final List<String> includePatterns = new ArrayList<>();
+
     private final AntPathMatcher matcher = new AntPathMatcher();
 
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = jwtTokenProvider.resolveToken(request);
-        String path = request.getServletPath();
-        boolean ignore = ignorePatterns.stream()
-                .anyMatch(s -> matcher.match(s, request.getServletPath()));
-        
-        if(ignore) {
+
+        if(!isMatchingURI(request.getServletPath())) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -57,5 +56,18 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     public JwtTokenFilter ignorePattern(String matchURI) {
         ignorePatterns.add(matchURI);
         return this;
+    }
+
+    public JwtTokenFilter includePattern(String matchURI) {
+        includePatterns.add(matchURI);
+        return this;
+    }
+
+    public Boolean isMatchingURI(String servletPath) {
+        if(includePatterns.stream().anyMatch(p -> matcher.match(p, servletPath))){
+            return ignorePatterns.stream().noneMatch(p -> matcher.match(p, servletPath));
+        }
+        else
+            return false;
     }
 }
