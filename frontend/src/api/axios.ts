@@ -1,8 +1,9 @@
-import { BASE_URL } from "@/constants/settings";
 import { authStore } from "@/stores/authStore";
 import axios from "axios";
 
-const instance = axios.create({});
+const instance = axios.create({
+  baseURL: import.meta.env.MODE !== "development" ? "/circling" : "",
+});
 
 instance.interceptors.request.use((req) => {
   const authContext = authStore.getState();
