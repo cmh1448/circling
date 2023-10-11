@@ -16,7 +16,7 @@ public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurity
         JwtTokenFilter jwtTokenFilter = new JwtTokenFilter(jwtTokenProvider);
 
         jwtTokenFilter
-                .ignorePattern("/h2-console/**")
+                .includePattern("/api/**")
                 .ignorePattern("/api/auth/sign-in")
                 .ignorePattern("/api/auth/sign-up");
 
