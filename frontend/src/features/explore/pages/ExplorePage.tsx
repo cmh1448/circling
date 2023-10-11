@@ -15,6 +15,11 @@ export default function ExplorePage() {
       description: "Rock and Roll!! 락을 즐기는 사람들의 모임",
       memberCount: 6,
     },
+    {
+      name: "맛집탐방",
+      description: "맛집탐방 동아리 입니다.",
+      memberCount: 3,
+    },
   ];
 
   return (
