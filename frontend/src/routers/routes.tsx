@@ -1,8 +1,9 @@
 import { RouteObject } from "react-router-dom";
 import WelcomePage from "@features/welcome/pages/WelcomePage.tsx";
 import LoginPage from "@/features/login/pages/LoginPage";
-import FeedPage from "@/features/feed/pages/FeedPage";
+import FeedPage from "@/features/circle/pages/FeedPage";
 import ExplorePage from "@/features/explore/pages/ExplorePage";
+import MyCirclesPage from "@/features/circle/pages/MyCirclesPage";
 
 export type RouteContext = "NotLogin" | "Login";
 
@@ -19,6 +20,10 @@ export const routes: Record<RouteContext, RouteObject[]> = {
     {
       path: "/feeds",
       element: <FeedPage />,
+    },
+    {
+      path: "/my-circles",
+      element: <MyCirclesPage />,
     },
     {
       path: "/explore",

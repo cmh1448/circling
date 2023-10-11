@@ -56,7 +56,6 @@ export default function LoginPage() {
   return (
     <div className="h-full flex items-center justify-center">
       <Card className="flex flex-col gap-10 mx-8 mx">
-        {authContext.isAuthenticated() ? "로그인됨" : "안됨"}
         <div className="flex">
           <span className="text-xl font-bold flex items-center gap-2 text-gray-800">
             <Icon icon="login" />

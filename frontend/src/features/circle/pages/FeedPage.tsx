@@ -2,9 +2,7 @@ import Icon from "@/components/base/Icon";
 import PageContainer from "@/components/pages/PageContainer";
 import { authStore } from "@/stores/authStore";
 import { useStore } from "zustand";
-import CircleItem from "../components/CircleItem";
 import { Circle } from "@/models/Circle";
-import Section from "../components/Section";
 import FeedCard from "../components/FeedCard";
 
 export default function FeedPage() {

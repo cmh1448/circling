@@ -41,7 +41,7 @@ export default function WelcomePage() {
             <div className="flex gap-1">
               <Icon icon="resume" fill />
               <span>
-                <span className=" font-bold">{authContext.user?.lastName}</span>
+                <span className=" font-bold">{`${authContext.user?.lastName}${authContext.user?.firstName}`}</span>
                 님으로 계속
               </span>
             </div>

@@ -28,9 +28,9 @@ function App() {
       path: "/feeds",
     },
     {
-      title: '내 동아리',
+      title: "내 동아리",
       icon: "book",
-      path: "/my"
+      path: "/my-circles",
     },
     {
       title: "동아리 찾기",

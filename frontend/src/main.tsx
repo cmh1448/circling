@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { BASE_URL } from "./constants/settings";
-import { authStore } from "./stores/authStore";
 
 const queryClient = new QueryClient();
 
