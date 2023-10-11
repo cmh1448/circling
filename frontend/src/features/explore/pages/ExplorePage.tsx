@@ -19,10 +19,10 @@ export default function ExplorePage() {
 
   return (
     <PageContainer>
-      <div className="flex items-center">
+      <div className="flex flex-col gap-1 md:flex-row">
         <span className="text-2xl font-bold">우리학교 동아리 목록</span>
         <div className="flex-1" />
-        <Input icon="search" placeholder="이름으로 검색"/>
+        <Input icon="search" placeholder="이름으로 검색" />
       </div>
 
       <div className="flex flex-col gap-2 mt-4">

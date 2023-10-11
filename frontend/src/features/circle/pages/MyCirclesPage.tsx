@@ -13,7 +13,7 @@ export default function MyCirclesPage() {
           return <CircleItem />;
         })}
       </div>
-      <div className=" text-2xl font-bold text-blue-500 flex gap-2 items-center mt-4">
+      <div className=" text-2xl font-bold text-blue-500 flex gap-2 items-center mt-8">
         {/* <Icon icon="groups" /> */}
         내가 팔로우한 동아리
       </div>

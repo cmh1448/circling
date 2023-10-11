@@ -9,10 +9,10 @@ export interface ExplorerCircleItem {
 
 export default function ExplorerCircleItem(props: ExplorerCircleItem) {
   return (
-    <div className=" bg-gray-100 rounded-lg p-4 ">
+    <div className=" bg-gray-100 rounded-lg p-4 md:flex md:justify-between">
       <div className="flex items-center gap-4">
         <CircleLogo />
-        <div className=" flex flex-col">
+        <div className="flex flex-col">
           <span className=" text-blue-500 text-lg font-bold">
             {props.circle.name}
           </span>
@@ -24,13 +24,10 @@ export default function ExplorerCircleItem(props: ExplorerCircleItem) {
             </span>
           </div>
         </div>
-        <div className="flex-1" />
-        <div className="flex  gap-2">
-          <Button className="gap-1" variant="primary">
-            팔로우
-          </Button>
-        </div>
       </div>
+      <Button className="w-full mt-3 md:w-fit md:aspect-square md:h-full">
+        팔로우
+      </Button>
     </div>
   );
 }
