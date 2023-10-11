@@ -26,7 +26,7 @@ export default function NavigationBar(props: NavBarProps) {
   };
 
   return (
-    <div className="w-full h-[50px] flex justify-center px-4 py-3 bg-transparent absolute top-0 left-0 backdrop-blur-lg z-50">
+    <div className="w-full h-[50px] flex justify-center px-4 py-3 bg-transparent absolute top-0 left-0 backdrop-blur-lg z-40">
       <div className="w-full flex items-center">
         {curNav() ? (
           <div className="flex gap-1 items-center">
