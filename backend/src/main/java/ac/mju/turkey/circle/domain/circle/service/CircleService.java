@@ -6,6 +6,7 @@ import ac.mju.turkey.circle.domain.circle.entity.Circle;
 import ac.mju.turkey.circle.domain.circle.entity.Follower;
 import ac.mju.turkey.circle.domain.circle.entity.embedded.FollowerId;
 import ac.mju.turkey.circle.domain.circle.entity.enums.FollowerType;
+import ac.mju.turkey.circle.domain.circle.repository.CircleQueryRepository;
 import ac.mju.turkey.circle.domain.circle.repository.CircleRepository;
 import ac.mju.turkey.circle.domain.circle.repository.FollowerQueryRepository;
 import ac.mju.turkey.circle.domain.circle.repository.FollowerRepository;
@@ -24,6 +25,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class CircleService {
     private final CircleRepository circleRepository;
+    private final CircleQueryRepository circleQueryRepository;
     private final FollowerRepository followerRepository;
     private final FollowerQueryRepository followerQueryRepository;
 
@@ -51,11 +53,11 @@ public class CircleService {
     }
 
     @Transactional(readOnly = true)
-    public CircleDto.Response findById(Long id) {
+    public CircleDto.DetailResponse findById(Long id) {
         Circle found = circleRepository.findById(id)
                 .orElseThrow(() -> new RestException(ErrorCode.GLOBAL_NOT_FOUND));
 
-        return CircleDto.Response.from(found);
+        return CircleDto.DetailResponse.from(found);
     }
 
     @Transactional
@@ -66,6 +68,9 @@ public class CircleService {
         circleRepository.delete(found);
     }
 
-
+    @Transactional(readOnly = true)
+    public List<CircleDto.DetailResponse> findAll() {
+        return circleQueryRepository.findAll();
+    }
 
 }

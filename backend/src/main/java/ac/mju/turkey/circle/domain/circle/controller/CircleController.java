@@ -18,8 +18,14 @@ import java.util.List;
 public class CircleController {
     private final CircleService circleService;
     private final FollowService followService;
+
+    @GetMapping
+    public List<CircleDto.DetailResponse> findAll() {
+        return circleService.findAll();
+    }
+
     @GetMapping("/{id}")
-    public CircleDto.Response findById(@PathVariable Long id) {
+    public CircleDto.DetailResponse findById(@PathVariable Long id) {
         return circleService.findById(id);
     }
 
