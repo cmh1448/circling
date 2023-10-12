@@ -1,0 +1,18 @@
+spring:
+  h2:
+    console:
+      enabled: true
+
+  datasource:
+    url: jdbc:mariadb://db.cmhvscode.dev:3306/circling
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: client
+    password: learnit#01
+
+  # jpa설정
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties: # property 사용 설정
+      hibernate: # hibernate property 설정
+        format_sql: true
