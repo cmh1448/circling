@@ -45,7 +45,7 @@ export default function Drawer(props: DrawerProps) {
           unmountOnExit
         >
           <div
-            className="absolute top-0 left-0 w-full p-4  h-full z-20"
+            className="absolute top-0 left-0 w-full p-4  h-full z-50"
             onClick={() => props.onClosed()}
           >
             <div className="flex justify-end">
