@@ -4,6 +4,8 @@ import Icon from "../base/Icon";
 import Drawer from "./Drawer";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useStore } from "zustand";
+import { uiStore } from "@/stores/uiStore";
 
 export interface NavBarProps {
   navigations: Navigation[];
@@ -13,6 +15,8 @@ export default function NavigationBar(props: NavBarProps) {
   const [drawerOpened, setDrawerOpened] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+
+  const uiContext = useStore(uiStore);
 
   const curNav = () => {
     return props.navigations.find((it) =>
@@ -25,14 +29,26 @@ export default function NavigationBar(props: NavBarProps) {
     setDrawerOpened(false);
   };
 
+  const navIcon = () => {
+    if (curNav()) return curNav()?.icon;
+    else return uiContext.navigation?.icon;
+  };
+
+  const navTitle = () => {
+    if (curNav()) return curNav()?.title;
+    else return uiContext.navigation?.title;
+  };
+
+  const navExist = () => curNav() || uiContext.navigation;
+
   return (
     <div className="w-full h-[50px] flex justify-center px-4 py-3 bg-transparent absolute top-0 left-0 backdrop-blur-lg z-40">
       <div className="w-full flex items-center">
-        {curNav() ? (
+        {navExist() ? (
           <div className="flex gap-1 items-center">
-            {curNav()?.icon ? <Icon icon={curNav()?.icon!} /> : null}
+            <Icon icon={navIcon()!} />
             <span className="text-xl font-bold text-gray-800">
-              {curNav()?.title}
+              {navTitle()}
             </span>
           </div>
         ) : (

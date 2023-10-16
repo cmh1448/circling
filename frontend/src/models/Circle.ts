@@ -1,5 +1,7 @@
 export interface Circle {
+  id: number;
   name: string;
   description: string;
-  memberCount: number;
+  members?: number;
+  followers?: number;
 }

@@ -7,6 +7,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use((req) => {
   const authContext = authStore.getState();
+  console.log(authContext);
   if (authContext.isAuthenticated())
     req.headers.Authorization = `Bearer ${authContext.accessToken}`;
 

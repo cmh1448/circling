@@ -15,7 +15,7 @@ export default function CircleItem(props: CardItemProps) {
       <span className=" text-gray-500">{props.circle.description}</span>
       <span className="text-gray-500 text-sm justify-end flex items-center gap-1">
         <Icon icon="people" className="text-[16px]" fill />
-        {props.circle.memberCount}명
+        {props.circle.members}명
       </span>
     </Card>
   );
