@@ -27,7 +27,7 @@ export default function ExplorerCircleItem(props: ExplorerCircleItem) {
 
   const { mutate: unfollow, isLoading: isUnFollowing } = useMutation({
     mutationFn: () => api.circle.unfollowCircle(props.circle.id),
-    onSuccess: () =>  queryClient.invalidateQueries(["fetchFollowingCircles"]),
+    onSuccess: () => queryClient.invalidateQueries(["fetchFollowingCircles"]),
   });
 
   const handleClick = () => {
@@ -56,7 +56,7 @@ export default function ExplorerCircleItem(props: ExplorerCircleItem) {
         </div>
       </div>
       <Button
-        className={`w-full mt-3 md:w-fit md:aspect-square md:h-20 ${
+        className={`w-full mt-3 md:w-40 md:h-20 ${
           props.following ? buttonStyles.unfollow : buttonStyles.follow
         }`}
         onClick={handleClick}
@@ -64,7 +64,10 @@ export default function ExplorerCircleItem(props: ExplorerCircleItem) {
         {isFollowing || isUnFollowing ? (
           <Spinner size="20px" />
         ) : props.following ? (
-          "언팔로우"
+          <div className="flex gap-1 items-center">
+            <Icon icon="check" />
+            팔로우됨
+          </div>
         ) : (
           "팔로우"
         )}

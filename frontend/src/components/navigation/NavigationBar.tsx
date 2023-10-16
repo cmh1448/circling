@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useStore } from "zustand";
 import { uiStore } from "@/stores/uiStore";
+import mjuLogo from "@assets/images/mju_symbol.png";
 
 export interface NavBarProps {
   navigations: Navigation[];
@@ -54,8 +55,10 @@ export default function NavigationBar(props: NavBarProps) {
         ) : (
           <Logo size="small" />
         )}
+        <div className="flex-1" />
 
         <div className="flex-1" />
+        <img className=" h-full opacity-80 mr-4 p-1" src={mjuLogo} />
         <div className="flex gap-2 items-center text-gray-700">
           <Icon icon="notifications" />
           <Icon

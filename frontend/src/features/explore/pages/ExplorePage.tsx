@@ -35,7 +35,7 @@ export default function ExplorePage() {
     return (
       <Fallback
         when={circles?.length === 0}
-        message="아무 동아리도 개설되지 않았어요"
+        message="동아리를 찾을 수 없어요"
       >
         {circles?.map((it) => (
           <ExplorerCircleItem
