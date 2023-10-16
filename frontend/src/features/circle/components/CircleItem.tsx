@@ -6,7 +6,7 @@ export interface CircleItemProps {
   circle: Circle;
 }
 
-export default function CircleItem() {
+export default function CircleItem(props: CircleItemProps) {
   const navigate = useNavigate();
 
   const handleClickCircle = (circleId: number) => {
@@ -20,7 +20,7 @@ export default function CircleItem() {
           onClick={() => handleClickCircle(1)}
           className="text-lg font-bold bg-transparent w-full hover:bg-gray-200 active:scale-[0.98] p-1 rounded-lg transition-all cursor-pointer select-none"
         >
-          음악 동아리
+          {props.circle.name}
         </div>
       </div>
       <div className="flex flex-col mt-2">

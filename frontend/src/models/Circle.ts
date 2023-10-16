@@ -5,3 +5,9 @@ export interface Circle {
   members?: number;
   followers?: number;
 }
+
+export interface Follower {
+  circle: Circle;
+
+  type: "MEMBER" | "FOLLOWER";
+}

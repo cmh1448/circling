@@ -16,6 +16,11 @@ export default function ExplorePage() {
     api.circle.fetchAllCircleList()
   );
 
+  const { data: followingCircles, isLoading: followingLoading } = useQuery(
+    ["fetchFollowingCircles"],
+    () => api.circle.fetchFollowingCircles()
+  );
+
   const filteredCircles = useMemo(
     () =>
       searchKeyword === ""
@@ -27,7 +32,12 @@ export default function ExplorePage() {
   /* Functions */
   const getCircleItemList = (circles: Circle[] | undefined) => {
     if (circles?.length)
-      return circles.map((it) => <ExplorerCircleItem circle={it} />);
+      return circles.map((it) => (
+        <ExplorerCircleItem
+          circle={it}
+          following={followingCircles?.some((f) => f.circle.id === it.id)!}
+        />
+      ));
     else
       return (
         <div className="flex justify-center text-2xl text-gray-400 mt-4">
@@ -49,7 +59,7 @@ export default function ExplorePage() {
       </div>
 
       <div className="flex flex-col gap-2 mt-4">
-        {isLoading
+        {isLoading || followingLoading
           ? [...Array(3)].map(() => (
               <Skeleton className=" w-full h-32 rounded-lg" />
             ))

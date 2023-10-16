@@ -2,12 +2,42 @@ import { Circle } from "@/models/Circle";
 import CircleLogo from "./CircleLogo";
 import Button from "@/components/base/Button";
 import Icon from "@/components/base/Icon";
+import api from "@/api";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import Spinner from "@/components/base/Spinner";
 
 export interface ExplorerCircleItem {
   circle: Circle;
+
+  following: boolean;
 }
 
+const buttonStyles = {
+  follow: "",
+  unfollow: "bg-gray-400 hover:bg-gray-500",
+};
+
 export default function ExplorerCircleItem(props: ExplorerCircleItem) {
+  const queryClient = useQueryClient();
+
+  const { mutate: follow, isLoading: isFollowing } = useMutation({
+    mutationFn: () => api.circle.followCircle(props.circle.id),
+    onSuccess: () => queryClient.invalidateQueries(["fetchFollowingCircles"]),
+  });
+
+  const { mutate: unfollow, isLoading: isUnFollowing } = useMutation({
+    mutationFn: () => api.circle.unfollowCircle(props.circle.id),
+    onSuccess: () =>  queryClient.invalidateQueries(["fetchFollowingCircles"]),
+  });
+
+  const handleClick = () => {
+    if (props.following) {
+      unfollow();
+    } else {
+      follow();
+    }
+  };
+
   return (
     <div className=" bg-gray-100 rounded-lg p-4 md:flex md:justify-between">
       <div className="flex items-center gap-4">
@@ -25,8 +55,19 @@ export default function ExplorerCircleItem(props: ExplorerCircleItem) {
           </div>
         </div>
       </div>
-      <Button className="w-full mt-3 md:w-fit md:aspect-square md:h-full">
-        팔로우
+      <Button
+        className={`w-full mt-3 md:w-fit md:aspect-square md:h-20 ${
+          props.following ? buttonStyles.unfollow : buttonStyles.follow
+        }`}
+        onClick={handleClick}
+      >
+        {isFollowing || isUnFollowing ? (
+          <Spinner size="20px" />
+        ) : props.following ? (
+          "언팔로우"
+        ) : (
+          "팔로우"
+        )}
       </Button>
     </div>
   );
