@@ -54,7 +54,7 @@ public class CircleController {
         followService.unfollow(id, user);
     }
 
-    @GetMapping("/followed")
+    @GetMapping("/my/followed")
     public List<FollowerDto.Response> findFollowedCircles(@AuthenticationPrincipal CircleUserDetails user) {
         return followService.findFollowedCircles(user);
     }
