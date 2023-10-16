@@ -58,4 +58,11 @@ public class CircleController {
     public List<FollowerDto.Response> findFollowedCircles(@AuthenticationPrincipal CircleUserDetails user) {
         return followService.findFollowedCircles(user);
     }
+
+    @PostMapping("/{id}/members/register")
+    public CircleDto.Response registerMember(@PathVariable Long id,
+                                             @AuthenticationPrincipal CircleUserDetails user,
+                                             @RequestBody CircleDto.Request requestDto) {
+        return circleService.registerMember(id, user, requestDto);
+    }
 }

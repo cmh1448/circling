@@ -3,18 +3,17 @@ package ac.mju.turkey.circle.domain.circle.service;
 import ac.mju.turkey.circle.domain.circle.dto.CircleDto;
 import ac.mju.turkey.circle.domain.circle.dto.FollowerDto;
 import ac.mju.turkey.circle.domain.circle.entity.Circle;
+import ac.mju.turkey.circle.domain.circle.entity.CircleMemberRegister;
 import ac.mju.turkey.circle.domain.circle.entity.Follower;
 import ac.mju.turkey.circle.domain.circle.entity.embedded.FollowerId;
 import ac.mju.turkey.circle.domain.circle.entity.enums.FollowerType;
-import ac.mju.turkey.circle.domain.circle.repository.CircleQueryRepository;
-import ac.mju.turkey.circle.domain.circle.repository.CircleRepository;
-import ac.mju.turkey.circle.domain.circle.repository.FollowerQueryRepository;
-import ac.mju.turkey.circle.domain.circle.repository.FollowerRepository;
+import ac.mju.turkey.circle.domain.circle.repository.*;
 import ac.mju.turkey.circle.system.exception.model.ErrorCode;
 import ac.mju.turkey.circle.system.exception.model.RestException;
 import ac.mju.turkey.circle.system.security.model.CircleUserDetails;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.antlr.v4.runtime.misc.LogManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +27,7 @@ public class CircleService {
     private final CircleQueryRepository circleQueryRepository;
     private final FollowerRepository followerRepository;
     private final FollowerQueryRepository followerQueryRepository;
+    private final CircleMemberRegisterRepository circleMemberRegisterRepository;
 
     @Transactional
     public CircleDto.Response createCircle(CircleDto.Request request) {
@@ -71,6 +71,21 @@ public class CircleService {
     @Transactional(readOnly = true)
     public List<CircleDto.DetailResponse> findAll() {
         return circleQueryRepository.findAll();
+    }
+
+    @Transactional
+    public CircleDto.Response registerMember(Long circleId, CircleUserDetails user, CircleDto.Request requestDto) {
+        Circle foundCircle = circleRepository.findById(circleId)
+                .orElseThrow(() -> new RestException(ErrorCode.GLOBAL_NOT_FOUND));
+
+        CircleMemberRegister register = CircleMemberRegister.builder()
+                .circle(foundCircle)
+                .message(requestDto.getMessage())
+                .build();
+
+        circleMemberRegisterRepository.save(register);  // 신청 정보 저장
+
+        return CircleDto.Response.from(foundCircle);
     }
 
 }

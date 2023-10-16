@@ -21,6 +21,8 @@ public class CircleDto {
         String name;
         String description;
 
+        String message;
+
         public Circle toEntity() {
             return Circle.builder()
                     .name(name)
@@ -71,6 +73,7 @@ public class CircleDto {
         Long followers;
 
         Long members;
+
 
         public static DetailResponse from(Circle circle) {
             return DetailResponse.builder()
