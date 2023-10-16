@@ -6,6 +6,7 @@ import ExplorePage from "@/features/explore/pages/ExplorePage";
 import MyCirclesPage from "@/features/circle/pages/MyCirclesPage";
 import ProfilePage from "@/features/profile/pages/ProfilePage";
 import CircleBoardPage from "@/features/circle/pages/CircleBoardPage";
+import RegisterPage from "@/features/login/pages/RegisterPage";
 
 export type RouteContext = "NotLogin" | "Login";
 
@@ -36,6 +37,10 @@ export const routes: Record<RouteContext, RouteObject[]> = {
       element: <ProfilePage />,
     },
     {
+      path: "/register",
+      element: <RegisterPage />,
+    },
+    {
       path: "/circles/:id",
       element: <CircleBoardPage />,
     },
@@ -44,6 +49,10 @@ export const routes: Record<RouteContext, RouteObject[]> = {
     {
       path: "/",
       element: <WelcomePage />,
+    },
+    {
+      path: "/register",
+      element: <RegisterPage />,
     },
     {
       path: "/*",

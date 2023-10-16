@@ -5,6 +5,7 @@ export interface ButtonProps {
   sizeType?: "big" | "normal" | "small";
   children: ReactNode;
   className?: string;
+  enabled?: boolean;
 
   onClick?: () => void;
 }
@@ -21,8 +22,13 @@ const sizes = {
   small: "p-1",
 };
 
+const baseStyles = {
+  enabled: "active:scale-90",
+  disabled: "!bg-gray-300 !cursor-default",
+};
+
 export default function Button(props: ButtonProps) {
-  const { variant = "primary", sizeType = "normal" } = props;
+  const { variant = "primary", sizeType = "normal", enabled = "true" } = props;
 
   const getStyles = () => {
     return styles[variant];
@@ -34,9 +40,9 @@ export default function Button(props: ButtonProps) {
 
   return (
     <button
-      className={`rounded-lg flex items-center justify-center transition-all active:scale-90 select-none ${getStyles()} ${getSizeStyles()} ${
-        props.className
-      }`}
+      className={`rounded-lg flex items-center justify-center transition-all ${
+        enabled ? baseStyles.enabled : baseStyles.disabled
+      }  select-none ${getStyles()} ${getSizeStyles()} ${props.className}`}
       onClick={props.onClick}
     >
       {props.children}
