@@ -5,7 +5,8 @@ import Input from "@/components/base/Input";
 import { useQuery } from "react-query";
 import api from "@/api";
 import Skeleton from "@/components/base/Skeleton";
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
+import Fallback from "@/components/fallback/fallback";
 
 export default function ExplorePage() {
   /* Constants & Variables */
@@ -31,19 +32,19 @@ export default function ExplorePage() {
 
   /* Functions */
   const getCircleItemList = (circles: Circle[] | undefined) => {
-    if (circles?.length)
-      return circles.map((it) => (
-        <ExplorerCircleItem
-          circle={it}
-          following={followingCircles?.some((f) => f.circle.id === it.id)!}
-        />
-      ));
-    else
-      return (
-        <div className="flex justify-center text-2xl text-gray-400 mt-4">
-          동아리를 찾을 수 없습니다.
-        </div>
-      );
+    return (
+      <Fallback
+        when={circles?.length === 0}
+        message="아무 동아리도 개설되지 않았어요"
+      >
+        {circles?.map((it) => (
+          <ExplorerCircleItem
+            circle={it}
+            following={followingCircles?.some((f) => f.circle.id === it.id)!}
+          />
+        ))}
+      </Fallback>
+    );
   };
 
   return (
