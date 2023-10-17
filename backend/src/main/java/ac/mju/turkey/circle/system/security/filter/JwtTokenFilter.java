@@ -1,8 +1,10 @@
 package ac.mju.turkey.circle.system.security.filter;
 
+import ac.mju.turkey.circle.system.exception.dto.ErrorDto;
 import ac.mju.turkey.circle.system.exception.model.ErrorCode;
 import ac.mju.turkey.circle.system.exception.model.RestException;
 import ac.mju.turkey.circle.system.security.provider.JwtTokenProvider;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -46,7 +48,14 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             }
         }catch (RestException ex) {
             SecurityContextHolder.clearContext();
-            response.sendError(ex.getErrorCode().getStatusCode(), ex.getErrorCode().getMessage());
+
+            response.setStatus(ex.getErrorCode().getStatusCode());
+            response.setContentType("text/json");
+            response.setCharacterEncoding("utf-8");
+            ObjectMapper mapper = new ObjectMapper();
+            response.getWriter().write(mapper.writeValueAsString(ErrorDto.ErrorResponse.from(ex.getErrorCode())));
+            response.getWriter().flush();
+
             return;
         }
 

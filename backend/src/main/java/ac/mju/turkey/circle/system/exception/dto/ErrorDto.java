@@ -15,11 +15,13 @@ public class ErrorDto {
     public static class ErrorResponse {
         private Integer statusCode;
         private String message;
+        private String codeName;
 
         public static ErrorResponse from(ErrorCode errorCode) {
             return ErrorResponse.builder()
                     .statusCode(errorCode.getStatusCode())
                     .message(errorCode.getMessage())
+                    .codeName(errorCode.getCodeName())
                     .build();
         }
 
