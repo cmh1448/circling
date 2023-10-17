@@ -1,23 +1,23 @@
 package ac.mju.turkey.circle.domain.circle.entity;
 
+import ac.mju.turkey.circle.common.auditor.UserStampedEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
-public class CircleMemberRegister {
+public class RegisterApplication extends UserStampedEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne // 여기에 적절한 연관관계 설정을 해주어야 합니다.
+    @ManyToOne
     private Circle circle;
 
     private String message;
