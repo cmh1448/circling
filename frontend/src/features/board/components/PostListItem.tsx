@@ -1,14 +1,11 @@
 import Divider from "@/components/base/Divider";
 import Icon from "@/components/base/Icon";
-import { useNavigate } from "react-router-dom";
 
 export interface PostListItemProps {
   onClick?: () => void;
 }
 
 export default function PostListItem(props: PostListItemProps) {
-  const navigate = useNavigate();
-
   return (
     <div className="flex flex-col" onClick={props.onClick}>
       <div className="py-2 px-4 flex flex-col hover:bg-gray-100 transition-all cursor-pointer rounded-lg active:scale-[0.98]">

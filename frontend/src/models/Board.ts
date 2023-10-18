@@ -14,3 +14,12 @@ export interface Category {
   id: number;
   title: string;
 }
+
+export interface Comment {
+  content: string;
+
+  createdBy: User;
+  lastModifiedBy: User;
+  createdAt: string;
+  lastModifiedAt: string;
+}

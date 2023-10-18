@@ -1,10 +1,9 @@
 import {
+  createContext,
   HTMLAttributes,
   ReactNode,
   RefObject,
-  createContext,
   useContext,
-  useEffect,
   useRef,
 } from "react";
 
@@ -28,21 +27,25 @@ export default function PageContainer(props: PageContainerProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   return (
-    <ScrollContext.Provider value={scrollRef}>
-      <div
-        {...attrs}
-        className={`w-full px-4 flex justify-center overflow-y-auto apply-scrollbar ${attrs.className}`}
-        ref={scrollRef}
-      >
-        <div className="w-full flex flex-col items-center">
-          <div className="w-full pt-[50px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
-            {children}
-          </div>
-          <div className="flex py-4 w-full justify-center text-gray-300 text-sm">
-            Copyright (C) 2023 MJU 칠면조 팀 all rights reserved.
+    <div
+      {...attrs}
+      className={`h-full flex flex-col overflow-hidden ${attrs.className}`}
+    >
+      <ScrollContext.Provider value={scrollRef}>
+        <div
+          className={`w-full px-4 flex justify-center overflow-y-auto apply-scrollbar `}
+          ref={scrollRef}
+        >
+          <div className="w-full flex flex-col items-center">
+            <div className="w-full pt-[50px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
+              {children}
+            </div>
+            <div className="flex py-4 w-full justify-center text-gray-300 text-sm">
+              Copyright (C) 2023 MJU 칠면조 팀 all rights reserved.
+            </div>
           </div>
         </div>
-      </div>
-    </ScrollContext.Provider>
+      </ScrollContext.Provider>
+    </div>
   );
 }

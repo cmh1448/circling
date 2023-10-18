@@ -13,10 +13,12 @@ function App() {
   const [activeRoutes, setActiveRoutes] = useState(routes.NotLogin);
   const location = useLocation();
 
-  useEffect(() =>
-    setActiveRoutes(
-      authContext.isAuthenticated() ? routes.Login : routes.NotLogin
-    )
+  useEffect(
+    () =>
+      setActiveRoutes(
+        authContext.isAuthenticated() ? routes.Login : routes.NotLogin,
+      ),
+    [authContext],
   );
 
   const statefulRoutes = useRoutes(activeRoutes);

@@ -1,15 +1,24 @@
 import BoardTab from "../components/BoardTab";
 import PostListItem from "../components/PostListItem";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ActionButton from "@/components/base/ActionButton";
 import Icon from "@/components/base/Icon";
 import PageContainer from "@/components/pages/PageContainer";
+import { adjustCurrentNavBar } from "@/hooks/uiHook";
 
 export default function CirclePostListPage() {
   const navigate = useNavigate();
+  const { id } = useParams();
   const handleClickPost = (id: number) => {
     navigate(`/circles/board/posts/${id}`);
   };
+
+  const handleNewPost = () => {
+    navigate("/circles/board/posts/new");
+  };
+
+  adjustCurrentNavBar(Number(id));
+
   return (
     <PageContainer>
       <BoardTab
@@ -33,7 +42,7 @@ export default function CirclePostListPage() {
           <PostListItem onClick={() => handleClickPost(1)} key={it} />
         ))}
       </div>
-      <ActionButton>
+      <ActionButton onClick={handleNewPost}>
         <Icon icon="edit" className="text-white text-4xl" />
       </ActionButton>
     </PageContainer>

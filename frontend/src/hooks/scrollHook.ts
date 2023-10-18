@@ -3,14 +3,13 @@ import { useEffect, useRef, useState } from "react";
 export type ScrollDirection = "up" | "down" | "none";
 
 export const useScrollDirection = (
-  ref: React.RefObject<HTMLElement>
+  ref: React.RefObject<HTMLElement>,
 ): ScrollDirection => {
   const [scrollDirection, setScrollDirection] =
     useState<ScrollDirection>("none");
   const lastScrollTop = useRef<number>(0);
 
   useEffect(() => {
-    console.log("[ref changed] ", ref);
     const handleScroll = () => {
       if (ref.current) {
         const scrollTop = ref.current.scrollTop;

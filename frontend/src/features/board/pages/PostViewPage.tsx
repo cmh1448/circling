@@ -3,10 +3,23 @@ import Divider from "@/components/base/Divider";
 import Icon from "@/components/base/Icon";
 import PageContainer from "@/components/pages/PageContainer";
 import { useNavigate } from "react-router-dom";
+import CommentItem from "../components/CommentItem";
+import { useStore } from "zustand";
+import { authStore } from "@/stores/authStore";
+import { Comment } from "@/models/Board";
 
 export default function PostViewPage() {
   const navigate = useNavigate();
   const handleGoBack = () => navigate(-1);
+  const authContext = useStore(authStore);
+
+  const dummyComment: Comment = {
+    content: "Test Content",
+    createdAt: new Date().toISOString(),
+    createdBy: authContext.user!,
+    lastModifiedAt: new Date().toISOString(),
+    lastModifiedBy: authContext.user!,
+  };
 
   return (
     <PageContainer>
@@ -34,9 +47,20 @@ export default function PostViewPage() {
         </div>
       </div>
       <div>
-        댓글
+        <div className="flex items-center gap-4 my-4">
+          <div className="h-px w-full bg-gray-200" />
+          <div className="flex gap-1 whitespace-nowrap text-gray-400">
+            <Icon icon="comment" />
+            6개
+          </div>
+          <div className="h-px w-full bg-gray-200" />
+        </div>
+        <div className="flex flex-col gap-2 mt-1">
+          {[...Array(10)].map((it) => (
+            <CommentItem key={it} comment={dummyComment} />
+          ))}
+        </div>
       </div>
-
     </PageContainer>
   );
 }
