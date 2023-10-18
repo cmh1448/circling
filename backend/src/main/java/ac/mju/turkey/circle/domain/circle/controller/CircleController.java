@@ -70,5 +70,9 @@ public class CircleController {
         return circleService.getRegister(user);
     }
 
+    @GetMapping("/{id}/registers")
+    public List<CircleDto.RegisterResponse> getRegister(@PathVariable Long id, @AuthenticationPrincipal CircleUserDetails user){
+        return circleService.getRegisterApplications(id, user);
+    }
 
 }

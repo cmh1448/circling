@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -91,4 +92,13 @@ public class CircleService {
 
     }
 
+    @Transactional(readOnly = true)
+    public List<CircleDto.RegisterResponse> getRegisterApplications(Long id, CircleUserDetails user) {
+        List<RegisterApplication> found = registerApplicationQueryRepository.findAll()
+                .orElseThrow(() -> new RestException(ErrorCode.GLOBAL_NOT_FOUND));
+
+        return found.stream()
+                .map(CircleDto.RegisterResponse::from)
+                .collect(Collectors.toList());
+    }
 }
