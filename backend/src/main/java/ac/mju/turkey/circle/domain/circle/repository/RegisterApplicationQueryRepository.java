@@ -27,12 +27,12 @@ public class RegisterApplicationQueryRepository {
         );
     }
 
-    public Optional<List<RegisterApplication>> findAll() {
+    public List<RegisterApplication> findAll() {
         List<RegisterApplication> results = queryFactory
                 .selectFrom(registerApplication)
                 .fetch();
 
-        return Optional.ofNullable(results);
+        return results;
     }
 
 }

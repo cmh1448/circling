@@ -94,8 +94,7 @@ public class CircleService {
 
     @Transactional(readOnly = true)
     public List<CircleDto.RegisterResponse> getRegisterApplications(Long id, CircleUserDetails user) {
-        List<RegisterApplication> found = registerApplicationQueryRepository.findAll()
-                .orElseThrow(() -> new RestException(ErrorCode.GLOBAL_NOT_FOUND));
+        List<RegisterApplication> found = registerApplicationQueryRepository.findAll();
 
         return found.stream()
                 .map(CircleDto.RegisterResponse::from)
