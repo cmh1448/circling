@@ -31,8 +31,8 @@ export default function FeedPage() {
   return (
     <PageContainer>
       <div className="flex flex-col gap-4">
-        {[...Array(10).keys()].map(() => (
-          <FeedCard />
+        {[...Array(10).keys()].map((it) => (
+          <FeedCard key={it} />
         ))}
       </div>
     </PageContainer>

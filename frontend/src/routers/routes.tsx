@@ -5,8 +5,9 @@ import FeedPage from "@/features/circle/pages/FeedPage";
 import ExplorePage from "@/features/explore/pages/ExplorePage";
 import MyCirclesPage from "@/features/circle/pages/MyCirclesPage";
 import ProfilePage from "@/features/profile/pages/ProfilePage";
-import CircleBoardPage from "@/features/circle/pages/CircleBoardPage";
+import CirclePostListPage from "@/features/board/pages/CirclePostListPage";
 import RegisterPage from "@/features/login/pages/RegisterPage";
+import PostViewPage from "@/features/board/pages/PostViewPage";
 
 export type RouteContext = "NotLogin" | "Login";
 
@@ -42,7 +43,11 @@ export const routes: Record<RouteContext, RouteObject[]> = {
     },
     {
       path: "/circles/:id",
-      element: <CircleBoardPage />,
+      element: <CirclePostListPage />,
+    },
+    {
+      path: "/circles/board/posts/:id",
+      element: <PostViewPage />,
     },
   ],
   NotLogin: [

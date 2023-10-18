@@ -9,3 +9,8 @@ export interface Post {
   createdAt: string;
   lastModifiedAt: string;
 }
+
+export interface Category {
+  id: number;
+  title: string;
+}

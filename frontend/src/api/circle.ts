@@ -9,6 +9,10 @@ export const fetchFollowingCircles = async () => {
   return (await axios.get("/api/circles/my/followed")).data as Follower[];
 };
 
+export const fetchCircleById = async (id: number) => {
+  return (await axios.get(`/api/circles/${id}`)).data as Circle;
+};
+
 export const followCircle = async (id: number) => {
   return (await axios.post(`/api/circles/${id}/follow`)) as Follower;
 };

@@ -10,3 +10,8 @@ export const signUp = async (req: SignUpRequest) => {
   const result = await axios.post("/api/auth/sign-up", { ...req });
   return result.data as User;
 };
+
+export const authTest = async () => {
+  const result = await axios.get("/api/auth/auth-test");
+  return result.data as User;
+};

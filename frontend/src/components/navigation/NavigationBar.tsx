@@ -7,6 +7,8 @@ import { useState } from "react";
 import { useStore } from "zustand";
 import { uiStore } from "@/stores/uiStore";
 import mjuLogo from "@assets/images/mju_symbol.png";
+import Skeleton from "../base/Skeleton";
+import { createPortal } from "react-dom";
 
 export interface NavBarProps {
   navigations: Navigation[];
@@ -46,12 +48,19 @@ export default function NavigationBar(props: NavBarProps) {
     <div className="w-full h-[50px] flex justify-center px-4 py-3 bg-transparent absolute top-0 left-0 backdrop-blur-lg z-40">
       <div className="w-full flex items-center">
         {navExist() ? (
-          <div className="flex gap-1 items-center">
-            <Icon icon={navIcon()!} />
-            <span className="text-xl font-bold text-gray-800">
-              {navTitle()}
-            </span>
-          </div>
+          uiContext.isLoading ? (
+            <div className="flex gap-2">
+              <Skeleton className="h-6 w-6 rounded" />
+              <Skeleton className="h-6 w-28 rounded" />
+            </div>
+          ) : (
+            <div className="flex gap-1 items-center">
+              <Icon icon={navIcon()!} />
+              <span className="text-xl font-bold text-gray-800">
+                {navTitle()}
+              </span>
+            </div>
+          )
         ) : (
           <Logo size="small" />
         )}

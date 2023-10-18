@@ -39,7 +39,7 @@ export default function MyCirclesPage() {
             message="아무 동아리도 팔로우하지 않았어요"
           >
             {followingCircles?.map((it) => (
-              <CircleItem circle={it.circle} />
+              <CircleItem circle={it.circle}/>
             ))}
           </Fallback>
         )}

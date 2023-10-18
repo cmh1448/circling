@@ -56,7 +56,7 @@ export default function ExplorerCircleItem(props: ExplorerCircleItem) {
         </div>
       </div>
       <Button
-        className={`w-full mt-3 md:w-40 md:h-20 ${
+        className={`w-full h-10 mt-3 md:w-40 md:h-20 ${
           props.following ? buttonStyles.unfollow : buttonStyles.follow
         }`}
         onClick={handleClick}
