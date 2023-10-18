@@ -7,7 +7,6 @@ import ac.mju.turkey.circle.domain.circle.service.FollowService;
 import ac.mju.turkey.circle.system.security.model.CircleUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,12 +29,12 @@ public class CircleController {
     }
 
     @PostMapping
-    public CircleDto.Response create(@RequestBody CircleDto.Request request) {
+    public CircleDto.Response create(@RequestBody CircleDto.CreateRequest request) {
         return circleService.createCircle(request);
     }
 
     @PatchMapping("/{id}")
-    public CircleDto.Response updateById(@PathVariable Long id, @RequestBody CircleDto.Request request) {
+    public CircleDto.Response updateById(@PathVariable Long id, @RequestBody CircleDto.CreateRequest request) {
         return circleService.updateById(id, request);
     }
 
@@ -58,4 +57,22 @@ public class CircleController {
     public List<FollowerDto.Response> findFollowedCircles(@AuthenticationPrincipal CircleUserDetails user) {
         return followService.findFollowedCircles(user);
     }
+
+    @PostMapping("/{id}/members/register")
+    public CircleDto.RegisterResponse registerMember(@PathVariable Long id,
+                                             @AuthenticationPrincipal CircleUserDetails user,
+                                             @RequestBody CircleDto.RegisterRequest requestDto) {
+        return circleService.registerMember(id, user, requestDto);
+    }
+
+    @GetMapping("/registers/my")
+    public CircleDto.RegisterResponse getRegister(@AuthenticationPrincipal CircleUserDetails user){
+        return circleService.getRegister(user);
+    }
+
+    @GetMapping("/{id}/registers")
+    public List<CircleDto.RegisterResponse> getRegister(@PathVariable Long id, @AuthenticationPrincipal CircleUserDetails user){
+        return circleService.getRegisterApplications(id, user);
+    }
+
 }
