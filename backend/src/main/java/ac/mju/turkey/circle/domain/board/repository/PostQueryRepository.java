@@ -5,14 +5,10 @@ import ac.mju.turkey.circle.common.pagination.PagingQueryResult;
 import ac.mju.turkey.circle.domain.board.dto.PostDto;
 import ac.mju.turkey.circle.domain.board.entity.Category;
 import ac.mju.turkey.circle.domain.board.entity.Post;
-import ac.mju.turkey.circle.domain.board.entity.QCategory;
-import ac.mju.turkey.circle.domain.board.entity.QPost;
 import ac.mju.turkey.circle.domain.circle.entity.Circle;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
