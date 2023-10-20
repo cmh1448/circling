@@ -21,7 +21,7 @@ public class ErrorDto {
             return ErrorResponse.builder()
                     .statusCode(errorCode.getStatusCode())
                     .message(errorCode.getMessage())
-                    .codeName(errorCode.getCodeName())
+                    .codeName(errorCode.name())
                     .build();
         }
 

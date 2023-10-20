@@ -3,6 +3,10 @@ spring:
     active: dev
   main:
     allow-bean-definition-overriding: true
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
 
 # 로그 레벨 설정
 logging:
