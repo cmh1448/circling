@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/circles/{circleId}")
+@RequestMapping("/api/")
 public class PostController {
     private final PostService postService;
 
@@ -35,8 +35,13 @@ public class PostController {
         return postService.paginateByCategory(categoryId, pageable);
     }
 
-    @GetMapping("/posts")
+    @GetMapping("/circles/{circleId}/posts")
     public Page<PostDto.PaginationResponse> paginateByCircle(@PathVariable Long circleId, @PageableDefault Pageable pageable) {
         return postService.paginateByCircle(circleId, pageable);
+    }
+
+    @GetMapping("/posts/{postId}")
+    public PostDto.Response findById(@PathVariable Long postId) {
+        return postService.findById(postId);
     }
 }

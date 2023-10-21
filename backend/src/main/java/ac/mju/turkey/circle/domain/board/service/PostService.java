@@ -81,4 +81,12 @@ public class PostService {
 
         return postQueryRepository.paginateByCircle(circle, pageable);
     }
+
+    @Transactional(readOnly = true)
+    public PostDto.Response findById(Long id) {
+        Post found = postRepository.findById(id)
+                .orElseThrow(() -> new RestException(ErrorCode.GLOBAL_NOT_FOUND));
+
+        return PostDto.Response.from(found);
+    }
 }
