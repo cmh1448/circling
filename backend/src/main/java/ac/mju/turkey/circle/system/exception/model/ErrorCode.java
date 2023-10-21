@@ -24,10 +24,13 @@ public enum ErrorCode {
     CIRCLE_ALREADY_FOLLOWED(400, "이미 팔로우중인 동아리 입니다."),
     CIRCLE_NOT_FOLLOWED(400, "팔로우 되지 않은 동아리 입니다."),
     CIRCLE_NOT_FOUND(404, "동아리를 찾을 수 없습니다."),
+    CIRCLE_NOT_LEADER(403, "너 동아리 회장 아니잖아"),
     //Board
     BOARD_CATEGORY_NOT_FOUND(404, "카테고리를 찾을 수 없습니다."),
     //Other
     INTERNAL_SERVER_ERROR(500, "오류가 발생했습니다.");
+
+
 
     private final int statusCode;
     private final String message;

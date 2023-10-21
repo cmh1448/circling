@@ -14,7 +14,7 @@ import static ac.mju.turkey.circle.domain.circle.entity.QFollower.follower;
 public class FollowerQueryRepository {
     private final JPAQueryFactory queryFactory;
 
-    public List<Follower> findByFollowerEmail(String email) {
+    public List<Follower> findListByFollowerEmail(String email) {
         return queryFactory.selectFrom(follower)
                 .leftJoin(follower.id.user)
                 .leftJoin(follower.id.circle)
@@ -22,5 +22,15 @@ public class FollowerQueryRepository {
                         follower.id.user.email.eq(email)
                 )
                 .fetch();
+    }
+
+    public Follower findByFollowerEmail(String email) {
+        return queryFactory.selectFrom(follower)
+                .leftJoin(follower.id.user)
+                .leftJoin(follower.id.circle)
+                .where(
+                        follower.id.user.email.eq(email)
+                )
+                .fetchFirst();
     }
 }

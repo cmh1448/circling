@@ -1,9 +1,12 @@
 package ac.mju.turkey.circle.domain.circle.entity;
 
 import ac.mju.turkey.circle.common.auditor.UserStampedEntity;
+import ac.mju.turkey.circle.domain.circle.entity.enums.ApplicationType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+
+import static ac.mju.turkey.circle.domain.circle.entity.enums.ApplicationType.*;
 
 @Entity
 @Data
@@ -21,4 +24,14 @@ public class RegisterApplication extends UserStampedEntity {
     private Circle circle;
 
     private String message;
+
+    public ApplicationType status = WAITING;
+
+    public void approve() {
+        this.status = ApplicationType.APPROVED;
+    }
+
+    public void deny(){
+        this.status = ApplicationType.DENIED;
+    }
 }

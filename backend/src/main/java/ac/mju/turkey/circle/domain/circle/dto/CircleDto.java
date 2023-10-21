@@ -5,6 +5,7 @@ import ac.mju.turkey.circle.domain.circle.entity.Circle;
 import ac.mju.turkey.circle.domain.circle.entity.RegisterApplication;
 import ac.mju.turkey.circle.domain.circle.entity.enums.FollowerType;
 import ac.mju.turkey.circle.domain.user.dto.UserDto;
+import ac.mju.turkey.circle.domain.user.entity.User;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,10 +24,13 @@ public class CircleDto {
         String name;
         String description;
 
-        public Circle toEntity() {
+        User leader;
+
+        public Circle toEntity(User leader) {
             return Circle.builder()
                     .name(name)
                     .description(description)
+                    .leader(leader)
                     .build();
         }
     }

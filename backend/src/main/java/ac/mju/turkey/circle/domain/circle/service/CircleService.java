@@ -1,8 +1,12 @@
 package ac.mju.turkey.circle.domain.circle.service;
 
 import ac.mju.turkey.circle.domain.circle.dto.CircleDto;
+import ac.mju.turkey.circle.domain.circle.dto.FollowerDto;
 import ac.mju.turkey.circle.domain.circle.entity.Circle;
+import ac.mju.turkey.circle.domain.circle.entity.Follower;
 import ac.mju.turkey.circle.domain.circle.entity.RegisterApplication;
+import ac.mju.turkey.circle.domain.circle.entity.embedded.FollowerId;
+import ac.mju.turkey.circle.domain.circle.entity.enums.FollowerType;
 import ac.mju.turkey.circle.domain.circle.repository.*;
 import ac.mju.turkey.circle.system.exception.model.ErrorCode;
 import ac.mju.turkey.circle.system.exception.model.RestException;
@@ -27,8 +31,8 @@ public class CircleService {
     private final RegisterApplicationRepository registerApplicationRepository;
 
     @Transactional
-    public CircleDto.Response createCircle(CircleDto.CreateRequest request) {
-        Circle toSave = request.toEntity();
+    public CircleDto.Response createCircle(CircleDto.CreateRequest request, CircleUserDetails user) {
+        Circle toSave = request.toEntity(user.getUser());
 
         Circle saved = circleRepository.save(toSave);
 
@@ -40,10 +44,10 @@ public class CircleService {
         Circle found = circleRepository.findById(id)
                 .orElseThrow(() -> new RestException(ErrorCode.GLOBAL_NOT_FOUND));
 
-        if(Objects.nonNull(request.getName()))
+        if (Objects.nonNull(request.getName()))
             found.setName(request.getName());
 
-        if(Objects.nonNull(request.getDescription()))
+        if (Objects.nonNull(request.getDescription()))
             found.setDescription(request.getDescription());
 
         return CircleDto.Response.from(found);
@@ -83,7 +87,7 @@ public class CircleService {
     }
 
     @Transactional(readOnly = true)
-    public CircleDto.RegisterResponse getRegister(CircleUserDetails user){
+    public CircleDto.RegisterResponse getRegister(CircleUserDetails user) {
         RegisterApplication found = registerApplicationQueryRepository.findByEmail(user.getEmail())
                 .orElseThrow(() -> new RestException(ErrorCode.GLOBAL_NOT_FOUND));
 
@@ -99,5 +103,19 @@ public class CircleService {
         return found.stream()
                 .map(CircleDto.RegisterResponse::from)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void approveRegistration(Long id, CircleUserDetails user) {
+        RegisterApplication found = registerApplicationRepository.findById(id)
+                .orElseThrow(() -> new RestException(ErrorCode.GLOBAL_NOT_FOUND));
+        
+        if (found.getCircle().getLeader().getEmail().equals(user.getEmail())) {
+            found.approve();
+            Follower follower = followerQueryRepository.findByFollowerEmail(found.getCreatedBy().getEmail());
+            follower.setType(FollowerType.MEMBER);
+        } else {
+            throw new RestException(ErrorCode.CIRCLE_NOT_LEADER);
+        }
     }
 }
