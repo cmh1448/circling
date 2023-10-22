@@ -1,8 +1,12 @@
+import { Circle } from "./Circle";
 import { User } from "./User";
 
 export interface Post {
+  id: number;
   title: string;
-  content: string;
+  content?: string;
+  comments?: number;
+  category: Category;
 
   createdBy: User;
   lastModifiedBy: User;
@@ -13,6 +17,8 @@ export interface Post {
 export interface Category {
   id: number;
   title: string;
+  priority?: number;
+  circle: Circle;
 }
 
 export interface Comment {

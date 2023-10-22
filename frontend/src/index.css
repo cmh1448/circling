@@ -7,48 +7,49 @@
 
 html,
 body {
-    height: 100%;
-    width: 100%;
-    -webkit-overflow-scrolling: touch;
+  height: 100%;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
 #root {
-    height: 100%;
-    width: 100vw;
+  height: 100%;
+  width: 100vw;
 }
 
 * {
-    -webkit-tap-highlight-color: transparent;
-    /* -webkit-transform: translate3d(0, 0, 0); */
+  -webkit-tap-highlight-color: transparent;
+  /* -webkit-transform: translate3d(0, 0, 0); */
+  font-family: "Pretendard Variable", sans-serif;
 }
 
 input:focus {
-    outline: none;
+  outline: none;
 }
 
 .apply-scrollbar::-webkit-scrollbar {
-    width: 12px;
-    height: 12px;
-    border-radius: 8px;
+  width: 12px;
+  height: 12px;
+  border-radius: 8px;
 }
 
 .apply-scrollbar::-webkit-scrollbar-thumb {
-    background-color: #d1d5db;
-    background-clip: content-box;
+  background-color: #d1d5db;
+  background-clip: content-box;
 
-    border: solid 4px transparent;
-    border-radius: 8px;
+  border: solid 4px transparent;
+  border-radius: 8px;
 }
 
 .apply-scrollbar::-webkit-scrollbar-thumb:hover,
 .apply-scrollbar::-webkit-scrollbar-thumb:active {
-    background-color: #9ca3af;
+  background-color: #9ca3af;
 }
 
 .apply-scrollbar::-webkit-scrollbar-corner {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 .remove-scrollbar::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
