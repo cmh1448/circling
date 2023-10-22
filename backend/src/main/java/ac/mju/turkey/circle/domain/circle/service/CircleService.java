@@ -32,7 +32,8 @@ public class CircleService {
 
     @Transactional
     public CircleDto.Response createCircle(CircleDto.CreateRequest request, CircleUserDetails user) {
-        Circle toSave = request.toEntity(user.getUser());
+        Circle toSave = request.toEntity();
+        toSave.setLeader(user.getUser());
 
         Circle saved = circleRepository.save(toSave);
 
@@ -109,13 +110,23 @@ public class CircleService {
     public void approveRegistration(Long id, CircleUserDetails user) {
         RegisterApplication found = registerApplicationRepository.findById(id)
                 .orElseThrow(() -> new RestException(ErrorCode.GLOBAL_NOT_FOUND));
-        
-        if (found.getCircle().getLeader().getEmail().equals(user.getEmail())) {
-            found.approve();
-            Follower follower = followerQueryRepository.findByFollowerEmail(found.getCreatedBy().getEmail());
-            follower.setType(FollowerType.MEMBER);
+
+        found.canApprovedBy(user);
+        found.approve();
+
+        makeApplicantAsMember(found);
+    }
+
+    private void makeApplicantAsMember(RegisterApplication found) {
+        FollowerId followerId = FollowerId.of(found.getCreatedBy(), found.getCircle());
+
+        Optional<Follower> alreadyExisted = followerRepository.findById(followerId);
+
+        if(alreadyExisted.isEmpty()) {
+            Follower toSave = Follower.of(followerId, FollowerType.MEMBER);
+            followerRepository.save(toSave);
         } else {
-            throw new RestException(ErrorCode.CIRCLE_NOT_LEADER);
+            alreadyExisted.get().setType(FollowerType.MEMBER);
         }
     }
 }

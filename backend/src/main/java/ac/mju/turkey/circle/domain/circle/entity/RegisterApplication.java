@@ -1,12 +1,15 @@
 package ac.mju.turkey.circle.domain.circle.entity;
 
 import ac.mju.turkey.circle.common.auditor.UserStampedEntity;
-import ac.mju.turkey.circle.domain.circle.entity.enums.ApplicationType;
+import ac.mju.turkey.circle.domain.circle.entity.enums.ApplicationState;
+import ac.mju.turkey.circle.system.exception.model.ErrorCode;
+import ac.mju.turkey.circle.system.exception.model.RestException;
+import ac.mju.turkey.circle.system.security.model.CircleUserDetails;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import static ac.mju.turkey.circle.domain.circle.entity.enums.ApplicationType.*;
+import static ac.mju.turkey.circle.domain.circle.entity.enums.ApplicationState.*;
 
 @Entity
 @Data
@@ -25,13 +28,18 @@ public class RegisterApplication extends UserStampedEntity {
 
     private String message;
 
-    public ApplicationType status = WAITING;
+    public ApplicationState status = WAITING;
 
     public void approve() {
-        this.status = ApplicationType.APPROVED;
+        this.status = ApplicationState.APPROVED;
     }
 
     public void deny(){
-        this.status = ApplicationType.DENIED;
+        this.status = ApplicationState.DENIED;
+    }
+
+    public void canApprovedBy(CircleUserDetails user) {
+        if(!this.circle.leader.getEmail().equals(user.getEmail()))
+            throw new RestException(ErrorCode.AUTH_FORBIDDEN);
     }
 }

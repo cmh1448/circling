@@ -3,7 +3,6 @@ package ac.mju.turkey.circle.domain.circle.service;
 import ac.mju.turkey.circle.domain.circle.dto.FollowerDto;
 import ac.mju.turkey.circle.domain.circle.entity.Circle;
 import ac.mju.turkey.circle.domain.circle.entity.Follower;
-import ac.mju.turkey.circle.domain.circle.entity.RegisterApplication;
 import ac.mju.turkey.circle.domain.circle.entity.embedded.FollowerId;
 import ac.mju.turkey.circle.domain.circle.entity.enums.FollowerType;
 import ac.mju.turkey.circle.domain.circle.repository.CircleRepository;
@@ -59,7 +58,7 @@ public class FollowService {
 
     @Transactional(readOnly = true)
     public List<FollowerDto.Response> findFollowedCircles(CircleUserDetails user) {
-        List<Follower> founds = followerQueryRepository.findListByFollowerEmail(user.getEmail());
+        List<Follower> founds = followerQueryRepository.findByFollowerEmail(user.getEmail());
 
         return founds.stream()
                 .map(FollowerDto.Response::from)

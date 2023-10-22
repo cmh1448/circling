@@ -25,7 +25,7 @@ public class Circle extends UserStampedEntity {
 
     String description;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     User leader;
 
     @OneToMany(mappedBy = "id.circle", fetch = FetchType.LAZY)

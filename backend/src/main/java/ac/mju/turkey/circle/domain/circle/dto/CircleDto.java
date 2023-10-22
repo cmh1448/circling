@@ -24,13 +24,11 @@ public class CircleDto {
         String name;
         String description;
 
-        User leader;
 
-        public Circle toEntity(User leader) {
+        public Circle toEntity() {
             return Circle.builder()
                     .name(name)
                     .description(description)
-                    .leader(leader)
                     .build();
         }
     }
