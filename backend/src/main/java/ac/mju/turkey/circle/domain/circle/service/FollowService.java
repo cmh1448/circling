@@ -58,7 +58,7 @@ public class FollowService {
 
     @Transactional(readOnly = true)
     public List<FollowerDto.Response> findFollowedCircles(CircleUserDetails user) {
-        List<Follower> founds = followerQueryRepository.findByFollowerEmail(user.getEmail());
+        List<Follower> founds = followerQueryRepository.findFollowingCirclesByEmail(user.getEmail());
 
         return founds.stream()
                 .map(FollowerDto.Response::from)

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static ac.mju.turkey.circle.domain.circle.entity.QFollower.follower;
 
@@ -14,7 +15,7 @@ import static ac.mju.turkey.circle.domain.circle.entity.QFollower.follower;
 public class FollowerQueryRepository {
     private final JPAQueryFactory queryFactory;
 
-    public List<Follower> findByFollowerEmail(String email) {
+    public List<Follower> findFollowingCirclesByEmail(String email) {
         return queryFactory.selectFrom(follower)
                 .leftJoin(follower.id.user)
                 .leftJoin(follower.id.circle)
