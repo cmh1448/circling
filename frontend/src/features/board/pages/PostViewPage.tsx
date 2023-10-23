@@ -2,16 +2,23 @@ import Button from "@/components/base/Button";
 import Divider from "@/components/base/Divider";
 import Icon from "@/components/base/Icon";
 import PageContainer from "@/components/pages/PageContainer";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CommentItem from "../components/CommentItem";
 import { useStore } from "zustand";
 import { authStore } from "@/stores/authStore";
 import { Comment } from "@/models/Board";
+import { useQuery } from "react-query";
+import api from "@/api";
 
 export default function PostViewPage() {
   const navigate = useNavigate();
   const handleGoBack = () => navigate(-1);
   const authContext = useStore(authStore);
+  const { id } = useParams();
+
+  const { data: post, isLoading } = useQuery(["fetchPostById", id], () =>
+    api.board.fetchPostById(Number(id))
+  );
 
   const dummyComment: Comment = {
     content: "Test Content",
@@ -19,6 +26,12 @@ export default function PostViewPage() {
     createdBy: authContext.user!,
     lastModifiedAt: new Date().toISOString(),
     lastModifiedBy: authContext.user!,
+  };
+
+  const handleGoCategory = () => {
+    navigate(
+      `/circles/${post?.category.circle.id}?category=${post?.category.id}`
+    );
   };
 
   return (
@@ -29,6 +42,15 @@ export default function PostViewPage() {
           뒤로가기
         </Button>
         <div className="flex-1" />
+
+        <div
+          onClick={handleGoCategory}
+          className="text-2xl flex-col relative font-bold select-none text-gray-700 rounded-lg hover:bg-gray-100 flex items-center p-1 cursor-pointer active:scale-[0.98] transition-all"
+        >
+          {post?.category.title}
+        </div>
+
+        <div className="flex-1" />
         <Button variant={"third"}>
           <Icon icon="link" />
           링크 복사
@@ -36,22 +58,21 @@ export default function PostViewPage() {
       </div>
       <div className="flex flex-col gap-2">
         <div className="p-4 bg-gray-100 rounded-lg">
-          <span className="text-3xl text-blue-500">글 제목입니다.</span>
+          <span className="text-3xl text-blue-500">{post?.title}</span>
           <div className="w-full h-[2px] bg-gray-200 rounded-full my-2" />
           <div className="flex items-center gap-2 text-gray-400">
-            천명현 <Divider variant="dot" className="!bg-gray-400" /> 10분전
+            {post?.createdBy.nickName}{" "}
+            <Divider variant="dot" className="!bg-gray-400" /> 10분전
           </div>
         </div>
-        <div className="px-4 py-8 bg-gray-100 rounded-lg">
-          여기에 게시물 내용이 보여집니다.
-        </div>
+        <div className="px-4 py-8 bg-gray-100 rounded-lg">{post?.content}</div>
       </div>
       <div>
         <div className="flex items-center gap-4 my-4">
           <div className="h-px w-full bg-gray-200" />
           <div className="flex gap-1 whitespace-nowrap text-gray-400">
             <Icon icon="comment" />
-            6개
+            {post?.comments ?? 0}개
           </div>
           <div className="h-px w-full bg-gray-200" />
         </div>

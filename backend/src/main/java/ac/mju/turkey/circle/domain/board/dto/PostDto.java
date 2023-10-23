@@ -54,6 +54,7 @@ public class PostDto {
             return Response.builder()
                     .id(post.getId())
                     .title(post.getTitle())
+                    .category(CategoryDto.Response.from(post.getCategory()))
                     .content(post.getContent())
                     .category(CategoryDto.Response.from(post.getCategory()))
                     .createdAt(post.getCreatedAt())

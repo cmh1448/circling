@@ -2,6 +2,7 @@ package ac.mju.turkey.circle.domain.board.dto;
 
 import ac.mju.turkey.circle.domain.board.entity.Category;
 import ac.mju.turkey.circle.domain.board.entity.Post;
+import ac.mju.turkey.circle.domain.circle.dto.CircleDto;
 import ac.mju.turkey.circle.domain.user.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,6 +40,8 @@ public class CategoryDto {
 
         private Long priority;
 
+        private CircleDto.Response circle;
+
         private LocalDateTime createdAt;
 
 
@@ -48,6 +51,7 @@ public class CategoryDto {
             return Response.builder()
                     .id(category.getId())
                     .title(category.getTitle())
+                    .circle(CircleDto.Response.from(category.getCircle()))
                     .priority(category.getPriority())
                     .createdAt(category.getCreatedAt())
                     .lastModifiedAt(category.getLastModifiedAt())

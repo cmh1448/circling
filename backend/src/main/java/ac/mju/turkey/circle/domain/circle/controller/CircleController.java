@@ -29,8 +29,8 @@ public class CircleController {
     }
 
     @PostMapping
-    public CircleDto.Response create(@RequestBody CircleDto.CreateRequest request) {
-        return circleService.createCircle(request);
+    public CircleDto.Response create(@RequestBody CircleDto.CreateRequest request, @AuthenticationPrincipal CircleUserDetails user) {
+        return circleService.createCircle(request, user);
     }
 
     @PatchMapping("/{id}")
@@ -73,6 +73,11 @@ public class CircleController {
     @GetMapping("/{id}/registers")
     public List<CircleDto.RegisterResponse> getRegister(@PathVariable Long id, @AuthenticationPrincipal CircleUserDetails user){
         return circleService.getRegisterApplications(id, user);
+    }
+
+    @PostMapping("/registers/{id}/approve")
+    public void approveRegistration(@PathVariable Long id, @AuthenticationPrincipal CircleUserDetails user){
+        circleService.approveRegistration(id, user);
     }
 
 }

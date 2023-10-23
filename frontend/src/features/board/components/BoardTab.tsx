@@ -1,17 +1,22 @@
 import { Category } from "@/models/Board";
 import TabItem from "./TabItem";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export interface BoardTabProps {
   categories: Category[];
 
-  selectedChange?: (changedTo: Category | null) => void;
+  selectedChange?: (changedTo: Category | undefined) => void;
+  selectedDefault?: Category;
 }
 
 export default function BoardTab(props: BoardTabProps) {
   const [selectedCategory, setSelectedCategory] = useState<
     Category | undefined
-  >(undefined);
+  >(props.selectedDefault);
+
+  useEffect(() => {
+    props.selectedChange && props.selectedChange(selectedCategory);
+  }, [selectedCategory]);
 
   return (
     <div className="flex gap-2 flex-wrap">
