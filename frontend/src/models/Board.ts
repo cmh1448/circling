@@ -14,6 +14,11 @@ export interface Post {
   lastModifiedAt: string;
 }
 
+export interface PostRequest {
+  title: string;
+  content: string;
+}
+
 export interface Category {
   id: number;
   title: string;

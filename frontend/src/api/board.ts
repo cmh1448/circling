@@ -1,4 +1,4 @@
-import { Category, Post } from "@/models/Board";
+import { Category, Post, PostRequest } from "@/models/Board";
 import axios from "./axios";
 import { Page, Pageable } from "@/models/Pagination";
 
@@ -29,5 +29,13 @@ export const fetchPostsByCategory = async (
 
 export const fetchPostById = async (id: number) => {
   const response = await axios.get(`/api/posts/${id}`);
+  return response.data as Post;
+};
+
+export const uploadPost = async (categoryId: number, request: PostRequest) => {
+  const response = await axios.post(
+    `/api/categories/${categoryId}/posts`,
+    request
+  );
   return response.data as Post;
 };

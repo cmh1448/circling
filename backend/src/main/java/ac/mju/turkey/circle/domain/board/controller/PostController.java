@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class PostController {
     private final PostService postService;
 
-    @PostMapping("/categories/{categoryId}")
+    @PostMapping("/categories/{categoryId}/posts")
     public PostDto.Response create(@PathVariable Long categoryId, @RequestBody PostDto.Request request) {
         return postService.create(categoryId, request);
     }

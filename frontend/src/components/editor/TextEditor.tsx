@@ -1,5 +1,6 @@
 import ReactQuill from "react-quill";
 import "./theme.css";
+import { useEffect } from "react";
 
 interface TextEditorProps {
   onChange?: (val: string) => void;
@@ -11,7 +12,6 @@ export default function TextEditor({ onChange, value = "" }: TextEditorProps) {
   return (
     <ReactQuill
       theme="snow"
-      value={value}
       onChange={(value: string) => onChange && onChange(value)}
     />
   );

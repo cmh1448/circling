@@ -1,7 +1,6 @@
 package ac.mju.turkey.circle.domain.board.repository;
 
 import ac.mju.turkey.circle.domain.board.entity.Category;
-import ac.mju.turkey.circle.domain.board.entity.QCategory;
 import ac.mju.turkey.circle.domain.circle.entity.Circle;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;

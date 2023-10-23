@@ -11,6 +11,7 @@ import { Category } from "@/models/Board";
 import Suspense from "@/components/suspense/Suspense";
 import Skeleton from "@/components/base/Skeleton";
 import { Pageable } from "@/models/Pagination";
+import Fallback from "@/components/fallback/fallback";
 
 export default function CirclePostListPage() {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ export default function CirclePostListPage() {
     navigate(`/circles/board/posts/${id}`);
   };
   const handleNewPost = () => {
-    navigate("/circles/board/posts/new");
+    navigate(`/circles/${id}/board/posts/new`);
   };
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -86,15 +87,25 @@ export default function CirclePostListPage() {
             <Skeleton className="w-full h-14 mt-2 rounded-lg" />
           ))}
         >
-          {(!!categoryId ? categoryPosts?.content : circlePosts?.content)?.map(
-            (it) => (
+          <Fallback
+            when={
+              !!categoryId
+                ? categoryPosts?.content.length === 0
+                : circlePosts?.content.length === 0
+            }
+            message="아무 게시물도 없어요"
+          >
+            {(!!categoryId
+              ? categoryPosts?.content
+              : circlePosts?.content
+            )?.map((it) => (
               <PostListItem
                 post={it}
                 onClick={() => handleClickPost(it.id)}
                 key={it.id}
               />
-            )
-          )}
+            ))}
+          </Fallback>
         </Suspense>
       </div>
       <ActionButton onClick={handleNewPost}>

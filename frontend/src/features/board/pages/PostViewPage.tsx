@@ -9,6 +9,10 @@ import { authStore } from "@/stores/authStore";
 import { Comment } from "@/models/Board";
 import { useQuery } from "react-query";
 import api from "@/api";
+import Suspense from "@/components/suspense/Suspense";
+import Skeleton from "@/components/base/Skeleton";
+import { elapsedStringOf, parseLocalDateTime } from "@/utils/DateUtils";
+import { DateTime } from "luxon";
 
 export default function PostViewPage() {
   const navigate = useNavigate();
@@ -47,7 +51,12 @@ export default function PostViewPage() {
           onClick={handleGoCategory}
           className="text-2xl flex-col relative font-bold select-none text-gray-700 rounded-lg hover:bg-gray-100 flex items-center p-1 cursor-pointer active:scale-[0.98] transition-all"
         >
-          {post?.category.title}
+          <Suspense
+            isLoading={isLoading}
+            fallback={<Skeleton className="w-28 h-8 rounded-lg" />}
+          >
+            {post?.category.title}
+          </Suspense>
         </div>
 
         <div className="flex-1" />
@@ -61,11 +70,33 @@ export default function PostViewPage() {
           <span className="text-3xl text-blue-500">{post?.title}</span>
           <div className="w-full h-[2px] bg-gray-200 rounded-full my-2" />
           <div className="flex items-center gap-2 text-gray-400">
-            {post?.createdBy.nickName}{" "}
-            <Divider variant="dot" className="!bg-gray-400" /> 10분전
+            <Suspense
+              isLoading={isLoading}
+              fallback={<Skeleton className="w-12 h-4 rounded" />}
+            >
+              {post?.createdBy.nickName}
+            </Suspense>
+            <Divider variant="dot" className="!bg-gray-400" />
+            <Suspense
+              isLoading={isLoading}
+              fallback={<Skeleton className="w-12 h-4 rounded" />}
+            >
+              {elapsedStringOf(
+                parseLocalDateTime(post?.createdAt) ?? DateTime.now()
+              )}
+            </Suspense>
           </div>
         </div>
-        <div className="px-4 py-8 bg-gray-100 rounded-lg">{post?.content}</div>
+        <div className="px-4 py-8 bg-gray-100 rounded-lg">
+          <Suspense
+            isLoading={isLoading}
+            fallback={[...Array(6)].map(() => (
+              <Skeleton className="w-full h-6 mt-2 rounded" />
+            ))}
+          >
+            {post?.content}
+          </Suspense>
+        </div>
       </div>
       <div>
         <div className="flex items-center gap-4 my-4">

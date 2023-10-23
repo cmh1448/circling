@@ -51,7 +51,7 @@ export const routes: Record<RouteContext, RouteObject[]> = {
       element: <PostViewPage />,
     },
     {
-      path: "/circles/board/posts/new",
+      path: "/circles/:circleId/board/posts/new",
       element: <NewPostPage />,
     },
   ],
