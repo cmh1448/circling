@@ -2,14 +2,24 @@ import Icon from "@/components/base/Icon";
 import { Post } from "@/models/Board";
 import { elapsedStringOf, parseLocalDateTime } from "@/utils/DateUtils";
 import { DateTime } from "luxon";
+import { useNavigate } from "react-router-dom";
 
 interface PostItemProps {
   post: Post;
 }
 
 export default function PostItem({ post }: PostItemProps) {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/circles/board/posts/${post.id}`);
+  };
+
   return (
-    <div className="flex text-sm cursor-pointer text-gray-400 gap-2 items-center hover:bg-gray-200 active:scale-95 p-1 rounded-lg transition-all">
+    <div
+      onClick={handleClick}
+      className="flex text-sm cursor-pointer text-gray-400 gap-2 items-center hover:bg-gray-200 active:scale-95 p-1 rounded-lg transition-all"
+    >
       <Icon icon="article" className="text-sm" />
       <span className=" font-semibold flex items-center gap-3">
         <span className=" line-clamp-1">{post.title}</span>

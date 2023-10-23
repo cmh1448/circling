@@ -13,6 +13,7 @@ import Suspense from "@/components/suspense/Suspense";
 import Skeleton from "@/components/base/Skeleton";
 import { elapsedStringOf, parseLocalDateTime } from "@/utils/DateUtils";
 import { DateTime } from "luxon";
+import TextViewer from "@/components/editor/TextViewer";
 
 export default function PostViewPage() {
   const navigate = useNavigate();
@@ -67,7 +68,14 @@ export default function PostViewPage() {
       </div>
       <div className="flex flex-col gap-2">
         <div className="p-4 bg-gray-100 rounded-lg">
-          <span className="text-3xl text-blue-500">{post?.title}</span>
+          <span className="text-3xl text-blue-500">
+            <Suspense
+              isLoading={isLoading}
+              fallback={<Skeleton className="w-full h-10 rounded-lg" />}
+            >
+              {post?.title}
+            </Suspense>
+          </span>
           <div className="w-full h-[2px] bg-gray-200 rounded-full my-2" />
           <div className="flex items-center gap-2 text-gray-400">
             <Suspense
@@ -94,7 +102,7 @@ export default function PostViewPage() {
               <Skeleton className="w-full h-6 mt-2 rounded" />
             ))}
           >
-            {post?.content}
+            <TextViewer html={post?.content ?? ""} />
           </Suspense>
         </div>
       </div>

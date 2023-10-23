@@ -39,3 +39,10 @@ export const uploadPost = async (categoryId: number, request: PostRequest) => {
   );
   return response.data as Post;
 };
+
+export const fetchFeedPosts = async (pageable: Pageable) => {
+  const response = await axios.get(
+    `/api/posts/feeds${pageable.toQueryString(true)}`
+  );
+  return response.data as Page<Post>;
+};
