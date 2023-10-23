@@ -3,15 +3,17 @@ package ac.mju.turkey.circle.domain.board.controller;
 
 import ac.mju.turkey.circle.domain.board.dto.PostDto;
 import ac.mju.turkey.circle.domain.board.service.PostService;
+import ac.mju.turkey.circle.system.security.model.CircleUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/circles/{circleId}")
+@RequestMapping("/api")
 public class PostController {
     private final PostService postService;
 
@@ -35,8 +37,13 @@ public class PostController {
         return postService.paginateByCategory(categoryId, pageable);
     }
 
-    @GetMapping("/posts")
+    @GetMapping("/circles/{circleId}/posts")
     public Page<PostDto.PaginationResponse> paginateByCircle(@PathVariable Long circleId, @PageableDefault Pageable pageable) {
         return postService.paginateByCircle(circleId, pageable);
+    }
+
+    @GetMapping("/posts/feeds")
+    public Page<PostDto.Response> paginateFeedsByUser(@AuthenticationPrincipal CircleUserDetails user, @PageableDefault Pageable pageable) {
+        return postService.paginateFeeds(user, pageable);
     }
 }

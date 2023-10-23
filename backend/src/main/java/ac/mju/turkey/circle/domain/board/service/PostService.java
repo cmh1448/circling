@@ -10,15 +10,13 @@ import ac.mju.turkey.circle.domain.circle.entity.Circle;
 import ac.mju.turkey.circle.domain.circle.repository.CircleRepository;
 import ac.mju.turkey.circle.system.exception.model.ErrorCode;
 import ac.mju.turkey.circle.system.exception.model.RestException;
-import jdk.jfr.Frequency;
+import ac.mju.turkey.circle.system.security.model.CircleUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Objects;
 
 @RequiredArgsConstructor
@@ -80,5 +78,10 @@ public class PostService {
                 .orElseThrow(() -> new RestException(ErrorCode.CIRCLE_NOT_FOUND));
 
         return postQueryRepository.paginateByCircle(circle, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PostDto.Response> paginateFeeds(CircleUserDetails user, Pageable pageable) {
+        return postQueryRepository.paginateFeedsByUser(user, pageable);
     }
 }

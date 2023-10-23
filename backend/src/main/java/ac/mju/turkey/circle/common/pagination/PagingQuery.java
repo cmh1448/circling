@@ -1,21 +1,21 @@
 package ac.mju.turkey.circle.common.pagination;
 
-import ac.mju.turkey.circle.domain.board.entity.Post;
+import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.EntityPathBase;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class PagingQuery<E extends EntityPathBase<?>> {
     List<Predicate> where = new ArrayList<>();
     List<OrderSpecifier<?>> orderBy = new ArrayList<>();
+    List<EntityPath<?>> fetchJoins = new ArrayList<>();
+
     EntityPathBase<?> entity;
 
     JPAQueryFactory queryFactory;
@@ -62,8 +62,14 @@ public class PagingQuery<E extends EntityPathBase<?>> {
         return this;
     }
 
+    public PagingQuery<E> fetchJoin(EntityPath<?> entityPath) {
+        fetchJoins.add(entityPath);
+
+        return this;
+    }
+
     public <K> PagingQueryResult<K> fetchPages(Pageable pageable, Class<K> entityClass) {
-        List<?> result = queryFactory.selectFrom(entity)
+        JPAQuery<?> resultQuery = queryFactory.selectFrom(entity)
                 .where(
                         where.toArray(new Predicate[0])
                 )
@@ -71,7 +77,11 @@ public class PagingQuery<E extends EntityPathBase<?>> {
                         orderBy.toArray(new OrderSpecifier[0])
                 )
                 .limit(pageable.getPageSize())
-                .offset(pageable.getOffset())
+                .offset(pageable.getOffset());
+
+        resultQuery = applyFetchJoins(resultQuery);
+
+        List<?> result = resultQuery
                 .fetch();
 
         Long count = queryFactory.select(entity.count()).from(entity)
@@ -81,6 +91,13 @@ public class PagingQuery<E extends EntityPathBase<?>> {
                 .fetchFirst();
 
         return new PagingQueryResult<>(result.stream().map(entityClass::cast).toList(), count, pageable);
+    }
+
+    private JPAQuery<?> applyFetchJoins(JPAQuery<?> resultQuery) {
+        for (EntityPath<?> it: fetchJoins) {
+            resultQuery = resultQuery.leftJoin(it).fetchJoin();
+        }
+        return resultQuery;
     }
 
 
