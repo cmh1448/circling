@@ -32,6 +32,11 @@ public class PostController {
         postService.delete(postId);
     }
 
+    @GetMapping("/posts/{postId}")
+    public PostDto.Response findById(@PathVariable Long postId) {
+        return postService.findById(postId);
+    }
+
     @GetMapping("/categories/{categoryId}/posts")
     public Page<PostDto.PaginationResponse> paginateByCategory(@PathVariable Long categoryId, @PageableDefault Pageable pageable) {
         return postService.paginateByCategory(categoryId, pageable);

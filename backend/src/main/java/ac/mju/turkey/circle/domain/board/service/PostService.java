@@ -84,4 +84,11 @@ public class PostService {
     public Page<PostDto.Response> paginateFeeds(CircleUserDetails user, Pageable pageable) {
         return postQueryRepository.paginateFeedsByUser(user, pageable);
     }
+
+    public PostDto.Response findById(Long postId) {
+        Post found = postRepository.findById(postId)
+                .orElseThrow(() -> new RestException(ErrorCode.GLOBAL_NOT_FOUND));
+
+        return PostDto.Response.from(found);
+    }
 }
