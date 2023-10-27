@@ -88,7 +88,7 @@ public class PostDto {
             return PaginationResponse.builder()
                     .id(post.getId())
                     .title(post.getTitle())
-                    //.comments() //TODO
+                    .comments((long) post.getComments().size())
                     .createdAt(post.getCreatedAt())
                     .createdBy(UserDto.UserResponse.from(post.getCreatedBy()))
                     .lastModifiedAt(post.getLastModifiedAt())

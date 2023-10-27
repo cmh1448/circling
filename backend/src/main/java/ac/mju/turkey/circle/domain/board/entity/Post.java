@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,4 +29,7 @@ public class Post extends UserStampedEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Circle circle;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
+    private List<Comment> comments;
 }
