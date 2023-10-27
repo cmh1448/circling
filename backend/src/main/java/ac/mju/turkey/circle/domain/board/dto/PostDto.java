@@ -40,6 +40,8 @@ public class PostDto {
 
         private String content;
 
+        private Long comments;
+
         private CategoryDto.Response category;
 
         private LocalDateTime createdAt;
@@ -56,6 +58,7 @@ public class PostDto {
                     .title(post.getTitle())
                     .category(CategoryDto.Response.from(post.getCategory()))
                     .content(post.getContent())
+                    .comments((long) post.getComments().size())
                     .category(CategoryDto.Response.from(post.getCategory()))
                     .createdAt(post.getCreatedAt())
                     .createdBy(UserDto.UserResponse.from(post.getCreatedBy()))
