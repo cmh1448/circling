@@ -28,6 +28,8 @@ public enum ErrorCode {
 
     //Board
     BOARD_CATEGORY_NOT_FOUND(404, "카테고리를 찾을 수 없습니다."),
+    BOARD_POST_NOT_FOUND(404, "게시물을 찾을 수 없습니다."),
+    BOARD_PARENT_COMMENT_NOT_FOUND(404, "부모 댓글을 찾을 수 없습니다."),
     //Other
     INTERNAL_SERVER_ERROR(500, "오류가 발생했습니다.");
 
