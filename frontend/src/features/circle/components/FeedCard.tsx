@@ -51,7 +51,8 @@ export default function FeedCard({ post }: FeedCardProps) {
           {elapsedStringOf(parseLocalDateTime(post.createdAt))}
         </div>
         <div className="flex items-center text-gray-500 gap-1  rounded">
-          <Icon icon="comment" className="text-[18px]" fill />9
+          <Icon icon="comment" className="text-[18px]" fill />
+          {post.comments}
         </div>
       </div>
     </Card>

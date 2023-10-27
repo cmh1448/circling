@@ -61,7 +61,6 @@ export default function FeedPage() {
           .map((it) => (
             <FeedCard key={it.id} post={it} />
           ))}
-        <div></div>
         {!isLastPage ? (
           <div
             ref={nextLoadingRef}
