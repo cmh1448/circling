@@ -14,7 +14,7 @@ export default function TextEditor({
   value,
 }: TextEditorProps) {
   return (
-    <div className={`${height ? `mb-[50px] h-[${height}px]` : ""}`}>
+    <div className={`${height ? `mb-[10px] h-[${height}px]` : ""}`}>
       <ReactQuill
         value={value}
         className="h-full"
