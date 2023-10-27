@@ -4,15 +4,23 @@ import { useEffect } from "react";
 
 interface TextEditorProps {
   onChange?: (val: string) => void;
-
   value?: string;
+  height?: number;
 }
 
-export default function TextEditor({ onChange, value = "" }: TextEditorProps) {
+export default function TextEditor({
+  onChange,
+  height,
+  value,
+}: TextEditorProps) {
   return (
-    <ReactQuill
-      theme="snow"
-      onChange={(value: string) => onChange && onChange(value)}
-    />
+    <div className={`${height ? `mb-[50px] h-[${height}px]` : ""}`}>
+      <ReactQuill
+        value={value}
+        className="h-full"
+        theme="snow"
+        onChange={(value: string) => onChange && onChange(value)}
+      />
+    </div>
   );
 }

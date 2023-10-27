@@ -71,7 +71,7 @@ export default function NewPostPage() {
         />
       </div>
       <TitleInput className={`text-2xl font-bold`} onInput={setTitle} />
-      <TextEditor onChange={(val) => setEditorValue(val)} />
+      <TextEditor onChange={(val) => setEditorValue(val)} value={editorValue} />
       <div></div>
       <div className={`flex flex-col mt-2`}>
         <Button

@@ -15,6 +15,7 @@ export default defineConfig({
     proxy: {
       "/api": {
         target: "https://circling.cmhvscode.dev/circling",
+        // target: "http://localhost:8080/circling",
         changeOrigin: true,
         secure: false,
       },

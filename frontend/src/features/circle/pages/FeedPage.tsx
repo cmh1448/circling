@@ -29,10 +29,10 @@ export default function FeedPage() {
     fetchNextPage,
   } = useInfiniteQuery(
     ["fetchFeedPosts"],
-    ({ pageParam = 1 }) => api.board.fetchFeedPosts(Pageable.of(4, pageParam)),
+    ({ pageParam = 1 }) => api.board.fetchFeedPosts(Pageable.of(10, pageParam)),
     {
       getNextPageParam: (lastPage, allPage) => {
-        console.log("fetch next page");
+        // console.log("fetch next page");
         return lastPage.pageable.pageNumber + 2;
       },
     }
@@ -51,38 +51,20 @@ export default function FeedPage() {
 
   useEffect(() => {
     if (feeds?.pages[feeds.pages.length - 1].last) setIsLastPage(true);
+    console.log(isLastPage);
   }, [feeds]);
   return (
     <PageContainer className={`relative `}>
-      {/* <CSSTransition
-        classNames="fade"
-        in={isFetching}
-        timeout={150}
-        unmountOnExit
-      >
-        <div className={`absolute ${absoluteCenter}`}>
-          <Spinner size="20px" color="#3b82f6" />
-        </div>
-      </CSSTransition> */}
-      <div
-        className={`flex flex-col gap-4 transition-all ${
-          isFetching ? "translate-y-[40px]" : ""
-        } `}
-      >
+      <div className={`flex flex-col gap-4 transition-all `}>
         {feeds?.pages
           .flatMap((p) => p.content)
           .map((it) => (
-            <FeedCard post={it} />
+            <FeedCard key={it.id} post={it} />
           ))}
         <div></div>
-        {feeds?.pages[feeds.pages.length - 1].last ? (
+        {!isLastPage ? (
           <div
             ref={nextLoadingRef}
-            style={{
-              visibility: feeds?.pages[feeds.pages.length - 1].last
-                ? "hidden"
-                : "visible",
-            }}
             className="flex justify-center items-center"
           >
             <Spinner color="#9ca3af" size="20px" />

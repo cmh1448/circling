@@ -11,9 +11,8 @@ import { useQuery } from "react-query";
 import api from "@/api";
 import Suspense from "@/components/suspense/Suspense";
 import Skeleton from "@/components/base/Skeleton";
-import { elapsedStringOf, parseLocalDateTime } from "@/utils/DateUtils";
-import { DateTime } from "luxon";
 import TextViewer from "@/components/editor/TextViewer";
+import CommentPanel from "../panels/CommentPanel";
 
 export default function PostViewPage() {
   const navigate = useNavigate();
@@ -24,14 +23,6 @@ export default function PostViewPage() {
   const { data: post, isLoading } = useQuery(["fetchPostById", id], () =>
     api.board.fetchPostById(Number(id))
   );
-
-  const dummyComment: Comment = {
-    content: "Test Content",
-    createdAt: new Date().toISOString(),
-    createdBy: authContext.user!,
-    lastModifiedAt: new Date().toISOString(),
-    lastModifiedBy: authContext.user!,
-  };
 
   const handleGoCategory = () => {
     navigate(
@@ -66,8 +57,8 @@ export default function PostViewPage() {
           링크 복사
         </Button>
       </div>
-      <div className="flex flex-col gap-2">
-        <div className="p-4 bg-gray-100 rounded-lg">
+      <div className="flex flex-col gap-2]">
+        <div className="p-4 bg-gray-100 rounded-lg min-h-[300px]">
           <span className="text-3xl text-blue-500">
             <Suspense
               isLoading={isLoading}
@@ -76,7 +67,6 @@ export default function PostViewPage() {
               {post?.title}
             </Suspense>
           </span>
-          <div className="w-full h-[2px] bg-gray-200 rounded-full my-2" />
           <div className="flex items-center gap-2 text-gray-400">
             <Suspense
               isLoading={isLoading}
@@ -89,15 +79,14 @@ export default function PostViewPage() {
               isLoading={isLoading}
               fallback={<Skeleton className="w-12 h-4 rounded" />}
             >
-              {elapsedStringOf(parseLocalDateTime(post?.createdAt))}
+              {post?.createdAt}
             </Suspense>
           </div>
-        </div>
-        <div className="px-4 py-8 bg-gray-100 rounded-lg">
+          <div className="w-full h-[2px] bg-gray-200 rounded-full my-2" />
           <Suspense
             isLoading={isLoading}
-            fallback={[...Array(6)].map(() => (
-              <Skeleton className="w-full h-6 mt-2 rounded" />
+            fallback={[...Array(6)].map((i, index) => (
+              <Skeleton className="w-full h-6 mt-2 rounded" key={index} />
             ))}
           >
             <TextViewer html={post?.content ?? ""} />
@@ -109,14 +98,17 @@ export default function PostViewPage() {
           <div className="h-px w-full bg-gray-200" />
           <div className="flex gap-1 whitespace-nowrap text-gray-400">
             <Icon icon="comment" />
-            {post?.comments ?? 0}개
+            <Suspense
+              isLoading={isLoading}
+              fallback={<Skeleton className="w-10 h-5 rounded" />}
+            >
+              {post?.comments}개
+            </Suspense>
           </div>
           <div className="h-px w-full bg-gray-200" />
         </div>
-        <div className="flex flex-col gap-2 mt-1">
-          {[...Array(10)].map((it) => (
-            <CommentItem key={it} comment={dummyComment} />
-          ))}
+        <div className="mt-1">
+          <CommentPanel postId={Number(id)} />
         </div>
       </div>
     </PageContainer>

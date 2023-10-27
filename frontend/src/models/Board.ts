@@ -27,10 +27,19 @@ export interface Category {
 }
 
 export interface Comment {
-  content: string;
+  id: number;
+  content?: string;
+  isDeleted: boolean;
+
+  parentId?: number;
+  children?: Comment[];
 
   createdBy: User;
   lastModifiedBy: User;
   createdAt: string;
   lastModifiedAt: string;
+}
+
+export interface CommentRequest {
+  content: string;
 }

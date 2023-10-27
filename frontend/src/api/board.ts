@@ -1,4 +1,10 @@
-import { Category, Post, PostRequest } from "@/models/Board";
+import {
+  Category,
+  Comment,
+  CommentRequest,
+  Post,
+  PostRequest,
+} from "@/models/Board";
 import axios from "./axios";
 import { Page, Pageable } from "@/models/Pagination";
 
@@ -46,4 +52,22 @@ export const fetchFeedPosts = async (pageable: Pageable) => {
   );
 
   return response.data as Page<Post>;
+};
+
+export const fetchCommentsByPost = async (postId: number) => {
+  const response = await axios.get(`/api/posts/${postId}/comments`);
+
+  return response.data as Comment[];
+};
+
+export const uploadComment = async (postId: number, req: CommentRequest) => {
+  const response = await axios.post(`/api/posts/${postId}/comments`, req);
+
+  return response.data as Comment;
+};
+
+export const uploadReply = async (parentId: number, req: CommentRequest) => {
+  const response = await axios.post(`/api/comments/${parentId}`, req);
+
+  return response.data as Comment;
 };

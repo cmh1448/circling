@@ -42,7 +42,7 @@
   text-align: left;
   white-space: pre-wrap;
   word-wrap: break-word;
-  min-height: 200px;
+  min-height: 100px;
 }
 .ql-editor > * {
   cursor: text;
