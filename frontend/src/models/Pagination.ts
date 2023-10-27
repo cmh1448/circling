@@ -23,6 +23,7 @@ export interface Page<T> {
   last: boolean;
   size: number;
   number: number;
+  pageable: Pageable;
   numberOfElements: number;
   first: boolean;
   empty: boolean;

@@ -1,8 +1,6 @@
 import { Circle } from "@/models/Circle";
 import PostItem from "./PostItem";
 import { useNavigate } from "react-router-dom";
-import { useStore } from "zustand";
-import { uiStore } from "@/stores/uiStore";
 import { useQuery } from "react-query";
 import api from "@/api";
 import { Pageable } from "@/models/Pagination";

@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 
 export type ScrollDirection = "up" | "down" | "none";
 
 export const useScrollDirection = (
-  ref: React.RefObject<HTMLElement>,
+  ref: React.RefObject<HTMLElement>
 ): ScrollDirection => {
   const [scrollDirection, setScrollDirection] =
     useState<ScrollDirection>("none");
@@ -36,4 +36,28 @@ export const useScrollDirection = (
   }, [ref]);
 
   return scrollDirection;
+};
+
+export const useScrollHeight = (ref: RefObject<HTMLElement>) => {
+  const [scrollHeight, setScrollHeightState] = useState(
+    ref.current?.scrollHeight
+  );
+
+  const setScrollHeight = (height: number) => {
+    ref.current?.scrollBy({ top: height });
+  };
+
+  const handleScroll = () => {
+    setScrollHeightState(ref.current?.scrollHeight);
+  };
+
+  useEffect(() => {
+    ref.current?.addEventListener("scroll", handleScroll);
+
+    return () => {
+      ref.current?.removeEventListener("scroll", handleScroll);
+    };
+  });
+
+  return [scrollHeight, setScrollHeight] as const;
 };

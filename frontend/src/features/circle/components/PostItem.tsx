@@ -31,7 +31,7 @@ export default function PostItem({ post }: PostItemProps) {
       <span className="flex-1" />
       <span className="flex gap-1 items-center whitespace-nowrap">
         <Icon icon="schedule" className="text-sm" />
-        {elapsedStringOf(parseLocalDateTime(post.createdAt) ?? DateTime.now())}
+        {elapsedStringOf(parseLocalDateTime(post.createdAt))}
       </span>
     </div>
   );

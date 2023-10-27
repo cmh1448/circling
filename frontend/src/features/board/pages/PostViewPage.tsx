@@ -89,9 +89,7 @@ export default function PostViewPage() {
               isLoading={isLoading}
               fallback={<Skeleton className="w-12 h-4 rounded" />}
             >
-              {elapsedStringOf(
-                parseLocalDateTime(post?.createdAt) ?? DateTime.now()
-              )}
+              {elapsedStringOf(parseLocalDateTime(post?.createdAt))}
             </Suspense>
           </div>
         </div>

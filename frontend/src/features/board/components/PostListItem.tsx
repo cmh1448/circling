@@ -23,9 +23,7 @@ export default function PostListItem(props: PostListItemProps) {
         </span>
         <div className="flex gap-2 items-center">
           <span className="text-gray-500 break-keep">
-            {elapsedStringOf(
-              parseLocalDateTime(props.post.createdAt) ?? DateTime.now()
-            )}
+            {elapsedStringOf(parseLocalDateTime(props.post.createdAt))}
           </span>
           <Divider variant="dot" />
           <span className=" text-gray-500 break-keep">

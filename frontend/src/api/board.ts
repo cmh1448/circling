@@ -44,5 +44,6 @@ export const fetchFeedPosts = async (pageable: Pageable) => {
   const response = await axios.get(
     `/api/posts/feeds${pageable.toQueryString(true)}`
   );
+
   return response.data as Page<Post>;
 };

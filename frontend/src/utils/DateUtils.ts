@@ -10,7 +10,7 @@ export const parseLocalDate = (dateString: string | undefined) => {
   return DateTime.fromFormat(dateString, "yyyy-MM-dd");
 };
 
-export const elapsedStringOf = (date: DateTime): string => {
+export const elapsedStringOf = (date: DateTime | undefined): string => {
   if (!date) return "시간 없음";
 
   const now = new Date();
