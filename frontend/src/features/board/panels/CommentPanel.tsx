@@ -56,7 +56,7 @@ export default function CommentPanel({ postId }: CommentPanelProps) {
       api.board.uploadReply(req.parentId, { content: req.content }),
     onSuccess: () => {
       queryClient.invalidateQueries(["fetchCommentsByPost", postId]);
-      setSelectedComment(undefined)
+      setSelectedComment(undefined);
     },
   });
 
@@ -104,7 +104,7 @@ export default function CommentPanel({ postId }: CommentPanelProps) {
               depth={it.depth}
               onClick={() => handleCommentClick(index)}
               className={`transition-transform ${
-                index > selectedComment! ? "translate-y-[200px]" : ""
+                index > selectedComment! ? "translate-y-[230px]" : ""
               }`}
             />
             <div className="relative">
@@ -116,7 +116,7 @@ export default function CommentPanel({ postId }: CommentPanelProps) {
                   unmountOnExit
                   mountOnEnter
                 >
-                  <div className="h-[200px]">
+                  <div className="h-[230px]">
                     <CommentInput
                       key={index}
                       text="대댓글 작성"
@@ -132,7 +132,7 @@ export default function CommentPanel({ postId }: CommentPanelProps) {
       </Suspense>
       <div
         className={`transition-transform ${
-          selectedComment !== undefined ? "translate-y-[200px]" : ""
+          selectedComment !== undefined ? "translate-y-[230px]" : ""
         }`}
       >
         <CommentInput
