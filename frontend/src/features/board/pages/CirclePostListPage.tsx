@@ -12,6 +12,8 @@ import Suspense from "@/components/suspense/Suspense";
 import Skeleton from "@/components/base/Skeleton";
 import { Pageable } from "@/models/Pagination";
 import Fallback from "@/components/fallback/fallback";
+import Pagination from "@/components/pagination/Pagination";
+import { useMemo, useState } from "react";
 
 export default function CirclePostListPage() {
   const navigate = useNavigate();
@@ -26,6 +28,10 @@ export default function CirclePostListPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryId = searchParams.get("category");
 
+  const [currentPageable, setCurrentPageable] = useState<Pageable>(
+    Pageable.of(10, 1)
+  );
+
   /* Server Side */
   const { data: categories, isLoading: isCategoryLoading } = useQuery(
     ["fetchCategoriesByCircle", id],
@@ -33,14 +39,13 @@ export default function CirclePostListPage() {
   );
 
   const { data: circlePosts, isLoading: isCirclePostsLoading } = useQuery(
-    ["fetchPostsByCircle", id],
-    () => api.board.fetchPostsByCircle(Number(id), Pageable.of(10, 1))
+    ["fetchPostsByCircle", id, currentPageable],
+    () => api.board.fetchPostsByCircle(Number(id), currentPageable)
   );
 
   const { data: categoryPosts, isLoading: isCategoryPostsLoading } = useQuery(
     ["fetchPostsByCategory", categoryId],
-    () =>
-      api.board.fetchPostsByCategory(Number(categoryId!), Pageable.of(10, 1)),
+    () => api.board.fetchPostsByCategory(Number(categoryId!), currentPageable),
     {
       enabled: !!categoryId,
     }
@@ -48,6 +53,7 @@ export default function CirclePostListPage() {
 
   /* Functions */
   const handleCategoryChanged = (selected: Category | undefined) => {
+    setCurrentPageable(Pageable.of(10, 1));
     setSearchParams(
       { category: selected?.id.toString() ?? "" },
       {
@@ -106,6 +112,26 @@ export default function CirclePostListPage() {
               />
             ))}
           </Fallback>
+        </Suspense>
+      </div>
+      <div>
+        <Suspense
+          isLoading={isCirclePostsLoading}
+          fallback={
+            <div className="flex gap-2 justify-center mt-2">
+              {[...Array(5)].map((i, index) => (
+                <Skeleton
+                  key={index}
+                  className="w-12 aspect-square rounded-lg"
+                />
+              ))}
+            </div>
+          }
+        >
+          <Pagination
+            currentPage={circlePosts}
+            onPageMove={(pageable) => setCurrentPageable(pageable)}
+          />
         </Suspense>
       </div>
       <ActionButton onClick={handleNewPost}>
