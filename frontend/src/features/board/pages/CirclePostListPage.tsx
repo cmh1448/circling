@@ -129,7 +129,7 @@ export default function CirclePostListPage() {
           }
         >
           <Pagination
-            currentPage={circlePosts}
+            currentPage={!!categoryId ? categoryPosts : circlePosts}
             onPageMove={(pageable) => setCurrentPageable(pageable)}
           />
         </Suspense>
