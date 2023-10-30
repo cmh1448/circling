@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,5 +32,5 @@ public class Post extends UserStampedEntity {
     private Circle circle;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
-    private List<Comment> comments;
+    private final List<Comment> comments = new ArrayList<>();
 }
