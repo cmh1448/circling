@@ -7,22 +7,32 @@ import CommentItem from "../components/CommentItem";
 import { useStore } from "zustand";
 import { authStore } from "@/stores/authStore";
 import { Comment } from "@/models/Board";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import api from "@/api";
 import Suspense from "@/components/suspense/Suspense";
 import Skeleton from "@/components/base/Skeleton";
 import TextViewer from "@/components/editor/TextViewer";
 import CommentPanel from "../panels/CommentPanel";
+import Spinner from "@/components/base/Spinner";
 
 export default function PostViewPage() {
   const navigate = useNavigate();
   const handleGoBack = () => navigate(-1);
   const authContext = useStore(authStore);
+  const queryClient = useQueryClient();
+
   const { id } = useParams();
 
   const { data: post, isLoading } = useQuery(["fetchPostById", id], () =>
     api.board.fetchPostById(Number(id))
   );
+
+  const { mutate: deletePost, isLoading: isDeleting } = useMutation({
+    mutationFn: (id: number) => api.board.deletePost(id),
+    onSuccess: () => {
+      navigate(-1);
+    },
+  });
 
   const handleGoCategory = () => {
     navigate(
@@ -30,10 +40,14 @@ export default function PostViewPage() {
     );
   };
 
+  const handleDeletePost = () => {
+    deletePost(post.id);
+  };
+
   return (
     <PageContainer>
-      <div className="flex mb-2">
-        <Button variant={"primary"} onClick={handleGoBack}>
+      <div className="flex mb-2 relative">
+        <Button variant={"primary"} onClick={handleGoBack} className="absolute">
           <Icon icon="arrow_back" />
           뒤로가기
         </Button>
@@ -52,10 +66,18 @@ export default function PostViewPage() {
         </div>
 
         <div className="flex-1" />
-        <Button variant={"third"}>
-          <Icon icon="link" />
-          링크 복사
-        </Button>
+        {authContext.user.email === post?.createdBy?.email ? (
+          <Button
+            onClick={handleDeletePost}
+            variant={"third"}
+            className="bg-red-400 hover:bg-red-500 text-white w-20 absolute right-0"
+          >
+            <Suspense isLoading={isDeleting} fallback={<Spinner size="24px" />}>
+              <Icon icon="delete" />
+              삭제
+            </Suspense>
+          </Button>
+        ) : null}
       </div>
       <div className="flex flex-col gap-2]">
         <div className="p-4 bg-gray-100 rounded-lg min-h-[300px]">

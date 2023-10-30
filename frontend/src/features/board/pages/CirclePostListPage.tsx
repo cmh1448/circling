@@ -116,7 +116,7 @@ export default function CirclePostListPage() {
       </div>
       <div>
         <Suspense
-          isLoading={isCirclePostsLoading}
+          isLoading={isCirclePostsLoading || isCategoryPostsLoading}
           fallback={
             <div className="flex gap-2 justify-center mt-2">
               {[...Array(5)].map((i, index) => (
