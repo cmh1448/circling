@@ -31,6 +31,6 @@ public class Post extends UserStampedEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Circle circle;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE)
     private final List<Comment> comments = new ArrayList<>();
 }

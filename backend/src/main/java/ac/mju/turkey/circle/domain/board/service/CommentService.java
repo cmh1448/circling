@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -76,8 +77,22 @@ public class CommentService {
         Comment toDelete = commentQueryRepository.findById(commentId)
                 .orElseThrow(() -> new RestException(ErrorCode.GLOBAL_NOT_FOUND));
 
-        if(toDelete.getChildren().isEmpty())
-            commentRepository.delete(toDelete);
+        if(toDelete.getChildren().isEmpty()) {
+            List<Comment> deleteList = new ArrayList<>();
+
+            Comment parent = toDelete.getParent();
+            deleteList.add(toDelete);
+
+            while(true) {
+                if(Objects.nonNull(parent) && parent.getIsDeleted()) {
+                    deleteList.add(parent);
+                    parent = parent.getParent();
+                }else
+                    break;
+            }
+
+            commentRepository.deleteAll(deleteList);
+        }
         else {
             toDelete.setIsDeleted(true);
         }
