@@ -7,6 +7,8 @@ import { useStore } from "zustand";
 import { authStore } from "./stores/authStore.ts";
 import { Navigation } from "./models/Navigation.ts";
 import NavigationBar from "./components/navigation/NavigationBar.tsx";
+import api from "./api/index.ts";
+import { SignUpRequest } from "./models/User.ts";
 
 function App() {
   const authContext = useStore(authStore);
@@ -16,9 +18,9 @@ function App() {
   useEffect(
     () =>
       setActiveRoutes(
-        authContext.isAuthenticated() ? routes.Login : routes.NotLogin,
+        authContext.isAuthenticated() ? routes.Login : routes.NotLogin
       ),
-    [authContext],
+    [authContext]
   );
 
   const statefulRoutes = useRoutes(activeRoutes);

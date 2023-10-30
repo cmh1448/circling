@@ -71,3 +71,11 @@ export const uploadReply = async (parentId: number, req: CommentRequest) => {
 
   return response.data as Comment;
 };
+
+export const deleteReply = async (id: number) => {
+  await axios.delete(`/api/comments/${id}`);
+};
+
+export const deletePost = async (id: number) => {
+  await axios.delete(`/api/posts/${id}`);
+};

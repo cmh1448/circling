@@ -8,6 +8,9 @@ import { Comment } from "@/models/Board";
 import { css } from "@emotion/css";
 import CommentInput from "../components/CommentInput";
 import { CSSTransition } from "react-transition-group";
+import Button from "@/components/base/Button";
+import { useStore } from "zustand";
+import { authStore } from "@/stores/authStore";
 
 interface CommentPanelProps {
   postId: number;
@@ -36,6 +39,7 @@ const computeFlattenCommentsWithDepth = (
 
 export default function CommentPanel({ postId }: CommentPanelProps) {
   const queryClient = useQueryClient();
+  const authContext = useStore(authStore);
 
   /* Server Side */
   const { data: comments, isLoading: isCommentLoading } = useQuery(
@@ -54,6 +58,14 @@ export default function CommentPanel({ postId }: CommentPanelProps) {
   const { mutate: uploadReply, isLoading: isUploadingReply } = useMutation({
     mutationFn: (req: ReplyRequest) =>
       api.board.uploadReply(req.parentId, { content: req.content }),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["fetchCommentsByPost", postId]);
+      setSelectedComment(undefined);
+    },
+  });
+
+  const { mutate: deleteReply, isLoading: isDeletingReply } = useMutation({
+    mutationFn: (id: number) => api.board.deleteReply(id),
     onSuccess: () => {
       queryClient.invalidateQueries(["fetchCommentsByPost", postId]);
       setSelectedComment(undefined);
@@ -102,7 +114,11 @@ export default function CommentPanel({ postId }: CommentPanelProps) {
             <CommentItem
               comment={it.comment}
               depth={it.depth}
-              onClick={() => handleCommentClick(index)}
+              onReplyClick={() => handleCommentClick(index)}
+              onDeleteClick={() => deleteReply(it.comment.id)}
+              isWriter={it.comment.createdBy.email === authContext.user.email}
+              isOpened={selectedComment === index}
+              isDeleteLoading={isDeletingReply}
               className={`transition-transform ${
                 index > selectedComment! ? "translate-y-[230px]" : ""
               }`}
