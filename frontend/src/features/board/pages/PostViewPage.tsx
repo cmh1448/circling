@@ -70,7 +70,7 @@ export default function PostViewPage() {
           <Button
             onClick={handleDeletePost}
             variant={"third"}
-            className="bg-red-400 hover:bg-red-500 text-white w-20 absolute right-0"
+            className="!bg-red-400 hover:!bg-red-500 text-white w-20 absolute right-0"
           >
             <Suspense isLoading={isDeleting} fallback={<Spinner size="24px" />}>
               <Icon icon="delete" />
