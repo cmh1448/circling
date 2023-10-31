@@ -40,9 +40,11 @@ export default function Button(props: ButtonProps) {
 
   return (
     <button
-      className={`rounded-lg flex items-center justify-center transition-all ${
+      className={`${
+        props.className
+      } rounded-lg flex items-center justify-center transition-all ${
         enabled ? baseStyles.enabled : baseStyles.disabled
-      }  select-none ${getStyles()} ${getSizeStyles()} ${props.className}`}
+      }  select-none ${getStyles()} ${getSizeStyles()} `}
       onClick={props.onClick}
     >
       {props.children}

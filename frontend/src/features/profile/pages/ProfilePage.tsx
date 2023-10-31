@@ -1,13 +1,21 @@
 import api from "@/api";
 import Button from "@/components/base/Button";
+import Card from "@/components/base/Card";
+import Icon from "@/components/base/Icon";
+import TextViewer from "@/components/editor/TextViewer";
 import PageContainer from "@/components/pages/PageContainer";
 import { SignUpRequest } from "@/models/User";
 import { authStore } from "@/stores/authStore";
 import { DateTime } from "luxon";
+import { useQuery } from "react-query";
 import { useStore } from "zustand";
 
 export default function ProfilePage() {
   const authContext = useStore(authStore);
+
+  const { data: myRegister, isLoading } = useQuery(["fetchMyRegister"], () =>
+    api.circle.fetchMyRegister()
+  );
 
   const data = [
     "남병준",
@@ -79,9 +87,26 @@ export default function ProfilePage() {
         </Button>
       </div>
 
-      {authContext.user?.email === "admin" ? (
-        <Button onClick={handleAddDummy}>더미 추가</Button>
-      ) : null}
+      <div className="w-full h-px bg-gray-500 rounded my-4" />
+
+      {/* <div>
+        {myRegister ? (
+          <>
+            <div className="flex flex-col">
+              <span className="text-2xl font-bold">내 동아리 가입 신청서</span>
+              <span className="text-xl text-blue-500 ml-2">가입 대기중</span>
+            </div>
+
+            <Card className="gap-4 flex items-center">
+              <span className="text-xl flex items-center justify-center font-bold gap-2 text-blue-500">
+                {myRegister.circle.name}
+              </span>
+              <TextViewer html={myRegister.message} />
+              <div className="text-gray-400"></div>
+            </Card>
+          </>
+        ) : null}
+      </div> */}
     </PageContainer>
   );
 }

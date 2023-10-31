@@ -84,6 +84,7 @@ export default function CommentPanel({ postId }: CommentPanelProps) {
   const [selectedComment, setSelectedComment] = useState<number | undefined>(
     undefined
   );
+  const [editComment, setEditComment] = useState<number | undefined>(undefined);
 
   /* Life Cycles */
   useEffect(() => console.log(flattenComments), [flattenComments]);

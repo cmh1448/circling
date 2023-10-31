@@ -79,3 +79,13 @@ export const deleteReply = async (id: number) => {
 export const deletePost = async (id: number) => {
   await axios.delete(`/api/posts/${id}`);
 };
+
+export const findMyPosts = async (
+  sort: "createdAt" | "title" | "comments",
+  reverse: boolean = false
+) => {
+  const response = await axios.get(`/api/posts/my`, {
+    params: { sort, reverse },
+  });
+  return response.data as Post[];
+};

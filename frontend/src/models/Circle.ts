@@ -1,3 +1,5 @@
+import { User } from "./User";
+
 export interface Circle {
   id: number;
   name: string;
@@ -10,4 +12,14 @@ export interface Follower {
   circle: Circle;
 
   type: "MEMBER" | "FOLLOWER";
+}
+
+export interface Register {
+  id: number;
+  circle: Circle;
+  message?: string;
+  createdBy: User;
+  createdAt: string;
+  lastModifiedBy: User;
+  lastModifiedAt: string;
 }

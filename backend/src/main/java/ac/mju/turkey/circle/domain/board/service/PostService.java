@@ -110,6 +110,5 @@ public class PostService {
         if(reversed) comparator = comparator.reversed();
 
         return founds.stream().sorted(comparator).map(PostDto.Response::from).toList();
-
     }
 }

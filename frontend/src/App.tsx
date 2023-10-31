@@ -42,6 +42,11 @@ function App() {
       path: "/explore",
     },
     {
+      title: "내 활동",
+      icon: "edit_square",
+      path: "/activity",
+    },
+    {
       title: "프로필",
       icon: "person",
       path: "/profile",
