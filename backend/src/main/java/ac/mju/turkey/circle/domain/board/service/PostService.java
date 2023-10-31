@@ -1,6 +1,7 @@
 package ac.mju.turkey.circle.domain.board.service;
 
 import ac.mju.turkey.circle.domain.board.dto.PostDto;
+import ac.mju.turkey.circle.domain.board.dto.SortBy;
 import ac.mju.turkey.circle.domain.board.entity.Category;
 import ac.mju.turkey.circle.domain.board.entity.Post;
 import ac.mju.turkey.circle.domain.board.repository.CategoryRepository;
@@ -17,6 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 
 @RequiredArgsConstructor
@@ -85,10 +88,28 @@ public class PostService {
         return postQueryRepository.paginateFeedsByUser(user, pageable);
     }
 
+    @Transactional(readOnly = true)
     public PostDto.Response findById(Long postId) {
         Post found = postRepository.findById(postId)
                 .orElseThrow(() -> new RestException(ErrorCode.GLOBAL_NOT_FOUND));
 
         return PostDto.Response.from(found);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostDto.Response> findMyPosts(CircleUserDetails user, SortBy sortBy, Boolean reversed) {
+        List<Post> founds = postQueryRepository.findAllByCreatorEmail(user.getEmail());
+
+        Comparator<Post> comparator = null;
+        switch (sortBy) {
+            case title -> comparator = Comparator.comparing(Post::getTitle);
+            case comments -> comparator = Comparator.comparing(p -> p.getComments().size());
+            case createdAt -> comparator = Comparator.comparing(Post::getCreatedAt);
+        }
+
+        if(reversed) comparator = comparator.reversed();
+
+        return founds.stream().sorted(comparator).map(PostDto.Response::from).toList();
+
     }
 }

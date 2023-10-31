@@ -14,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 import static ac.mju.turkey.circle.domain.board.entity.QPost.post;
 import static ac.mju.turkey.circle.domain.circle.entity.QFollower.follower;
 
@@ -63,5 +65,17 @@ public class PostQueryRepository {
                 .fetchPages(pageable, Post.class);
 
         return found.toPageImpl(PostDto.Response::from);
+    }
+
+    public List<Post> findAllByCreatorEmail(String email) {
+        return queryFactory.selectFrom(post)
+                .leftJoin(post.createdBy).fetchJoin()
+                .leftJoin(post.lastModifiedBy).fetchJoin()
+                .leftJoin(post.category).fetchJoin()
+                .leftJoin(post.comments).fetchJoin()
+                .where(
+                        post.createdBy.email.eq(email)
+                )
+                .fetch();
     }
 }

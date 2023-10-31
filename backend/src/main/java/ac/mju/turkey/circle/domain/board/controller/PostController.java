@@ -2,6 +2,7 @@ package ac.mju.turkey.circle.domain.board.controller;
 
 
 import ac.mju.turkey.circle.domain.board.dto.PostDto;
+import ac.mju.turkey.circle.domain.board.dto.SortBy;
 import ac.mju.turkey.circle.domain.board.service.PostService;
 import ac.mju.turkey.circle.system.security.model.CircleUserDetails;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,5 +53,12 @@ public class PostController {
     @GetMapping("/posts/feeds")
     public Page<PostDto.Response> paginateFeedsByUser(@AuthenticationPrincipal CircleUserDetails user, @PageableDefault Pageable pageable) {
         return postService.paginateFeeds(user, pageable);
+    }
+
+    @GetMapping("/posts/my")
+    public List<PostDto.Response> findMyPosts(@AuthenticationPrincipal CircleUserDetails user,
+                                              @RequestParam(defaultValue = "createdAt") SortBy sort,
+                                              @RequestParam(defaultValue = "false") Boolean reverse) {
+        return postService.findMyPosts(user, sort, reverse);
     }
 }
