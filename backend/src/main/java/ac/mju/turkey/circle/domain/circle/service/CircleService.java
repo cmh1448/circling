@@ -1,7 +1,6 @@
 package ac.mju.turkey.circle.domain.circle.service;
 
 import ac.mju.turkey.circle.domain.circle.dto.CircleDto;
-import ac.mju.turkey.circle.domain.circle.dto.FollowerDto;
 import ac.mju.turkey.circle.domain.circle.entity.Circle;
 import ac.mju.turkey.circle.domain.circle.entity.Follower;
 import ac.mju.turkey.circle.domain.circle.entity.RegisterApplication;
@@ -115,6 +114,15 @@ public class CircleService {
         found.approve();
 
         makeApplicantAsMember(found);
+    }
+
+    @Transactional(readOnly = true)
+    public List<CircleDto.RegisterResponse> findToApproves(CircleUserDetails user) {
+        List<RegisterApplication> found = registerApplicationQueryRepository.findToApproveByUser(user);
+
+        return found.stream()
+                .map(CircleDto.RegisterResponse::from)
+                .toList();
     }
 
     private void makeApplicantAsMember(RegisterApplication found) {

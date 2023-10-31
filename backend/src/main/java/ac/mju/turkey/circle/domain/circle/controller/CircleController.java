@@ -80,4 +80,8 @@ public class CircleController {
         circleService.approveRegistration(id, user);
     }
 
+    @GetMapping("/registers/approves")
+    public List<CircleDto.RegisterResponse> findToApproves(@AuthenticationPrincipal CircleUserDetails user) {
+        return circleService.findToApproves(user);
+    }
 }

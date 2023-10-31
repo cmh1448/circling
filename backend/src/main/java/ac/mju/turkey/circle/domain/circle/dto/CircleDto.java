@@ -1,11 +1,9 @@
 package ac.mju.turkey.circle.domain.circle.dto;
 
-import ac.mju.turkey.circle.common.auditor.UserStampedEntity;
 import ac.mju.turkey.circle.domain.circle.entity.Circle;
 import ac.mju.turkey.circle.domain.circle.entity.RegisterApplication;
 import ac.mju.turkey.circle.domain.circle.entity.enums.FollowerType;
 import ac.mju.turkey.circle.domain.user.dto.UserDto;
-import ac.mju.turkey.circle.domain.user.entity.User;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -60,11 +58,14 @@ public class CircleDto {
 
         String description;
 
+        UserDto.UserResponse leader;
+
         public static Response from(Circle circle) {
             return Response.builder()
                     .id(circle.getId())
                     .name(circle.getName())
                     .description(circle.getDescription())
+                    .leader(UserDto.UserResponse.from(circle.getLeader()))
                     .build();
         }
     }
