@@ -1,6 +1,7 @@
 package ac.mju.turkey.circle.domain.circle.service;
 
 import ac.mju.turkey.circle.domain.circle.dto.CircleDto;
+import ac.mju.turkey.circle.domain.circle.dto.FollowerDto;
 import ac.mju.turkey.circle.domain.circle.entity.Circle;
 import ac.mju.turkey.circle.domain.circle.entity.Follower;
 import ac.mju.turkey.circle.domain.circle.entity.RegisterApplication;
@@ -136,5 +137,14 @@ public class CircleService {
         } else {
             alreadyExisted.get().setType(FollowerType.MEMBER);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public FollowerDto.Response findMemberedCircle(CircleUserDetails user) {
+
+        Follower found = followerQueryRepository.findMemberedCircleByEmail(user.getEmail())
+                .orElseThrow(() -> new RestException(ErrorCode.GLOBAL_NOT_FOUND));
+
+        return FollowerDto.Response.from(found);
     }
 }

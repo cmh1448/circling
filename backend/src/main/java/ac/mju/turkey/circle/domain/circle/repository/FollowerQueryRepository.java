@@ -1,6 +1,7 @@
 package ac.mju.turkey.circle.domain.circle.repository;
 
 import ac.mju.turkey.circle.domain.circle.entity.Follower;
+import ac.mju.turkey.circle.domain.circle.entity.enums.FollowerType;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -23,5 +24,18 @@ public class FollowerQueryRepository {
                         follower.id.user.email.eq(email)
                 )
                 .fetch();
+    }
+
+    public Optional<Follower> findMemberedCircleByEmail(String email) {
+        return Optional.ofNullable(
+                queryFactory.selectFrom(follower)
+                        .leftJoin(follower.id.user).fetchJoin()
+                        .leftJoin(follower.id.circle).fetchJoin()
+                        .where(
+                                follower.id.user.email.eq(email),
+                                follower.type.eq(FollowerType.MEMBER)
+                        )
+                        .fetchFirst()
+        );
     }
 }

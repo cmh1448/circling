@@ -58,6 +58,11 @@ public class CircleController {
         return followService.findFollowedCircles(user);
     }
 
+    @GetMapping("/my/membered")
+    public FollowerDto.Response findMemberedCircles(@AuthenticationPrincipal CircleUserDetails user) {
+        return circleService.findMemberedCircle(user);
+    }
+
     @PostMapping("/{id}/members/register")
     public CircleDto.RegisterResponse registerMember(@PathVariable Long id,
                                              @AuthenticationPrincipal CircleUserDetails user,
