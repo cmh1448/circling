@@ -62,7 +62,6 @@ export const fetchCommentsByPost = async (postId: number) => {
 
 export const uploadComment = async (postId: number, req: CommentRequest) => {
   const response = await axios.post(`/api/posts/${postId}/comments`, req);
-
   return response.data as Comment;
 };
 
@@ -74,6 +73,12 @@ export const uploadReply = async (parentId: number, req: CommentRequest) => {
 
 export const deleteReply = async (id: number) => {
   await axios.delete(`/api/comments/${id}`);
+};
+
+export const editReply = async (id: number, req: CommentRequest) => {
+  const response = await axios.patch(`/api/comments/${id}`, req);
+
+  return response.data as Comment;
 };
 
 export const deletePost = async (id: number) => {

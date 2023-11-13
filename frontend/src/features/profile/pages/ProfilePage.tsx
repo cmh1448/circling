@@ -7,7 +7,7 @@ import PageContainer from "@/components/pages/PageContainer";
 import { SignUpRequest } from "@/models/User";
 import { authStore } from "@/stores/authStore";
 import { DateTime } from "luxon";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useStore } from "zustand";
 
 export default function ProfilePage() {
@@ -16,6 +16,15 @@ export default function ProfilePage() {
   const { data: myRegister, isLoading } = useQuery(["fetchMyRegister"], () =>
     api.circle.fetchMyRegister()
   );
+
+  const { data: toApproves } = useQuery(["toApproves"], () =>
+    api.circle.fetchToApproves()
+  );
+
+  const { mutate: approve } = useMutation({
+    mutationFn: (id: number) => api.circle.approveRegister(id),
+    onSuccess: () => {},
+  });
 
   const data = [
     "남병준",
@@ -50,17 +59,7 @@ export default function ProfilePage() {
     "김경진",
   ];
 
-  const handleAddDummy = () => {
-    data.forEach((name) => {
-      api.auth.signUp({
-        email: name,
-        lastName: name.substring(0, 1),
-        firstName: name.substring(1, 3),
-        nickName: name,
-        password: "password",
-      });
-    });
-  };
+  const handleAccept = (id: number) => {};
   return (
     <PageContainer>
       <div className="text-2xl font-bold">로그인 정보</div>
@@ -89,12 +88,11 @@ export default function ProfilePage() {
 
       <div className="w-full h-px bg-gray-500 rounded my-4" />
 
-      {/* <div>
+      <div>
         {myRegister ? (
           <>
             <div className="flex flex-col">
               <span className="text-2xl font-bold">내 동아리 가입 신청서</span>
-              <span className="text-xl text-blue-500 ml-2">가입 대기중</span>
             </div>
 
             <Card className="gap-4 flex items-center">
@@ -102,11 +100,42 @@ export default function ProfilePage() {
                 {myRegister.circle.name}
               </span>
               <TextViewer html={myRegister.message} />
-              <div className="text-gray-400"></div>
+              <div className="flex-1" />
+              <span className="text-xl text-white p-2 bg-blue-500 rounded-lg">
+                승인 대기중
+              </span>
             </Card>
           </>
         ) : null}
-      </div> */}
+      </div>
+
+      <div>
+        {myRegister ? (
+          <>
+            <div className="flex flex-col mt-4">
+              <span className="text-2xl font-bold">나에게 온 가입 신청</span>
+            </div>
+
+            {toApproves.map((it) => (
+              <Card className=" flex items-center">
+                <div className="flex flex-col gap-4">
+                  <div className="flex gap-2 items-center">
+                    <span className="text-xl flex items-center justify-center font-bold gap-2 text-blue-500">
+                      {it.circle.name}
+                    </span>
+                    <span className="text-gray-500">
+                      {it.createdBy.nickName}
+                    </span>
+                  </div>
+                  <TextViewer html={it.message} />
+                </div>
+                <div className="flex-1" />
+                <Button>가입 수락</Button>
+              </Card>
+            ))}
+          </>
+        ) : null}
+      </div>
     </PageContainer>
   );
 }

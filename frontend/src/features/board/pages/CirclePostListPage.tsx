@@ -14,6 +14,7 @@ import { Pageable } from "@/models/Pagination";
 import Fallback from "@/components/fallback/fallback";
 import Pagination from "@/components/pagination/Pagination";
 import { useMemo, useState } from "react";
+import Button from "@/components/base/Button";
 
 export default function CirclePostListPage() {
   const navigate = useNavigate();

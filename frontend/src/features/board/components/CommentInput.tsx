@@ -7,6 +7,7 @@ import { useState } from "react";
 
 interface CommentInputProps {
   text?: string;
+  mode?: "reply" | "edit";
 
   onUpload?: (value: string) => void;
   isUploading?: boolean;
@@ -16,6 +17,7 @@ export default function CommentInput({
   text = "확인",
   onUpload,
   isUploading = false,
+  mode = "reply",
 }: CommentInputProps) {
   const [value, setValue] = useState("");
 
@@ -29,7 +31,12 @@ export default function CommentInput({
   return (
     <div>
       <TextEditor height={100} onChange={setValue} value={value} />
-      <Button className="w-full gap-2 h-10" onClick={handleClick}>
+      <Button
+        className={`w-full gap-2 h-10 ${
+          mode === "edit" ? "bg-green-500 hover:bg-green-600" : ""
+        }`}
+        onClick={handleClick}
+      >
         <Suspense isLoading={isUploading} fallback={<Spinner size="20px" />}>
           <Icon icon="check" />
           {text}

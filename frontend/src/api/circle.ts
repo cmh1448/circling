@@ -25,3 +25,16 @@ export const fetchMyRegister = async () => {
   const response = await axios.get(`/api/circles/registers/my`);
   return response.data as Register;
 };
+
+export const fetchToApproves = async () => {
+  const response = await axios.get(`/api/circles/registers/approves`);
+  return response.data as Register[];
+};
+
+export const approveRegister = async (id: number) => {
+  await axios.post(`/api/circles/registers/${id}/approve`);
+};
+
+export const fetchMyMemberedCircle = async () => {
+  return (await axios.get("/api/circles/my/membered")).data as Circle;
+};

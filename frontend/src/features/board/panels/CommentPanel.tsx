@@ -4,11 +4,9 @@ import Suspense from "@/components/suspense/Suspense";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import CommentItem from "../components/CommentItem";
 import React, { ReactNode, useEffect, useMemo, useState } from "react";
-import { Comment } from "@/models/Board";
-import { css } from "@emotion/css";
+import { Comment, CommentRequest } from "@/models/Board";
 import CommentInput from "../components/CommentInput";
 import { CSSTransition } from "react-transition-group";
-import Button from "@/components/base/Button";
 import { useStore } from "zustand";
 import { authStore } from "@/stores/authStore";
 
@@ -72,6 +70,20 @@ export default function CommentPanel({ postId }: CommentPanelProps) {
     },
   });
 
+  interface EditRequest {
+    id: number;
+    content: string;
+  }
+
+  const { mutate: editReply, isLoading: isEditing } = useMutation({
+    mutationFn: (req: EditRequest) =>
+      api.board.editReply(req.id, { content: req.content }),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["fetchCommentsByPost", postId]);
+      setSelectedComment(undefined);
+    },
+  });
+
   /* Properties */
   const flattenComments = useMemo(() => {
     const commentDepths: CommentDepth[] = [];
@@ -84,10 +96,13 @@ export default function CommentPanel({ postId }: CommentPanelProps) {
   const [selectedComment, setSelectedComment] = useState<number | undefined>(
     undefined
   );
-  const [editComment, setEditComment] = useState<number | undefined>(undefined);
+
+  const [mode, setMode] = useState<"reply" | "edit">("reply");
 
   /* Life Cycles */
-  useEffect(() => console.log(flattenComments), [flattenComments]);
+  useEffect(() => {
+    setMode("reply");
+  }, [selectedComment]);
 
   const handleCommentClick = (index: number) => {
     if (selectedComment == index) setSelectedComment(undefined);
@@ -100,6 +115,19 @@ export default function CommentPanel({ postId }: CommentPanelProps) {
 
   const handleUploadReply = (value: string, parent: number) => {
     uploadReply({ parentId: parent, content: value });
+  };
+
+  const handleEditComment = (value: string) => {
+    editReply({
+      id: flattenComments[selectedComment!].comment.id,
+      content: value,
+    });
+  };
+
+  const uploadOrEdit = (value: string) => {
+    if (mode === "reply")
+      handleUploadReply(value, flattenComments[selectedComment!].comment.id);
+    else handleEditComment(value);
   };
 
   return (
@@ -117,6 +145,7 @@ export default function CommentPanel({ postId }: CommentPanelProps) {
               depth={it.depth}
               onReplyClick={() => handleCommentClick(index)}
               onDeleteClick={() => deleteReply(it.comment.id)}
+              onEditClick={() => setMode("edit")}
               isWriter={it.comment.createdBy.email === authContext.user.email}
               isOpened={selectedComment === index}
               isDeleteLoading={isDeletingReply}
@@ -136,9 +165,10 @@ export default function CommentPanel({ postId }: CommentPanelProps) {
                   <div className="h-[230px]">
                     <CommentInput
                       key={index}
-                      text="대댓글 작성"
-                      isUploading={isUploadingReply}
-                      onUpload={(val) => handleUploadReply(val, it.comment.id)}
+                      mode={mode}
+                      text={mode === "reply" ? "대댓글 작성" : "댓글 수정"}
+                      isUploading={isUploadingReply || isEditing}
+                      onUpload={(val) => uploadOrEdit(val)}
                     />
                   </div>
                 </CSSTransition>
