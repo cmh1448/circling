@@ -10,6 +10,7 @@ import RegisterPage from "@/features/login/pages/RegisterPage";
 import PostViewPage from "@/features/board/pages/PostViewPage";
 import NewPostPage from "@features/board/pages/NewPostPage.tsx";
 import MyActivity from "@/features/activity/pages/MyActivity";
+import ManageCirclePage from "@/features/circle/pages/ManageCirclePage";
 
 export type RouteContext = "NotLogin" | "Login";
 
@@ -54,6 +55,10 @@ export const routes: Record<RouteContext, RouteObject[]> = {
     {
       path: "/circles/:circleId/board/posts/new",
       element: <NewPostPage />,
+    },
+    {
+      path: "/circles/:circleId/manage",
+      element: <ManageCirclePage />,
     },
     {
       path: "/activity",

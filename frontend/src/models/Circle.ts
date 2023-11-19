@@ -6,6 +6,7 @@ export interface Circle {
   description: string;
   members?: number;
   followers?: number;
+  leader?: User;
 }
 
 export interface Follower {

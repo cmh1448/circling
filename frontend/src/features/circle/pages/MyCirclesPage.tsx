@@ -6,8 +6,15 @@ import Skeleton from "@/components/base/Skeleton";
 import Fallback from "@/components/fallback/fallback";
 import Button from "@/components/base/Button";
 import Icon from "@/components/base/Icon";
+import { useMemo } from "react";
+import { useStore } from "zustand";
+import { authStore } from "@/stores/authStore";
+import ManagingCircleItem from "../components/ManagingCircleItem";
+import { useNavigate } from "react-router-dom";
 
 export default function MyCirclesPage() {
+  const authContext = useStore(authStore);
+
   const { data: followingCircles, isLoading: followingLoading } = useQuery(
     ["fetchFollowingCircles"],
     () => api.circle.fetchFollowingCircles()
@@ -18,9 +25,33 @@ export default function MyCirclesPage() {
     () => api.circle.fetchMyMemberedCircle()
   );
 
+  const managingCircle = useMemo(() => {
+    return followingCircles?.filter(
+      (it) => it.circle.leader.email === authContext.user.email
+    );
+  }, [followingCircles]);
+
+  const navigate = useNavigate();
+
+  const handleManageCircle = (id: number) => {
+    navigate(`/circles/${id}/manage`);
+  };
   return (
     <PageContainer>
-      <div className=" text-2xl font-bold text-blue-500 flex gap-2 items-center">
+      {managingCircle?.length !== 0 ? (
+        <>
+          <div className=" text-2xl font-bold text-blue-500 flex gap-2 items-center">
+            {/* <Icon icon="groups" /> */}
+            내가 관리하는 동아리
+          </div>
+          <div className="flex gap-4 mt-2">
+            {managingCircle?.map((it) => (
+              <ManagingCircleItem circle={it.circle} />
+            ))}
+          </div>
+        </>
+      ) : null}
+      <div className=" text-2xl font-bold text-blue-500 flex gap-2 items-center mt-4">
         {/* <Icon icon="groups" /> */}
         내가 회원인 동아리
       </div>
