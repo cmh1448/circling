@@ -26,7 +26,7 @@ export default function Icon(props: IconProps) {
   return (
     <span
       {...rest}
-      className={` material-symbols-outlined transition-all select-none ${props.className}`}
+      className={`material-symbols-outlined  select-none ${props.className}`}
       style={{
         fontVariationSettings: iconStyle(),
       }}
