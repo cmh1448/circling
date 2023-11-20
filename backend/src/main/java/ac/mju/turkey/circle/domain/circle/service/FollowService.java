@@ -8,6 +8,7 @@ import ac.mju.turkey.circle.domain.circle.entity.enums.FollowerType;
 import ac.mju.turkey.circle.domain.circle.repository.CircleRepository;
 import ac.mju.turkey.circle.domain.circle.repository.FollowerQueryRepository;
 import ac.mju.turkey.circle.domain.circle.repository.FollowerRepository;
+import ac.mju.turkey.circle.domain.user.dto.UserDto;
 import ac.mju.turkey.circle.system.exception.model.ErrorCode;
 import ac.mju.turkey.circle.system.exception.model.RestException;
 import ac.mju.turkey.circle.system.security.model.CircleUserDetails;
@@ -66,11 +67,12 @@ public class FollowService {
     }
 
     @Transactional(readOnly = true)
-    public List<FollowerDto.Response> findFollowersByCircleId(Long circleId) {
+    public List<UserDto.UserResponse> findFollowersByCircleId(Long circleId) {
         List<Follower> founds = followerQueryRepository.findFollowersByCircleId(circleId);
 
         return founds.stream()
-                .map(FollowerDto.Response::from)
+                .map(f -> f.getId().getUser())
+                .map(UserDto.UserResponse::from)
                 .toList();
     }
 

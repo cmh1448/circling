@@ -4,6 +4,7 @@ import ac.mju.turkey.circle.domain.circle.dto.CircleDto;
 import ac.mju.turkey.circle.domain.circle.dto.FollowerDto;
 import ac.mju.turkey.circle.domain.circle.service.CircleService;
 import ac.mju.turkey.circle.domain.circle.service.FollowService;
+import ac.mju.turkey.circle.domain.user.dto.UserDto;
 import ac.mju.turkey.circle.system.security.model.CircleUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -91,12 +92,12 @@ public class CircleController {
     }
 
     @GetMapping("/{id}/followers")
-    public List<FollowerDto.Response> findFollowersByCircleId(@PathVariable Long id) {
+    public List<UserDto.UserResponse> findFollowersByCircleId(@PathVariable Long id) {
         return followService.findFollowersByCircleId(id);
     }
 
     @GetMapping("/{id}/members")
-    public List<FollowerDto.Response> findMembersByCircleId(@PathVariable Long id) {
+    public List<UserDto.UserResponse> findMembersByCircleId(@PathVariable Long id) {
         return circleService.findMembersByCircleId(id);
     }
 }
