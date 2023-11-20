@@ -158,4 +158,12 @@ public class CircleService {
                 .map(UserDto.UserResponse::from)
                 .toList();
     }
+
+    public List<CircleDto.RegisterResponse> findToApprovesByCircleId(Long id) {
+        List<RegisterApplication> found = registerApplicationQueryRepository.findToApproveByCircleId(id);
+
+        return found.stream()
+                .map(CircleDto.RegisterResponse::from)
+                .toList();
+    }
 }

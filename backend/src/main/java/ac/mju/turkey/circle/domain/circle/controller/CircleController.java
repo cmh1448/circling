@@ -91,6 +91,11 @@ public class CircleController {
         return circleService.findToApproves(user);
     }
 
+    @GetMapping("/{id}/registers/approves")
+    public List<CircleDto.RegisterResponse> findToApprovesByCircleId(@PathVariable Long id, @AuthenticationPrincipal CircleUserDetails user) {
+        return circleService.findToApprovesByCircleId(id);
+    }
+
     @GetMapping("/{id}/followers")
     public List<UserDto.UserResponse> findFollowersByCircleId(@PathVariable Long id) {
         return followService.findFollowersByCircleId(id);

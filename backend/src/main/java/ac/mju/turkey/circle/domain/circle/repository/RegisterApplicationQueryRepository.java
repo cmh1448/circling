@@ -43,4 +43,11 @@ public class RegisterApplicationQueryRepository {
         return results;
     }
 
+    public List<RegisterApplication> findToApproveByCircleId(Long id) {
+        return queryFactory.selectFrom(registerApplication)
+                .where(
+                        registerApplication.circle.id.eq(id)
+                )
+                .fetch();
+    }
 }
