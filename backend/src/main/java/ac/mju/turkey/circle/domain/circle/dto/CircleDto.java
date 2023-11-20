@@ -2,6 +2,7 @@ package ac.mju.turkey.circle.domain.circle.dto;
 
 import ac.mju.turkey.circle.domain.circle.entity.Circle;
 import ac.mju.turkey.circle.domain.circle.entity.RegisterApplication;
+import ac.mju.turkey.circle.domain.circle.entity.enums.ApplicationState;
 import ac.mju.turkey.circle.domain.circle.entity.enums.FollowerType;
 import ac.mju.turkey.circle.domain.user.dto.UserDto;
 import com.querydsl.core.annotations.QueryProjection;
@@ -123,6 +124,8 @@ public class CircleDto {
 
         LocalDateTime createdAt;
 
+        ApplicationState status;
+
         UserDto.UserResponse lastModifiedBy;
 
         LocalDateTime lastModifiedAt;
@@ -133,6 +136,7 @@ public class CircleDto {
                     .circle(Response.from(register.getCircle()))
                     .message(register.getMessage())
                     .createdBy(UserDto.UserResponse.from(register.getCreatedBy()))
+                    .status(register.getStatus())
                     .createdAt(register.getCreatedAt())
                     .lastModifiedBy(UserDto.UserResponse.from(register.getLastModifiedBy()))
                     .lastModifiedAt(register.getLastModifiedAt())

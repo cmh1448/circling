@@ -1,6 +1,7 @@
 package ac.mju.turkey.circle.domain.circle.repository;
 
 import ac.mju.turkey.circle.domain.circle.entity.RegisterApplication;
+import ac.mju.turkey.circle.domain.circle.entity.enums.ApplicationState;
 import ac.mju.turkey.circle.system.security.model.CircleUserDetails;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +20,12 @@ public class RegisterApplicationQueryRepository {
     public List<RegisterApplication> findToApproveByUser(CircleUserDetails user) {
         return queryFactory.selectFrom(registerApplication)
                 .where(
-                        registerApplication.circle.leader.email.eq(user.getEmail())
+                        registerApplication.circle.leader.email.eq(user.getEmail()),
+                        registerApplication.status.eq(ApplicationState.WAITING)
                 )
                 .fetch();
     }
 
-    //CreatedBy (email PK)를 기준으로 신청서 1개를 찾아서 반환
     public Optional<RegisterApplication> findByEmail(String email) {
         return Optional.ofNullable(
                 queryFactory.selectFrom(registerApplication)
@@ -46,7 +47,8 @@ public class RegisterApplicationQueryRepository {
     public List<RegisterApplication> findToApproveByCircleId(Long id) {
         return queryFactory.selectFrom(registerApplication)
                 .where(
-                        registerApplication.circle.id.eq(id)
+                        registerApplication.circle.id.eq(id),
+                        registerApplication.status.eq(ApplicationState.WAITING)
                 )
                 .fetch();
     }
