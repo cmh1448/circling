@@ -147,4 +147,13 @@ public class CircleService {
 
         return FollowerDto.Response.from(found);
     }
+
+    @Transactional(readOnly = true)
+    public List<FollowerDto.Response> findMembersByCircleId(Long circleId) {
+        List<Follower> founds = followerQueryRepository.findMembersByCircleId(circleId);
+
+        return founds.stream()
+                .map(FollowerDto.Response::from)
+                .toList();
+    }
 }

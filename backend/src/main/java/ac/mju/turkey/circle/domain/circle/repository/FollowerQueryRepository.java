@@ -38,4 +38,26 @@ public class FollowerQueryRepository {
                         .fetchFirst()
         );
     }
+
+    public List<Follower> findFollowersByCircleId(Long circleId) {
+        return queryFactory.selectFrom(follower)
+                .leftJoin(follower.id.user).fetchJoin()
+                .leftJoin(follower.id.circle).fetchJoin()
+                .where(
+                        follower.id.circle.id.eq(circleId),
+                        follower.type.eq(FollowerType.FOLLOWER)
+                )
+                .fetch();
+    }
+
+    public List<Follower> findMembersByCircleId(Long circleId) {
+        return queryFactory.selectFrom(follower)
+                .leftJoin(follower.id.user).fetchJoin()
+                .leftJoin(follower.id.circle).fetchJoin()
+                .where(
+                        follower.id.circle.id.eq(circleId),
+                        follower.type.eq(FollowerType.MEMBER)
+                )
+                .fetch();
+    }
 }

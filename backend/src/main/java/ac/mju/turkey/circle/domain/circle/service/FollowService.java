@@ -65,4 +65,13 @@ public class FollowService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<FollowerDto.Response> findFollowersByCircleId(Long circleId) {
+        List<Follower> founds = followerQueryRepository.findFollowersByCircleId(circleId);
+
+        return founds.stream()
+                .map(FollowerDto.Response::from)
+                .toList();
+    }
+
 }
