@@ -1,4 +1,4 @@
-import { Circle, Follower, Register } from "@/models/Circle";
+import { Circle, Follower, Register, RegisterRequest } from "@/models/Circle";
 import axios from "./axios";
 import { User } from "@/models/User";
 
@@ -55,4 +55,14 @@ export const fetchMembersByCircle = async (id: number) => {
 
 export const deleteMember = async (circleId: number, email: string) => {
   await axios.delete(`/api/circles/${circleId}/members/${email}`);
-}
+};
+
+export const registerToCircle = async (
+  circleId: number,
+  request: RegisterRequest
+) => {
+  return (await axios.post(
+    `/api/circles/${circleId}/members/register`,
+    request
+  )) as Register;
+};

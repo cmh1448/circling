@@ -24,3 +24,7 @@ export interface Register {
   lastModifiedBy: User;
   lastModifiedAt: string;
 }
+
+export interface RegisterRequest {
+  message: string;
+}

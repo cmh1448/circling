@@ -1,8 +1,7 @@
 import { createPortal } from "react-dom";
 import { CSSTransition } from "react-transition-group";
-import Icon from "../base/Icon";
 
-interface SlideDialogProps {
+export interface SlideDialogProps {
   opened: boolean;
   onClosed: () => void;
 
@@ -41,7 +40,7 @@ export default function SlideDlialog(props: SlideDialogProps) {
           unmountOnExit
         >
           <div className="absolute bottom-0 left-0 w-full h-[80%] z-50 flex flex-col justify-end items-center ">
-            <div className="w-[calc(100%-30px)] bg-white rounded-t-lg shadow-2xl h-full overflow-y-auto apply-scrollbar px-3 py-2">
+            <div className="w-[calc(100%-30px)] md:w-[calc(100%-200px)] bg-white rounded-t-lg shadow-2xl h-full overflow-y-auto apply-scrollbar px-3 py-2">
               {props.children}
             </div>
           </div>
