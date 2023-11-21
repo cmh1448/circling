@@ -43,8 +43,16 @@ export default function ExplorerCircleItem(props: ExplorerCircleItem) {
       <div className="flex items-center gap-4">
         <CircleLogo />
         <div className="flex flex-col">
-          <span className=" text-blue-500 text-lg font-bold">
+          <span className=" text-blue-500 text-lg font-bold flex gap-2">
             {props.circle.name}
+            <span className="text-gray-400 flex items-center text-sm">
+              <Icon icon="person" className="text-[16px]" fill />
+              {props.circle.members}
+            </span>
+            <span className="text-gray-400 flex items-center text-sm">
+              <Icon icon="people" className="text-[16px]" fill />
+              {props.circle.followers}
+            </span>
           </span>
           <div className="flex flex-col">
             <span className="text-gray-500">{props.circle.description}</span>
