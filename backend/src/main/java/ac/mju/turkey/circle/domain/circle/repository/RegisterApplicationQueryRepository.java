@@ -30,7 +30,8 @@ public class RegisterApplicationQueryRepository {
         return Optional.ofNullable(
                 queryFactory.selectFrom(registerApplication)
                     .where(
-                            registerApplication.createdBy.email.eq(email)
+                            registerApplication.createdBy.email.eq(email),
+                            registerApplication.status.eq(ApplicationState.WAITING)
                     )
                     .fetchFirst()
         );
