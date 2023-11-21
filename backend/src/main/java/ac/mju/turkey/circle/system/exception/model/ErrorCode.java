@@ -25,6 +25,7 @@ public enum ErrorCode {
     CIRCLE_ALREADY_FOLLOWED(400, "이미 팔로우중인 동아리 입니다."),
     CIRCLE_NOT_FOLLOWED(400, "팔로우 되지 않은 동아리 입니다."),
     CIRCLE_NOT_FOUND(404, "동아리를 찾을 수 없습니다."),
+    CIRCLE_ALREADY_MEMBER(400, "이미 가입된 동아리 입니다."),
 
     //Board
     BOARD_CATEGORY_NOT_FOUND(404, "카테고리를 찾을 수 없습니다."),

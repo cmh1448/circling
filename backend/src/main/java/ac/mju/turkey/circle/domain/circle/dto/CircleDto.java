@@ -43,6 +43,7 @@ public class CircleDto {
             return RegisterApplication.builder()
                     .circle(circle)
                     .message(message)
+                    .status(ApplicationState.WAITING)
                     .build();
         }
     }

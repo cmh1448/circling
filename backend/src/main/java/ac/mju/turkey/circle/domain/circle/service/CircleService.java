@@ -84,11 +84,21 @@ public class CircleService {
         Circle foundCircle = circleRepository.findById(circleId)
                 .orElseThrow(() -> new RestException(ErrorCode.GLOBAL_NOT_FOUND));
 
-        RegisterApplication toSave = request.toEntity(foundCircle);
+        cannotRegisterIfAlreadyMember(user, foundCircle);
 
+        RegisterApplication toSave = request.toEntity(foundCircle);
         RegisterApplication saved = registerApplicationRepository.save(toSave);// 신청 정보 저장
 
         return CircleDto.RegisterResponse.from(saved);
+    }
+
+    private void cannotRegisterIfAlreadyMember(CircleUserDetails user, Circle foundCircle) {
+        FollowerId followerId = FollowerId.of(user.getUser(), foundCircle);
+        Optional<Follower> alreadyExisted = followerRepository.findById(followerId);
+
+        if(alreadyExisted.isPresent()) {
+            throw new RestException(ErrorCode.CIRCLE_ALREADY_MEMBER);
+        }
     }
 
     @Transactional(readOnly = true)
