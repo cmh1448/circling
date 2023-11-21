@@ -6,6 +6,7 @@ export interface InputProps {
   placeholder?: string;
   type?: "text" | "password";
   error?: boolean;
+  value?: string;
 
   onInput?: (val: string) => void;
   onEntered?: () => void;
@@ -52,6 +53,7 @@ export default function Input(props: InputProps) {
         placeholder={placeholder}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
+        value={props.value}
         onInput={(e) => onInput && onInput(e.currentTarget.value)}
         onKeyDown={(e) => {
           if (e.key === "Enter" && onEntered) onEntered();

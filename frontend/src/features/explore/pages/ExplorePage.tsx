@@ -33,10 +33,7 @@ export default function ExplorePage() {
   /* Functions */
   const getCircleItemList = (circles: Circle[] | undefined) => {
     return (
-      <Fallback
-        when={circles?.length === 0}
-        message="동아리를 찾을 수 없어요"
-      >
+      <Fallback when={circles?.length === 0} message="동아리를 찾을 수 없어요">
         {circles?.map((it) => (
           <ExplorerCircleItem
             circle={it}

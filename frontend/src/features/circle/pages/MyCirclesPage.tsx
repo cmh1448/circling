@@ -6,11 +6,12 @@ import Skeleton from "@/components/base/Skeleton";
 import Fallback from "@/components/fallback/fallback";
 import Button from "@/components/base/Button";
 import Icon from "@/components/base/Icon";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useStore } from "zustand";
 import { authStore } from "@/stores/authStore";
 import ManagingCircleItem from "../components/ManagingCircleItem";
 import { useNavigate } from "react-router-dom";
+import Suspense from "@/components/suspense/Suspense";
 
 export default function MyCirclesPage() {
   const authContext = useStore(authStore);
@@ -20,52 +21,84 @@ export default function MyCirclesPage() {
     () => api.circle.fetchFollowingCircles()
   );
 
-  const { data: myCircles, isLoading: myCirclesLoading } = useQuery(
+  const { data: myCircle, isLoading: myCircleLoading } = useQuery(
     ["fetchMyMemberedCircle"],
-    () => api.circle.fetchMyMemberedCircle()
+    () => api.circle.fetchMyMemberedCircle(),
+    {
+      retry: (failureCount, error: any) => {
+        if (error?.codeName === "GLOBAL_NOT_FOUND") return false;
+        return failureCount < 3;
+      },
+    }
   );
 
   const managingCircle = useMemo(() => {
-    return followingCircles?.filter(
-      (it) => it.circle.leader.email === authContext.user.email
-    );
-  }, [followingCircles]);
+    if (!followingCircles) return undefined;
 
-  const navigate = useNavigate();
+    const merged = [];
+    merged.push(...followingCircles);
+    if (myCircle) merged.push(myCircle);
 
-  const handleManageCircle = (id: number) => {
-    navigate(`/circles/${id}/manage`);
-  };
+    return merged
+      ?.sort((a, b) => b.circle.id - a.circle.id)
+      ?.filter((it) => it.circle.leader.email === authContext.user.email);
+  }, [followingCircles, myCircle]);
+
   return (
     <PageContainer>
-      {managingCircle?.length !== 0 ? (
-        <>
-          <div className=" text-2xl font-bold text-blue-500 flex gap-2 items-center">
-            {/* <Icon icon="groups" /> */}
-            내가 관리하는 동아리
-          </div>
-          <div className="flex gap-4 mt-2">
-            {managingCircle?.map((it) => (
-              <ManagingCircleItem circle={it.circle} />
-            ))}
-          </div>
-        </>
-      ) : null}
+      <div className=" text-2xl font-bold text-blue-500 flex gap-2 items-center">
+        {/* <Icon icon="groups" /> */}
+        내가 관리하는 동아리
+      </div>
+      <div className=" overflow-x-auto apply-scrollbar">
+        <div className="flex gap-4 mt-2 w-fit pb-2">
+          <Suspense
+            isLoading={followingLoading}
+            fallback={
+              <>
+                {[...Array(5)].map(() => (
+                  <Skeleton className=" h-40 aspect-square rounded-lg" />
+                ))}
+              </>
+            }
+          >
+            <Fallback
+              when={managingCircle?.length === 0}
+              message="내가 관리하는 동아리가 없어요"
+            >
+              {managingCircle?.map((it) => (
+                <ManagingCircleItem circle={it.circle} />
+              ))}
+            </Fallback>
+          </Suspense>
+        </div>
+      </div>
+
       <div className=" text-2xl font-bold text-blue-500 flex gap-2 items-center mt-4">
         {/* <Icon icon="groups" /> */}
         내가 회원인 동아리
       </div>
-      <div className="flex flex-col gap-4 mt-2 items-center">
-        <Fallback
-          when={true}
-          icon="mood_bad"
-          message="내가 소속된 동아리가 없어요"
-        ></Fallback>
-        <Button className="w-fit">
-          <div className="flex gap-2 items-center">
-            <span>동아리 가입하기</span>
-          </div>
-        </Button>
+      <div className="flex flex-col gap-4 mt-2 w-fullx`x">
+        <Suspense
+          isLoading={myCircleLoading}
+          fallback={
+            <>
+              <Skeleton className="w-full h-32 rounded-lg" />
+            </>
+          }
+        >
+          <Fallback
+            when={myCircle === undefined}
+            message="내가 회원인 동아리가 없어요"
+            actionPanel={
+              <>
+                <Button variant="third">동아리 가입하기</Button>
+              </>
+            }
+          >
+            <CircleItem circle={myCircle?.circle} />
+          </Fallback>
+        </Suspense>
       </div>
       <div className=" text-2xl font-bold text-blue-500 flex gap-2 items-center mt-8">
         {/* <Icon icon="groups" /> */}

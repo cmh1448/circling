@@ -17,9 +17,6 @@ export default function ProfilePage() {
     api.circle.fetchMyRegister()
   );
 
-  const { data: toApproves } = useQuery(["toApproves"], () =>
-    api.circle.fetchToApproves()
-  );
 
   const { mutate: approve } = useMutation({
     mutationFn: (id: number) => api.circle.approveRegister(id),
@@ -109,33 +106,7 @@ export default function ProfilePage() {
         ) : null}
       </div>
 
-      <div>
-        {myRegister ? (
-          <>
-            <div className="flex flex-col mt-4">
-              <span className="text-2xl font-bold">나에게 온 가입 신청</span>
-            </div>
-
-            {toApproves.map((it) => (
-              <Card className=" flex items-center">
-                <div className="flex flex-col gap-4">
-                  <div className="flex gap-2 items-center">
-                    <span className="text-xl flex items-center justify-center font-bold gap-2 text-blue-500">
-                      {it.circle.name}
-                    </span>
-                    <span className="text-gray-500">
-                      {it.createdBy.nickName}
-                    </span>
-                  </div>
-                  <TextViewer html={it.message} />
-                </div>
-                <div className="flex-1" />
-                <Button>가입 수락</Button>
-              </Card>
-            ))}
-          </>
-        ) : null}
-      </div>
+      
     </PageContainer>
   );
 }

@@ -14,7 +14,7 @@ export interface TabBarProps {
 
 export default function TabBar(props: TabBarProps) {
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 flex-wrap">
       {props.tabs.map((it, index) => {
         return (
           <TabBarItem

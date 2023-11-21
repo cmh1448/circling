@@ -3,12 +3,12 @@ import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { useEffect, useState } from "react";
 import { routes } from "./routers/routes.tsx";
 import { useLocation, useRoutes } from "react-router-dom";
-import { useStore } from "zustand";
 import { authStore } from "./stores/authStore.ts";
 import { Navigation } from "./models/Navigation.ts";
 import NavigationBar from "./components/navigation/NavigationBar.tsx";
 import api from "./api/index.ts";
 import { SignUpRequest } from "./models/User.ts";
+import { useStore } from "zustand";
 
 function App() {
   const authContext = useStore(authStore);

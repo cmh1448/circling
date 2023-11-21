@@ -4,6 +4,7 @@ import Icon from "../base/Icon";
 export interface FallBackProps {
   when: boolean;
   children?: ReactNode;
+  actionPanel?: ReactNode;
 
   message?: string;
   icon?: string;
@@ -21,6 +22,7 @@ export default function Fallback(props: FallBackProps) {
         >
           {icon ? <Icon className="text-4xl" icon={icon} /> : null}
           <span className="text-xl">{text}</span>
+          <div className="mt-2">{props.actionPanel}</div>
         </div>
       ) : (
         props.children

@@ -1,5 +1,6 @@
 import { Circle, Follower, Register } from "@/models/Circle";
 import axios from "./axios";
+import { User } from "@/models/User";
 
 export const fetchAllCircleList = async () => {
   return (await axios.get("/api/circles")).data as Circle[];
@@ -31,10 +32,27 @@ export const fetchToApproves = async () => {
   return response.data as Register[];
 };
 
+export const fetchToApprovesByCircleId = async (id: number) => {
+  const response = await axios.get(`/api/circles/${id}/registers/approves`);
+  return response.data as Register[];
+};
+
 export const approveRegister = async (id: number) => {
   await axios.post(`/api/circles/registers/${id}/approve`);
 };
 
 export const fetchMyMemberedCircle = async () => {
-  return (await axios.get("/api/circles/my/membered")).data as Circle;
+  return (await axios.get("/api/circles/my/membered")).data as Follower;
 };
+
+export const fetchFollowersByCircle = async (id: number) => {
+  return (await axios.get(`/api/circles/${id}/followers`)).data as User[];
+};
+
+export const fetchMembersByCircle = async (id: number) => {
+  return (await axios.get(`/api/circles/${id}/members`)).data as User[];
+};
+
+export const deleteMember = async (circleId: number, email: string) => {
+  await axios.delete(`/api/circles/${circleId}/members/${email}`);
+}
