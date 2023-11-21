@@ -9,6 +9,8 @@ import ac.mju.turkey.circle.domain.circle.entity.embedded.FollowerId;
 import ac.mju.turkey.circle.domain.circle.entity.enums.FollowerType;
 import ac.mju.turkey.circle.domain.circle.repository.*;
 import ac.mju.turkey.circle.domain.user.dto.UserDto;
+import ac.mju.turkey.circle.domain.user.entity.User;
+import ac.mju.turkey.circle.domain.user.repository.UserRepository;
 import ac.mju.turkey.circle.system.exception.model.ErrorCode;
 import ac.mju.turkey.circle.system.exception.model.RestException;
 import ac.mju.turkey.circle.system.security.model.CircleUserDetails;
@@ -30,6 +32,7 @@ public class CircleService {
     private final FollowerQueryRepository followerQueryRepository;
     private final RegisterApplicationQueryRepository registerApplicationQueryRepository;
     private final RegisterApplicationRepository registerApplicationRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public CircleDto.Response createCircle(CircleDto.CreateRequest request, CircleUserDetails user) {
@@ -165,5 +168,15 @@ public class CircleService {
         return found.stream()
                 .map(CircleDto.RegisterResponse::from)
                 .toList();
+    }
+
+    public void deleteMember(Long id, String email) {
+        Circle foundCircle = circleRepository.findById(id)
+                .orElseThrow(() -> new RestException(ErrorCode.GLOBAL_NOT_FOUND));
+        User foundUser = userRepository.findById(email)
+                .orElseThrow(() -> new RestException(ErrorCode.GLOBAL_NOT_FOUND));
+
+        FollowerId followerId = FollowerId.of(foundUser, foundCircle);
+        followerRepository.deleteById(followerId);
     }
 }

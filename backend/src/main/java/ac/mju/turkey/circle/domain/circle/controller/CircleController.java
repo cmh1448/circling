@@ -64,6 +64,11 @@ public class CircleController {
         return circleService.findMemberedCircle(user);
     }
 
+    @DeleteMapping("/{id}/members/{email}")
+    public void deleteMember(@PathVariable Long id, @PathVariable String email) {
+        circleService.deleteMember(id, email);
+    }
+
     @PostMapping("/{id}/members/register")
     public CircleDto.RegisterResponse registerMember(@PathVariable Long id,
                                              @AuthenticationPrincipal CircleUserDetails user,
