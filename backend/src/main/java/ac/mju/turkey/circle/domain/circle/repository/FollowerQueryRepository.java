@@ -21,7 +21,8 @@ public class FollowerQueryRepository {
                 .leftJoin(follower.id.user)
                 .leftJoin(follower.id.circle)
                 .where(
-                        follower.id.user.email.eq(email)
+                        follower.id.user.email.eq(email),
+                        follower.type.eq(FollowerType.FOLLOWER)
                 )
                 .fetch();
     }
