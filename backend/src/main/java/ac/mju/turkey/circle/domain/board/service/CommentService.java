@@ -34,7 +34,7 @@ public class CommentService {
                 .toList();
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public CommentDto.Response createComment(CommentDto.Request request, Long postId) {
         Post foundPost = postRepository.findById(postId)
                 .orElseThrow(() -> new RestException(ErrorCode.BOARD_POST_NOT_FOUND));
