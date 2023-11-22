@@ -16,6 +16,14 @@ instance.interceptors.request.use((req) => {
 instance.interceptors.response.use(
   (response) => response,
   (error) => {
+    if (
+      error.response.status === 401 &&
+      error.response.data.codeName === "AUTH_TOKEN_INVALID"
+    ) {
+      const authContext = authStore.getState();
+      authContext.logout();
+    }
+
     return Promise.reject(error.response.data);
   }
 );
