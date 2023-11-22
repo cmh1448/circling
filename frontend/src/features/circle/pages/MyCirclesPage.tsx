@@ -53,7 +53,6 @@ export default function MyCirclesPage() {
         {/* <Icon icon="groups" /> */}
         내가 관리하는 동아리
       </div>
-      {myRegisterLoading ? "로딩중" : "로딩완료"}
       <div className=" overflow-x-auto apply-scrollbar">
         <div className="flex gap-4 mt-2 w-fit pb-2">
           <Suspense
