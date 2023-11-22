@@ -2,7 +2,9 @@ package ac.mju.turkey.circle.domain.circle.repository;
 
 import ac.mju.turkey.circle.domain.circle.dto.CircleDto;
 import ac.mju.turkey.circle.domain.circle.dto.QCircleDto_DetailResponse;
+import ac.mju.turkey.circle.domain.circle.entity.Circle;
 import ac.mju.turkey.circle.domain.circle.entity.enums.FollowerType;
+import ac.mju.turkey.circle.system.security.model.CircleUserDetails;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -39,6 +41,14 @@ public class CircleQueryRepository {
                             )
                 )
                 )).from(circle)
+                .fetch();
+    }
+
+    public List<Circle> findManagingCircles(CircleUserDetails user) {
+        return queryFactory.selectFrom(circle)
+                .leftJoin(circle.createdBy).fetchJoin()
+                .leftJoin(circle.lastModifiedBy).fetchJoin()
+                .where(circle.leader.eq(user.getUser()))
                 .fetch();
     }
 }

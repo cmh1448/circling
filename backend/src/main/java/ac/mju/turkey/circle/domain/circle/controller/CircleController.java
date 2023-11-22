@@ -110,4 +110,9 @@ public class CircleController {
     public List<UserDto.UserResponse> findMembersByCircleId(@PathVariable Long id) {
         return circleService.findMembersByCircleId(id);
     }
+
+    @GetMapping("/my/managing")
+    public List<CircleDto.DetailResponse> findManagingCircles(@AuthenticationPrincipal CircleUserDetails user) {
+        return circleService.findManagingCircles(user);
+    }
 }
