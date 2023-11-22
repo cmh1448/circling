@@ -11,6 +11,8 @@ import PostViewPage from "@/features/board/pages/PostViewPage";
 import NewPostPage from "@features/board/pages/NewPostPage.tsx";
 import MyActivity from "@/features/activity/pages/MyActivity";
 import ManageCirclePage from "@/features/circle/pages/ManageCirclePage";
+import ChatListPage from "@/features/chat/pages/ChatListPage";
+import ChatPage from "@/features/chat/pages/ChatPage";
 
 export type RouteContext = "NotLogin" | "Login";
 
@@ -63,6 +65,14 @@ export const routes: Record<RouteContext, RouteObject[]> = {
     {
       path: "/activity",
       element: <MyActivity />,
+    },
+    {
+      path: "/chat",
+      element: <ChatListPage />,
+    },
+    {
+      path: "/chat/:id",
+      element: <ChatPage />,
     },
   ],
   NotLogin: [
