@@ -7,7 +7,7 @@ import { Circle, RegisterRequest } from "@/models/Circle";
 import WriteFormPanel from "./panels/WriteFormPanel";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import CompletePanel from "./panels/CompletePanel";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import api from "@/api";
 
 interface CircleRegisterDialogProps
@@ -16,9 +16,16 @@ interface CircleRegisterDialogProps
 export default function CircleRegisterDialog({
   ...args
 }: CircleRegisterDialogProps) {
+  const queryClient = useQueryClient();
   const { mutate: registerCircle, isLoading } = useMutation(
     (req: RegisterRequest) => {
       return api.circle.registerToCircle(selectedCircle.id, req);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["fetchMyMemberedCircle"]);
+        queryClient.invalidateQueries(["fetchMyRegister"]);
+      },
     }
   );
 

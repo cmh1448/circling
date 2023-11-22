@@ -5,21 +5,16 @@ import RegisterCircleItem from "../components/RegisterCircleItem";
 import { Circle } from "@/models/Circle";
 import Suspense from "@/components/suspense/Suspense";
 import Skeleton from "@/components/base/Skeleton";
+import { useNotFoundQuery } from "@/hooks/apiHook";
 
 interface SelectCirclePanelProps {
   onCircleSelect: (circle: Circle) => void;
 }
 
 export default function SelectCirclePanel(props: SelectCirclePanelProps) {
-  const { data: circles, isLoading } = useQuery(
+  const { data: circles, isLoading } = useNotFoundQuery(
     ["fetchCircles"],
     () => api.circle.fetchAllCircleList(),
-    {
-      retry: (failureCount, error: any) => {
-        if (error?.codeName === "GLOBAL_NOT_FOUND") return false;
-        return failureCount < 3;
-      },
-    }
   );
 
   return (

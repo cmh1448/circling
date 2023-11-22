@@ -12,6 +12,7 @@ import ManagingCircleItem from "../components/ManagingCircleItem";
 import Suspense from "@/components/suspense/Suspense";
 import CircleRegisterDialog from "../dialogs/CircleRegisterDialog";
 import Card from "@/components/base/Card";
+import { useNotFoundQuery } from "@/hooks/apiHook";
 
 export default function MyCirclesPage() {
   const authContext = useStore(authStore);
@@ -22,15 +23,9 @@ export default function MyCirclesPage() {
     () => api.circle.fetchFollowingCircles()
   );
 
-  const { data: myCircle, isLoading: myCircleLoading } = useQuery(
+  const { data: myCircle, isLoading: myCircleLoading } = useNotFoundQuery(
     ["fetchMyMemberedCircle"],
-    () => api.circle.fetchMyMemberedCircle(),
-    {
-      retry: (failureCount, error: any) => {
-        if (error?.codeName === "GLOBAL_NOT_FOUND") return false;
-        return failureCount < 3;
-      },
-    }
+    () => api.circle.fetchMyMemberedCircle()
   );
 
   const { data: circles, isLoading: isManagingCircleLoading } = useQuery(
@@ -38,16 +33,10 @@ export default function MyCirclesPage() {
     () => api.circle.fetchManagigCircles()
   );
 
-  const {
-    data: myRegister,
-    isLoading: myRegisterLoading,
-    isError: isRegisterError,
-  } = useQuery(["fetchMyRegister"], () => api.circle.fetchMyRegister(), {
-    retry: (failureCount, error: any) => {
-      if (error?.codeName === "GLOBAL_NOT_FOUND") return false;
-      return failureCount < 3;
-    },
-  });
+  const { data: myRegister, isLoading: myRegisterLoading } = useNotFoundQuery(
+    ["fetchMyRegister"],
+    () => api.circle.fetchMyRegister()
+  );
 
   /* Properties */
   const managingCircle = useMemo(() => {
@@ -64,6 +53,7 @@ export default function MyCirclesPage() {
         {/* <Icon icon="groups" /> */}
         내가 관리하는 동아리
       </div>
+      {myRegisterLoading ? "로딩중" : "로딩완료"}
       <div className=" overflow-x-auto apply-scrollbar">
         <div className="flex gap-4 mt-2 w-fit pb-2">
           <Suspense
@@ -87,11 +77,10 @@ export default function MyCirclesPage() {
           </Suspense>
         </div>
       </div>
-
       <div className=" text-2xl font-bold text-blue-500 flex gap-2 items-center mt-4">
         {/* <Icon icon="groups" /> */}
         <Suspense
-          isLoading={myCircleLoading || (myRegisterLoading && isRegisterError)}
+          isLoading={myCircleLoading || myRegisterLoading}
           fallback={
             <>
               <Skeleton className="w-32 h-10 rounded-lg" />
@@ -103,7 +92,7 @@ export default function MyCirclesPage() {
       </div>
       <div className="flex flex-col gap-4 mt-2 w-fullx`x">
         <Suspense
-          isLoading={myCircleLoading || (myRegisterLoading && isRegisterError)}
+          isLoading={myCircleLoading || myRegisterLoading}
           fallback={
             <>
               <Skeleton className="w-full h-32 rounded-lg" />

@@ -5,8 +5,9 @@ import Input from "@/components/base/Input";
 import { useQuery } from "react-query";
 import api from "@/api";
 import Skeleton from "@/components/base/Skeleton";
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Fallback from "@/components/fallback/fallback";
+import { useNotFoundQuery } from "@/hooks/apiHook";
 
 export default function ExplorePage() {
   /* Constants & Variables */
@@ -22,15 +23,9 @@ export default function ExplorePage() {
     () => api.circle.fetchFollowingCircles()
   );
 
-  const { data: memberedCircle, isLoading: memberedLoading } = useQuery(
+  const { data: memberedCircle, isLoading: memberedLoading } = useNotFoundQuery(
     ["fetchMyMemberedCircle"],
-    () => api.circle.fetchMyMemberedCircle(),
-    {
-      retry: (failureCount, error: any) => {
-        if (error?.codeName === "GLOBAL_NOT_FOUND") return false;
-        return failureCount < 3;
-      },
-    }
+    () => api.circle.fetchMyMemberedCircle()
   );
 
   const filteredCircles = useMemo(
@@ -69,7 +64,7 @@ export default function ExplorePage() {
       </div>
 
       <div className="flex flex-col gap-2 mt-4">
-        {isLoading || followingLoading
+        {isLoading || followingLoading || memberedLoading
           ? [...Array(3)].map(() => (
               <Skeleton className=" w-full h-32 rounded-lg" />
             ))
