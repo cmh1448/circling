@@ -1,15 +1,23 @@
 import Button from "@/components/base/Button";
 import Icon from "@/components/base/Icon";
 import TextEditor from "@/components/editor/TextEditor";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface WriteFormPanelProps {
   onBack: () => void;
   onSubmit: (content: string) => void;
+
+  clearTrigger?: boolean;
 }
 
 export default function WriteFormPanel(props: WriteFormPanelProps) {
   const [text, setText] = useState("");
+
+  useEffect(() => {
+    if (props.clearTrigger === true) {
+      setText("");
+    }
+  });
 
   return (
     <div>
@@ -18,6 +26,7 @@ export default function WriteFormPanel(props: WriteFormPanelProps) {
         <div className="flex-1" />
         <div className="flex gap-2">
           <Button variant="third" onClick={() => props.onBack()}>
+            <Icon icon="arrow_back" />
             뒤로가기
           </Button>
           <Button onClick={() => props.onSubmit(text)}>
