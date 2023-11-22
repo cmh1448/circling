@@ -6,6 +6,10 @@ export const fetchAllCircleList = async () => {
   return (await axios.get("/api/circles")).data as Circle[];
 };
 
+export const fetchManagigCircles = async () => {
+  return (await axios.get("/api/circles/my/managing")).data as Circle[];
+}
+
 export const fetchFollowingCircles = async () => {
   return (await axios.get("/api/circles/my/followed")).data as Follower[];
 };

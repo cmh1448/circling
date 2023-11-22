@@ -5,16 +5,13 @@ import api from "@/api";
 import Skeleton from "@/components/base/Skeleton";
 import Fallback from "@/components/fallback/fallback";
 import Button from "@/components/base/Button";
-import Icon from "@/components/base/Icon";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useStore } from "zustand";
 import { authStore } from "@/stores/authStore";
 import ManagingCircleItem from "../components/ManagingCircleItem";
-import { useNavigate } from "react-router-dom";
 import Suspense from "@/components/suspense/Suspense";
 import CircleRegisterDialog from "../dialogs/CircleRegisterDialog";
 import Card from "@/components/base/Card";
-import TextViewer from "@/components/editor/TextViewer";
 
 export default function MyCirclesPage() {
   const authContext = useStore(authStore);
@@ -36,6 +33,11 @@ export default function MyCirclesPage() {
     }
   );
 
+  const { data: circles, isLoading: isManagingCircleLoading } = useQuery(
+    ["fetchManagingCircles"],
+    () => api.circle.fetchManagigCircles()
+  );
+
   const {
     data: myRegister,
     isLoading: myRegisterLoading,
@@ -49,16 +51,10 @@ export default function MyCirclesPage() {
 
   /* Properties */
   const managingCircle = useMemo(() => {
-    if (!followingCircles) return undefined;
-
-    const merged = [];
-    merged.push(...followingCircles);
-    if (myCircle) merged.push(myCircle);
-
-    return merged
-      ?.sort((a, b) => b.circle.id - a.circle.id)
-      ?.filter((it) => it.circle.leader.email === authContext.user.email);
-  }, [followingCircles, myCircle]);
+    return circles?.filter(
+      (it) => it.leader?.email === authContext.user?.email
+    );
+  }, [circles]);
 
   const [isRegisterOpened, setIsRegisterOpened] = useState(false);
 
@@ -71,7 +67,7 @@ export default function MyCirclesPage() {
       <div className=" overflow-x-auto apply-scrollbar">
         <div className="flex gap-4 mt-2 w-fit pb-2">
           <Suspense
-            isLoading={followingLoading}
+            isLoading={isManagingCircleLoading}
             fallback={
               <>
                 {[...Array(5)].map(() => (
@@ -85,7 +81,7 @@ export default function MyCirclesPage() {
               message="내가 관리하는 동아리가 없어요"
             >
               {managingCircle?.map((it) => (
-                <ManagingCircleItem circle={it.circle} />
+                <ManagingCircleItem circle={it} />
               ))}
             </Fallback>
           </Suspense>
@@ -95,7 +91,7 @@ export default function MyCirclesPage() {
       <div className=" text-2xl font-bold text-blue-500 flex gap-2 items-center mt-4">
         {/* <Icon icon="groups" /> */}
         <Suspense
-          isLoading={myCircleLoading || myRegisterLoading}
+          isLoading={myCircleLoading || (myRegisterLoading && isRegisterError)}
           fallback={
             <>
               <Skeleton className="w-32 h-10 rounded-lg" />

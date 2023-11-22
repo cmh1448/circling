@@ -22,6 +22,17 @@ export default function ExplorePage() {
     () => api.circle.fetchFollowingCircles()
   );
 
+  const { data: memberedCircle, isLoading: memberedLoading } = useQuery(
+    ["fetchMyMemberedCircle"],
+    () => api.circle.fetchMyMemberedCircle(),
+    {
+      retry: (failureCount, error: any) => {
+        if (error?.codeName === "GLOBAL_NOT_FOUND") return false;
+        return failureCount < 3;
+      },
+    }
+  );
+
   const filteredCircles = useMemo(
     () =>
       searchKeyword === ""
@@ -36,6 +47,7 @@ export default function ExplorePage() {
       <Fallback when={circles?.length === 0} message="동아리를 찾을 수 없어요">
         {circles?.map((it) => (
           <ExplorerCircleItem
+            membered={memberedCircle?.circle.id === it.id}
             circle={it}
             following={followingCircles?.some((f) => f.circle.id === it.id)!}
           />

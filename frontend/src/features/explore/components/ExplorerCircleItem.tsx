@@ -10,6 +10,7 @@ export interface ExplorerCircleItem {
   circle: Circle;
 
   following: boolean;
+  membered: boolean;
 }
 
 const buttonStyles = {
@@ -63,23 +64,35 @@ export default function ExplorerCircleItem(props: ExplorerCircleItem) {
           </div>
         </div>
       </div>
-      <Button
-        className={`w-full h-10 mt-3 md:w-40 md:h-20 ${
-          props.following ? buttonStyles.unfollow : buttonStyles.follow
-        }`}
-        onClick={handleClick}
-      >
-        {isFollowing || isUnFollowing ? (
-          <Spinner size="20px" />
-        ) : props.following ? (
-          <div className="flex gap-1 items-center">
-            <Icon icon="check" />
-            팔로우됨
+
+      {props.membered ? (
+        <>
+          <div className="w-full h-10 mt-3 md:w-40 select-none md:h-20 bg-gray-200 rounded-lg text-blue-500 flex items-center justify-center">
+            <Icon icon="how_to_reg" fill />
+            소속됨
           </div>
-        ) : (
-          "팔로우"
-        )}
-      </Button>
+        </>
+      ) : (
+        <>
+          <Button
+            className={`w-full h-10 mt-3 md:w-40 md:h-20 ${
+              props.following ? buttonStyles.unfollow : buttonStyles.follow
+            }`}
+            onClick={handleClick}
+          >
+            {isFollowing || isUnFollowing ? (
+              <Spinner size="20px" />
+            ) : props.following ? (
+              <div className="flex gap-1 items-center">
+                <Icon icon="check" />
+                팔로우됨
+              </div>
+            ) : (
+              "팔로우"
+            )}
+          </Button>
+        </>
+      )}
     </div>
   );
 }
