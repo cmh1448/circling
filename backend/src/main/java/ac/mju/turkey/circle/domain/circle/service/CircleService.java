@@ -96,7 +96,7 @@ public class CircleService {
         FollowerId followerId = FollowerId.of(user.getUser(), foundCircle);
         Optional<Follower> alreadyExisted = followerRepository.findById(followerId);
 
-        if(alreadyExisted.isPresent()) {
+        if(alreadyExisted.isPresent() && alreadyExisted.get().getType().equals(FollowerType.MEMBER)) {
             throw new RestException(ErrorCode.CIRCLE_ALREADY_MEMBER);
         }
     }
