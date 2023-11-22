@@ -190,11 +190,11 @@ public class CircleService {
         followerRepository.deleteById(followerId);
     }
 
-    public List<CircleDto.DetailResponse> findManagingCircles(CircleUserDetails user) {
+    public List<CircleDto.Response> findManagingCircles(CircleUserDetails user) {
         List<Circle> found = circleQueryRepository.findManagingCircles(user);
 
         return found.stream()
-                .map(CircleDto.DetailResponse::from)
+                .map(CircleDto.Response::from)
                 .toList();
     }
 }

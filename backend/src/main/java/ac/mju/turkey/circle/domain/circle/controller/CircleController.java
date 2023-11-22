@@ -112,7 +112,7 @@ public class CircleController {
     }
 
     @GetMapping("/my/managing")
-    public List<CircleDto.DetailResponse> findManagingCircles(@AuthenticationPrincipal CircleUserDetails user) {
+    public List<CircleDto.Response> findManagingCircles(@AuthenticationPrincipal CircleUserDetails user) {
         return circleService.findManagingCircles(user);
     }
 }
