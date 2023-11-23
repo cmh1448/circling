@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface ChatLogRepository extends CrudRepository<ChatLog, String> {
     List<ChatLog> findByRoomName(String roomName);
+
+    List<ChatLog> findAllByReceiverOrSenderEquals(String receiver, String sender);
 }

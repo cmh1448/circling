@@ -22,4 +22,9 @@ public class ChatController {
     public List<ChatDto.Response> findCachedChatLogs(@PathVariable String email, @AuthenticationPrincipal CircleUserDetails user) {
         return chatService.loadCachedChatLog(user.getEmail(), email);
     }
+
+    @GetMapping("/logs/last")
+    public List<ChatDto.LastMessageResponse> findLastMessages(@AuthenticationPrincipal CircleUserDetails user) {
+        return chatService.loadLastMessages(user);
+    }
 }
