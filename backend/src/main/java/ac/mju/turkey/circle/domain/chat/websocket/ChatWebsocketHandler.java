@@ -72,7 +72,7 @@ public class ChatWebsocketHandler extends TextWebSocketHandler {
             MessageDto.Request request = objectMapper.readValue(payload, MessageDto.Request.class);
 
             List<Connection> receiverConnections = connections.values().stream()
-                    .filter(connection -> connection.getUser().getEmail().equals(request.getReceiver()))
+                    .filter(connection -> connection.getUser().getEmail().equals(request.getReceiver()) || connection.getUser().getEmail().equals(connections.get(session.getId()).getUser().getEmail()))
                     .toList();
 
 
