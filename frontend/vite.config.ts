@@ -14,10 +14,17 @@ export default defineConfig({
     port: 3000,
     proxy: {
       "/api": {
-        target: "https://circling.cmhvscode.dev/circling",
-        // target: "http://localhost:8080/circling",
+        // target: "https://circling.cmhvscode.dev/circling",
+        target: "http://localhost:8080/circling",
         changeOrigin: true,
         secure: false,
+      },
+      "/ws": {
+        // target: "wss://circling.cmhvscode.dev/circling",
+        target: "ws://localhost:8080/circling",
+        changeOrigin: true,
+        secure: false,
+        ws: true,
       },
     },
   },

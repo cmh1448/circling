@@ -20,7 +20,7 @@ export default function ChatListPage() {
         <Suspense
           isLoading={isChatsLoading}
           fallback={[...Array(10)].map((i) => (
-            <Skeleton className="w-full h-6" />
+            <Skeleton className="w-full h-14 rounded-lg mb-2" />
           ))}
         >
           <Fallback
@@ -34,7 +34,7 @@ export default function ChatListPage() {
         </Suspense>
       </div>
       <ActionButton onClick={() => {}}>
-        <Icon icon="add" className="text-white text-4xl"  />
+        <Icon icon="add" className="text-white text-4xl" />
       </ActionButton>
     </PageContainer>
   );

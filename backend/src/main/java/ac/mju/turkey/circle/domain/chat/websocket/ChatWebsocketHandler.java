@@ -75,11 +75,13 @@ public class ChatWebsocketHandler extends TextWebSocketHandler {
                     .filter(connection -> connection.getUser().getEmail().equals(request.getReceiver()))
                     .toList();
 
+
+
             receiverConnections.forEach(connection -> {
                 try {
                     connection.getSession().sendMessage(new TextMessage(objectMapper.writeValueAsString(MessageDto.Response.builder()
                             .content(request.getContent())
-                            .sender(connection.getUser().getEmail())
+                            .sender(connections.get(session.getId()).getUser().getEmail())
                             .build())));
                 } catch (IOException ignored) {}
             });

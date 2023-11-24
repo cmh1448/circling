@@ -9,11 +9,10 @@ import { BASE_URL } from "./constants/settings";
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
+
     <QueryClientProvider client={queryClient}>
       <BrowserRouter basename={BASE_URL}>
         <App />
       </BrowserRouter>
     </QueryClientProvider>
-  </React.StrictMode>
 );

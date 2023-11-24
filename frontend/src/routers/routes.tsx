@@ -71,7 +71,7 @@ export const routes: Record<RouteContext, RouteObject[]> = {
       element: <ChatListPage />,
     },
     {
-      path: "/chat/:id",
+      path: "/chat/:target",
       element: <ChatPage />,
     },
   ],

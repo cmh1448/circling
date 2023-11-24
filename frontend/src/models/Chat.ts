@@ -6,3 +6,19 @@ export interface LastChatMessage {
   sender: User;
   receiver: User;
 }
+
+export interface Message {
+  content: string;
+  timestamp: string;
+  sender: string;
+  receiver: string;
+}
+
+export interface MessageRequest {
+  receiver: string;
+  content: string;
+}
+
+export interface AuthRequest {
+  jwtToken: string;
+}
