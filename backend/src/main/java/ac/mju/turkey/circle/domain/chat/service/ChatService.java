@@ -4,6 +4,7 @@ import ac.mju.turkey.circle.domain.chat.dto.ChatDto;
 import ac.mju.turkey.circle.domain.chat.entity.ChatLog;
 import ac.mju.turkey.circle.domain.chat.repository.ChatLogRepository;
 import ac.mju.turkey.circle.domain.chat.websocket.dto.MessageDto;
+import ac.mju.turkey.circle.domain.user.dto.UserDto;
 import ac.mju.turkey.circle.domain.user.entity.User;
 import ac.mju.turkey.circle.domain.user.repository.UserRepository;
 import ac.mju.turkey.circle.system.exception.model.ErrorCode;
@@ -89,5 +90,17 @@ public class ChatService {
                 .filter(user -> user.getEmail().equals(email))
                 .findFirst()
                 .orElseThrow(() -> new RestException(ErrorCode.AUTH_USER_NOT_FOUND));
+    }
+
+    public List<UserDto.UserResponse> findAvailableUsers(CircleUserDetails user) {
+        //TODO: 채팅 가능한 유저들의 범위는?
+
+        //return all users except me
+        List<User> allUsers = userRepository.findAll();
+
+        return allUsers.stream()
+                .filter(u -> !u.getEmail().equals(user.getEmail()))
+                .map(UserDto.UserResponse::from)
+                .toList();
     }
 }

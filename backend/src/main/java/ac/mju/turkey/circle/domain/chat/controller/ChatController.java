@@ -2,6 +2,7 @@ package ac.mju.turkey.circle.domain.chat.controller;
 
 import ac.mju.turkey.circle.domain.chat.dto.ChatDto;
 import ac.mju.turkey.circle.domain.chat.service.ChatService;
+import ac.mju.turkey.circle.domain.user.dto.UserDto;
 import ac.mju.turkey.circle.system.security.model.CircleUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,5 +27,10 @@ public class ChatController {
     @GetMapping("/logs/last")
     public List<ChatDto.LastMessageResponse> findLastMessages(@AuthenticationPrincipal CircleUserDetails user) {
         return chatService.loadLastMessages(user);
+    }
+
+    @GetMapping("/users/available")
+    public List<UserDto.UserResponse> findAvailableUsers(@AuthenticationPrincipal CircleUserDetails user) {
+        return chatService.findAvailableUsers(user);
     }
 }
