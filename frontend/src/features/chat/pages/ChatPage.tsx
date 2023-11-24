@@ -35,7 +35,7 @@ export default function ChatPage() {
       if (location.host.includes("localhost")) {
         ws = new WebSocket(`ws://${location.host}/ws/chat`);
       } else {
-        ws = new WebSocket(`wss://${location.host}/ws/chat`);
+        ws = new WebSocket(`wss://${location.host}/circling/ws/chat`);
       }
 
       setWebsocket(ws);
