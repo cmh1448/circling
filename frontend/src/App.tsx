@@ -47,6 +47,11 @@ function App() {
       path: "/activity",
     },
     {
+      title: "채팅",
+      icon: "chat",
+      path: "/chat",
+    },
+    {
       title: "프로필",
       icon: "person",
       path: "/profile",
