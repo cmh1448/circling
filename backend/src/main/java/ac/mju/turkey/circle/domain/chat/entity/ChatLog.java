@@ -23,8 +23,10 @@ public class ChatLog {
     @Indexed
     private String roomName;
 
+    @Indexed
     private String sender;
 
+    @Indexed
     private String receiver;
 
     private String content;
