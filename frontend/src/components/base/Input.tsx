@@ -56,7 +56,8 @@ export default function Input(props: InputProps) {
         value={props.value}
         onInput={(e) => onInput && onInput(e.currentTarget.value)}
         onKeyDown={(e) => {
-          if (e.key === "Enter" && onEntered) onEntered();
+          if (e.key === "Enter" && onEntered && !e.nativeEvent.isComposing)
+            onEntered();
         }}
       />
     </div>

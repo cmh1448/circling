@@ -9,6 +9,7 @@ import { Message, MessageRequest } from "@/models/Chat";
 import { useStore } from "zustand";
 import { authStore } from "@/stores/authStore";
 import ChatBubble from "../components/ChatBubble";
+import FullScreenContainer from "@/components/pages/FullScreenContainer";
 
 export default function ChatPage() {
   const { target } = useParams();
@@ -74,10 +75,10 @@ export default function ChatPage() {
     );
   };
   return (
-    <PageContainer className="h-full">
-      <div className="flex flex-col h-full ">
+    <FullScreenContainer>
+      <div className="flex flex-col !h-full">
         <div className="text-gray-400 self-center">채팅이 시작되었습니다</div>
-        <div className="flex-1 flex flex-col gap-2">
+        <div className="flex-1 flex flex-col gap-2 overflow-auto apply-scrollbar">
           <Suspense isLoading={isChatLogsLoading}>
             {chatLogs?.map((chatLog) => (
               <ChatBubble message={chatLog} />
@@ -87,8 +88,9 @@ export default function ChatPage() {
             <ChatBubble message={chatLog} />
           ))}
         </div>
+
         <ChatInputPanel onSend={(str) => handleSend(str)} />
       </div>
-    </PageContainer>
+    </FullScreenContainer>
   );
 }

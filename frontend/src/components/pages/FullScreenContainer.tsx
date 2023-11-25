@@ -7,10 +7,8 @@ import {
   useRef,
 } from "react";
 
-export interface PageContainerProps extends HTMLAttributes<HTMLDivElement> {
+export interface FullScreenContainer extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
-
-  scrollClassName?: string;
 }
 
 // Scroll Context 생성
@@ -24,7 +22,7 @@ export const useScrollContext = () => {
   return context;
 };
 
-export default function PageContainer(props: PageContainerProps) {
+export default function FullScreenContainer(props: FullScreenContainer) {
   const { children, ...attrs } = props;
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -35,16 +33,11 @@ export default function PageContainer(props: PageContainerProps) {
     >
       <ScrollContext.Provider value={scrollRef}>
         <div
-          className={`w-full px-4 flex justify-center overflow-y-auto apply-scrollbar ${props.scrollClassName}`}
+          className={`w-full px-4 flex justify-center overflow-y-auto apply-scrollbar h-full`}
           ref={scrollRef}
         >
-          <div className="w-full flex flex-col items-center">
-            <div className="w-full pt-[50px] md:w-[600px] lg:w-[800px] xl:w-[1000px]">
-              {children}
-            </div>
-            <div className="flex py-4 w-full justify-center text-gray-300 text-sm">
-              Copyright (C) 2023 MJU 칠면조 팀 all rights reserved.
-            </div>
+          <div className="w-full pt-[50px] md:w-[600px] lg:w-[800px] xl:w-[1000px] h-full">
+            {children}
           </div>
         </div>
       </ScrollContext.Provider>
