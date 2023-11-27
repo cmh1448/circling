@@ -16,3 +16,7 @@ spring:
     properties: # property 사용 설정
       hibernate: # hibernate property 설정
         format_sql: true
+  redis:
+    source:
+      host: localhost
+      port: 6379

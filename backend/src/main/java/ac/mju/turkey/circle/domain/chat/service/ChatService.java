@@ -2,7 +2,7 @@ package ac.mju.turkey.circle.domain.chat.service;
 
 import ac.mju.turkey.circle.domain.chat.dto.ChatDto;
 import ac.mju.turkey.circle.domain.chat.entity.ChatLog;
-import ac.mju.turkey.circle.domain.chat.repository.ChatLogRepository;
+import ac.mju.turkey.circle.domain.chat.repository.ChatLogRedisRepository;
 import ac.mju.turkey.circle.domain.chat.websocket.dto.MessageDto;
 import ac.mju.turkey.circle.domain.user.dto.UserDto;
 import ac.mju.turkey.circle.domain.user.entity.User;
@@ -19,20 +19,20 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class ChatService {
-    private final ChatLogRepository chatLogRepository;
+    private final ChatLogRedisRepository chatLogRedisRepository;
     private final UserRepository userRepository;
 
     @Transactional
     public void saveChatLog(MessageDto.Request request, CircleUserDetails sender) {
         ChatLog toSave = ChatLog.of(request, sender.getEmail());
-        chatLogRepository.save(toSave);
+        chatLogRedisRepository.save(toSave);
     }
 
     @Transactional(readOnly = true)
     public List<ChatDto.Response> loadCachedChatLog(String sender, String receiver) {
         String roomName = ChatLog.generateRoomName(sender, receiver);
 
-        List<ChatLog> founds = chatLogRepository.findByRoomName(roomName);
+        List<ChatLog> founds = chatLogRedisRepository.findByRoomName(roomName);
 
         if (founds.size() >= 1000) {
             //TODO: flush to db
@@ -46,7 +46,7 @@ public class ChatService {
 
     @Transactional(readOnly = true)
     public List<ChatDto.LastMessageResponse> loadLastMessages(CircleUserDetails user) {
-        List<ChatLog> recentChats = chatLogRepository.findAllByReceiverOrSenderEquals(user.getEmail(), user.getEmail());
+        List<ChatLog> recentChats = chatLogRedisRepository.findAllByReceiverOrSenderEquals(user.getEmail(), user.getEmail());
 
         //group by roomName
         HashMap<String, ChatLog> grouped = new HashMap<>();
