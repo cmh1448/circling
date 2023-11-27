@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: release
   main:
     allow-bean-definition-overriding: true
   data:
