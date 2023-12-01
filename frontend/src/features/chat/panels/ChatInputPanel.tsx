@@ -16,7 +16,7 @@ export default function ChatInputPanel(props: ChatInputPanelProps) {
   };
 
   return (
-    <div className="mt-4 flex gap-2">
+    <div className="p-2 px-0 flex gap-2">
       <Input
         placeholder="메세지를 입력하세요..."
         className="flex-1"

@@ -4,12 +4,13 @@ import api from "@/api";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import Suspense from "@/components/suspense/Suspense";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Message, MessageRequest } from "@/models/Chat";
 import { useStore } from "zustand";
 import { authStore } from "@/stores/authStore";
 import ChatBubble from "../components/ChatBubble";
 import FullScreenContainer from "@/components/pages/FullScreenContainer";
+import Profile from "../components/Profile";
 
 export default function ChatPage() {
   const { target } = useParams();
@@ -57,6 +58,7 @@ export default function ChatPage() {
         } else {
           const message = JSON.parse(received) as Message;
           setReceivedChatLogs((prev) => [...prev, message]);
+          scrollToBottom();
         }
       };
     }
@@ -74,11 +76,25 @@ export default function ChatPage() {
       } as MessageRequest)
     );
   };
+
+  const scrollToBottom = () => {
+    scrollRef.current?.scrollTo(0, scrollRef.current.scrollHeight);
+  };
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, []);
+
   return (
     <FullScreenContainer>
       <div className="flex flex-col !h-full">
-        <div className="text-gray-400 self-center">채팅이 시작되었습니다</div>
-        <div className="flex-1 flex flex-col gap-2 overflow-auto apply-scrollbar">
+        <div
+          className="flex-1 flex flex-col gap-2 overflow-auto apply-scrollbar"
+          ref={scrollRef}
+        >
+          <div className="text-gray-400 self-center">채팅이 시작되었습니다</div>
           <Suspense isLoading={isChatLogsLoading}>
             {chatLogs?.map((chatLog) => (
               <ChatBubble message={chatLog} />
@@ -88,7 +104,6 @@ export default function ChatPage() {
             <ChatBubble message={chatLog} />
           ))}
         </div>
-
         <ChatInputPanel onSend={(str) => handleSend(str)} />
       </div>
     </FullScreenContainer>

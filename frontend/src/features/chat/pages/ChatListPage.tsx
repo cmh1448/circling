@@ -7,12 +7,17 @@ import { useQuery } from "react-query";
 import Suspense from "@/components/suspense/Suspense";
 import Fallback from "@/components/fallback/fallback";
 import Skeleton from "@/components/base/Skeleton";
+import SlideDlialog from "@/components/dialog/SlideDialog";
+import NewChatDialog from "../dialogs/NewChatDialog";
+import { useState } from "react";
 
 export default function ChatListPage() {
   const { data: chats, isLoading: isChatsLoading } = useQuery(
     ["fetchLastChatMessages"],
     () => api.chat.fetchLastChatMessages()
   );
+
+  const [newChatDialogOpened, setNewChatDialogOpened] = useState(false);
 
   return (
     <PageContainer>
@@ -33,9 +38,19 @@ export default function ChatListPage() {
           </Fallback>
         </Suspense>
       </div>
-      <ActionButton onClick={() => {}}>
+      <ActionButton
+        onClick={() => {
+          setNewChatDialogOpened(true);
+        }}
+      >
         <Icon icon="add" className="text-white text-4xl" />
       </ActionButton>
+      <NewChatDialog
+        opened={newChatDialogOpened}
+        onClosed={() => {
+          setNewChatDialogOpened(false);
+        }}
+      />
     </PageContainer>
   );
 }
