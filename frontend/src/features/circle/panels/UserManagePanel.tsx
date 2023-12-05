@@ -24,13 +24,13 @@ export default function UserManagePanel() {
       <span className="text-2xl font-bold">
         회원 목록 <span className="text-gray-500">{members?.length}</span>
       </span>
-      <div>
+      <div className="flex flex-col gap-2">
         <Suspense
           isLoading={isMembersLoading}
           fallback={
             <>
               {[...Array(5)].map(() => (
-                <Skeleton className="w-full h-14 mt-1 rounded" />
+                <Skeleton className="w-full h-14 rounded" />
               ))}
             </>
           }

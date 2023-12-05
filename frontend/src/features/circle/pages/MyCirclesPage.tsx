@@ -54,7 +54,11 @@ export default function MyCirclesPage() {
         내가 관리하는 동아리
       </div>
       <div className=" overflow-x-auto apply-scrollbar">
-        <div className="flex gap-4 mt-2 w-fit pb-2">
+        <div
+          className={`flex gap-4 mt-2 w-fit pb-2 ${
+            managingCircle?.length === 0 ? "w-full" : ""
+          }`}
+        >
           <Suspense
             isLoading={isManagingCircleLoading}
             fallback={
@@ -66,6 +70,7 @@ export default function MyCirclesPage() {
             }
           >
             <Fallback
+              className=""
               when={managingCircle?.length === 0}
               message="내가 관리하는 동아리가 없어요"
             >
