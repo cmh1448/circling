@@ -29,25 +29,32 @@ public class SseService {
 
         NotificationObserver observer = NotificationObserver.of(user.getEmail(), (it) -> {
             try {
-                emitter.send(SseEmitter.event()
-                        .id("notification")
-                        .data(NotificationDto.Response.from(it)));
+                emitter.send(SseEmitter.event().id("notification").data(NotificationDto.Response.from(it)));
             } catch (Exception e) {
-                emitter.complete();
+                try {
+
+                    emitter.complete();
+                } catch (Exception ignored) {
+                    this.emitters.remove(emitter);
+                }
             }
         }, () -> {
             try {
                 emitter.send(SseEmitter.event().id("update").build());
             } catch (IOException e) {
-                emitter.complete();
+                try {
+
+                    emitter.complete();
+                } catch (Exception ignored) {
+                    this.emitters.remove(emitter);
+                }
             }
         });
 
         notificationService.subscribe(observer);
 
         try {
-            emitter.send(SseEmitter.event()
-                    .id("connected").build());
+            emitter.send(SseEmitter.event().id("connected").build());
         } catch (IOException e) {
             emitter.complete();
         }
