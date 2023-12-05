@@ -33,6 +33,7 @@ public class Notification {
                 .title(title)
                 .content(content)
                 .targetEmail(targetEmail)
+                .createdAt(LocalDateTime.now())
                 .build();
     }
 }
