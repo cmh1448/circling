@@ -4,6 +4,7 @@ import ac.mju.turkey.circle.domain.notification.dto.NotificationDto;
 import ac.mju.turkey.circle.domain.notification.observer.NotificationObserver;
 import ac.mju.turkey.circle.system.security.model.CircleUserDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -13,6 +14,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class SseService {
     private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
     private final NotificationService notificationService;
@@ -31,8 +33,8 @@ public class SseService {
             try {
                 emitter.send(SseEmitter.event().id("notification").data(NotificationDto.Response.from(it)));
             } catch (Exception e) {
+                log.error("SseEmitter error", e);
                 try {
-
                     emitter.complete();
                 } catch (Exception ignored) {
                     this.emitters.remove(emitter);
@@ -43,7 +45,7 @@ public class SseService {
                 emitter.send(SseEmitter.event().id("update").build());
             } catch (IOException e) {
                 try {
-
+                    log.error("SseEmitter error", e);
                     emitter.complete();
                 } catch (Exception ignored) {
                     this.emitters.remove(emitter);
