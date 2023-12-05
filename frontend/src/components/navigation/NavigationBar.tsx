@@ -1,14 +1,15 @@
 import { Navigation } from "@/models/Navigation";
 import Logo from "../Logo";
 import Icon from "../base/Icon";
-import Drawer from "./Drawer";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useStore } from "zustand";
 import { uiStore } from "@/stores/uiStore";
 import mjuLogo from "@assets/images/mju_symbol.png";
 import Skeleton from "../base/Skeleton";
-import { createPortal } from "react-dom";
+import NotificationButton from "../notification/NotificationButton";
+import NavigationDrawer from "./NavigationDrawer";
+import NotificationDrawer from "../notification/NotificationDrawer";
 
 export interface NavBarProps {
   navigations: Navigation[];
@@ -16,6 +17,8 @@ export interface NavBarProps {
 
 export default function NavigationBar(props: NavBarProps) {
   const [drawerOpened, setDrawerOpened] = useState(false);
+  const [notiDrawerOpened, setNotiDrawerOpened] = useState(false);
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -69,7 +72,7 @@ export default function NavigationBar(props: NavBarProps) {
         <div className="flex-1" />
         <img className=" h-full opacity-80 mr-4 p-1" src={mjuLogo} />
         <div className="flex gap-2 items-center text-gray-700">
-          <Icon icon="notifications" />
+          <NotificationButton onClick={() => setNotiDrawerOpened(true)} />
           <Icon
             icon="menu"
             className="text-2xl active:scale-90 cursor-pointer select-none"
@@ -77,13 +80,19 @@ export default function NavigationBar(props: NavBarProps) {
           />
         </div>
       </div>
-      <Drawer
+      <NavigationDrawer
         navigations={props.navigations}
         selected={curNav()}
         onSelected={handleSelect}
         opened={drawerOpened}
         onClosed={() => setDrawerOpened(false)}
       />
+      <NotificationDrawer
+        opened={notiDrawerOpened}
+        onClosed={() => setNotiDrawerOpened(false)}
+      >
+        test
+      </NotificationDrawer>
     </div>
   );
 }

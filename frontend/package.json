@@ -15,6 +15,7 @@
     "@types/node": "^20.7.0",
     "@uidotdev/usehooks": "^2.4.0",
     "axios": "^1.5.1",
+    "event-source-polyfill": "^1.0.31",
     "luxon": "^3.4.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

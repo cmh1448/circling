@@ -1,19 +1,20 @@
 import Icon from "../base/Icon";
 import { Navigation } from "@/models/Navigation";
-import DrawerItem from "./DrawerItem";
 import { createPortal } from "react-dom";
 import { CSSTransition } from "react-transition-group";
-import { useRef } from "react";
-export interface DrawerProps {
-  navigations: Navigation[];
-  selected?: Navigation;
-  opened?: boolean;
 
-  onSelected?: (selected: Navigation) => void;
+export interface DrawerProps {
+
+  opened?: boolean;
+  children: React.ReactNode;
+
+  animation?: string;
+
   onClosed: () => void;
 }
 
 export default function Drawer(props: DrawerProps) {
+  const { animation = "slide" } = props;
   return createPortal(
     <>
       <CSSTransition
@@ -40,7 +41,7 @@ export default function Drawer(props: DrawerProps) {
         <CSSTransition
           timeout={300}
           in={props.opened}
-          classNames="slide"
+          classNames={animation}
           mountOnEnter
           unmountOnExit
         >
@@ -55,16 +56,7 @@ export default function Drawer(props: DrawerProps) {
                 onClick={() => props.onClosed()}
               />
             </div>
-            <div className="py-4 gap-4 flex flex-col items-end px-8">
-              {props.navigations.map((nav) => (
-                <DrawerItem
-                  key={nav.path}
-                  navigation={nav}
-                  isSelected={props.selected === nav}
-                  onSelect={props.onSelected}
-                />
-              ))}
-            </div>
+            <div className="py-4 px-8">{props.children}</div>
           </div>
         </CSSTransition>
       </div>

@@ -9,9 +9,12 @@ import NavigationBar from "./components/navigation/NavigationBar.tsx";
 import api from "./api/index.ts";
 import { SignUpRequest } from "./models/User.ts";
 import { useStore } from "zustand";
+import { notificationStore } from "./stores/notiStore.ts";
+import { Notification } from "./models/Notification.ts";
 
 function App() {
   const authContext = useStore(authStore);
+  const notiContext = useStore(notificationStore);
   const [activeRoutes, setActiveRoutes] = useState(routes.NotLogin);
   const location = useLocation();
 
