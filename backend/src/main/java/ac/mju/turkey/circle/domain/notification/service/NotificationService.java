@@ -20,9 +20,9 @@ public class NotificationService {
     private final HashMap<String, NotificationObserver> observers = new HashMap<>();
 
     public void sendNotification(String title, String content, String targetEmail) {
-        notificationRedisRepository.save(Notification.of(title, content, targetEmail));
+        Notification saved = notificationRedisRepository.save(Notification.of(title, content, targetEmail));
 
-        notifyObservers(Notification.of(title, content, targetEmail));
+        notifyObservers(saved);
     }
 
     public void sendNotification(NotificationDto.Request request) {
