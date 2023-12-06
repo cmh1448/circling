@@ -38,6 +38,11 @@ public class NotificationController {
         notificationService.deleteNotification(id);
     }
 
+    @DeleteMapping("/my")
+    public void deleteMy(@AuthenticationPrincipal CircleUserDetails user) {
+        notificationService.deleteMyNotifications(user);
+    }
+
     @GetMapping("/my")
     public List<NotificationDto.Response> my(@AuthenticationPrincipal CircleUserDetails user) {
         return notificationService.findMyNotifications(user);

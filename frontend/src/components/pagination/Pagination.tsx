@@ -23,7 +23,6 @@ export default function Pagination({
       const leftLength = Math.floor(range / 2) - 1;
       const rightLength = range - leftLength - 1;
       const current = currentPage.number + 1;
-      // console.log(leftLength, rightLength, current);
 
       result = [current];
       let leftAddCount = 0;

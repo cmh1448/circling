@@ -33,7 +33,6 @@ export default function FeedPage() {
     ({ pageParam = 1 }) => api.board.fetchFeedPosts(Pageable.of(10, pageParam)),
     {
       getNextPageParam: (lastPage, allPage) => {
-        // console.log("fetch next page");
         return lastPage.pageable.pageNumber + 2;
       },
     }
@@ -57,7 +56,6 @@ export default function FeedPage() {
 
   useEffect(() => {
     if (feeds?.pages[feeds.pages.length - 1].last) setIsLastPage(true);
-    console.log(isLastPage);
   }, [feeds]);
   return (
     <PageContainer className={`relative `}>

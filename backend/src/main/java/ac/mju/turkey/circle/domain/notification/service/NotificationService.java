@@ -52,4 +52,9 @@ public class NotificationService {
     public void unsubscribe(String id) {
         observers.remove(id);
     }
+
+    public void deleteMyNotifications(CircleUserDetails user) {
+        List<Notification> found = notificationRedisRepository.findByTargetEmail(user.getEmail());
+        notificationRedisRepository.deleteAll(found);
+    }
 }

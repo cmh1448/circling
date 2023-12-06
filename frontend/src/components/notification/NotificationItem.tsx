@@ -1,18 +1,26 @@
 import { Notification } from "@/models/Notification";
-import Button from "../base/Button";
-import Icon from "../base/Icon";
+import api from "@/api";
+import { notificationStore } from "@/stores/notiStore";
+import { useStore } from "zustand";
 
 interface NotificationItemProps {
   noti: Notification;
 }
 
 export default function NotificationItem(props: NotificationItemProps) {
+  const notiContext = useStore(notificationStore);
+
+  const handleDelete = () => {
+    const removedNoti = notiContext.popNotification(props.noti.id);
+    api.notification
+      .deleteNotification(props.noti.id)
+      .catch(() => notiContext.addNotification(removedNoti));
+  };
+
   return (
     <div
       className="w-full bg-white p-3 shadow rounded-lg active:scale-95 transition-all"
-      onClick={(e) => {
-        e.preventDefault();
-      }}
+      onClick={handleDelete}
     >
       <div className=" flex">
         <span className="text-xl font-bold">{props.noti.title}</span>

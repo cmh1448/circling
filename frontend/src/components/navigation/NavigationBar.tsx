@@ -10,6 +10,7 @@ import Skeleton from "../base/Skeleton";
 import NotificationButton from "../notification/NotificationButton";
 import NavigationDrawer from "./NavigationDrawer";
 import NotificationDrawer from "../notification/NotificationDrawer";
+import NotificationPopup from "../notification/NotificationPopup";
 
 export interface NavBarProps {
   navigations: Navigation[];
@@ -93,6 +94,7 @@ export default function NavigationBar(props: NavBarProps) {
       >
         test
       </NotificationDrawer>
+      <NotificationPopup />
     </div>
   );
 }

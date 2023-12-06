@@ -25,11 +25,6 @@ export function useNotFoundQuery<DataType>(
 
   const isLoading = useMemo(() => {
     if (query.isFetching && resultData === undefined) {
-      console.log(
-        ["debug: "],
-        queryKey,
-        lastError?.codeName === "GLOBAL_NOT_FOUND"
-      );
       if (lastError?.codeName === "GLOBAL_NOT_FOUND") return false;
       return true;
     }

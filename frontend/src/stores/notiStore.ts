@@ -2,21 +2,28 @@ import { Notification } from "@/models/Notification";
 import { createStore } from "zustand";
 import { AuthContext } from "./authStore";
 import { EventSourcePolyfill } from "event-source-polyfill";
+import api from "@/api";
 
 export interface NotiContext {
   notifications: Notification[];
   setNotifications: (notifications: Notification[]) => void;
   addNotification: (notification: Notification) => void;
-  removeNotification: (id: string) => void;
+  popNotification: (id: string) => Notification;
+
+  resetAndListen: (authContext: AuthContext) => void;
+  refresh: () => void;
+
+  firstFetching: boolean;
 
   eventSource: EventSource | null;
   setEventSource: (eventSource: EventSource) => void;
   closeEventSource: () => void;
   startListen: (authContext: AuthContext) => void;
 
-  toShows: Notification[];
-  pushToShow: (notification: Notification) => void;
-  popToShow: () => void;
+  subscribeWhenNewNotification: (
+    callback: (notification: Notification) => void
+  ) => () => void;
+  observers: ((notification: Notification) => void)[];
 }
 
 export const notificationStore = createStore<NotiContext>((set, get) => {
@@ -30,10 +37,46 @@ export const notificationStore = createStore<NotiContext>((set, get) => {
         notifications: [...state.notifications, notification],
       }));
     },
-    removeNotification: (id) => {
+    popNotification: (id) => {
+      const notifications = get().notifications;
+      const index = notifications.findIndex((n) => n.id === id);
+      if (index === -1) {
+        throw new Error("no such notification");
+      }
+
+      const notification = notifications[index];
       set((state) => ({
-        notifications: state.notifications.filter((n) => n.id !== id),
+        notifications: [
+          ...state.notifications.slice(0, index),
+          ...state.notifications.slice(index + 1),
+        ],
       }));
+
+      return notification;
+    },
+    firstFetching: true,
+
+    resetAndListen: (authContext) => {
+      if (get().eventSource) {
+        get().closeEventSource();
+        set({ eventSource: null });
+      }
+
+      set({
+        notifications: [],
+        firstFetching: true,
+      });
+
+      api.notification.fetchNotifications().then((notifications) => {
+        set({ notifications });
+        get().startListen(authContext);
+      });
+    },
+
+    refresh: () => {
+      api.notification.fetchNotifications().then((notifications) => {
+        set({ notifications });
+      });
     },
 
     eventSource: null,
@@ -63,28 +106,33 @@ export const notificationStore = createStore<NotiContext>((set, get) => {
 
           // add to notifications if it is appropiate format
           if (data.content && data.title) {
-            console.log("new notification", data);
-            set((state) => ({
-              notifications: [...state.notifications, data],
-              toShows: [...state.toShows, data],
-            }));
+            get().addNotification(data);
+
+            // notify observers
+            get().observers.forEach((observer) => {
+              observer(data);
+            });
           }
         }
       };
 
-      set({ eventSource });
+      set({ eventSource, firstFetching: false });
     },
 
-    toShows: [],
-    pushToShow: (notification) => {
-      set((state) => ({
-        toShows: [...state.toShows, notification],
-      }));
+    subscribeWhenNewNotification: (callback) => {
+      const observers = get().observers;
+      const index = observers.length;
+      observers.push(callback);
+
+      return () => {
+        set((state) => ({
+          observers: [
+            ...state.observers.slice(0, index),
+            ...state.observers.slice(index + 1),
+          ],
+        }));
+      };
     },
-    popToShow: () => {
-      set((state) => ({
-        toShows: state.toShows.slice(1),
-      }));
-    },
+    observers: [],
   };
 });

@@ -4,7 +4,6 @@ import { createPortal } from "react-dom";
 import { CSSTransition } from "react-transition-group";
 
 export interface DrawerProps {
-
   opened?: boolean;
   children: React.ReactNode;
 
@@ -46,7 +45,7 @@ export default function Drawer(props: DrawerProps) {
           unmountOnExit
         >
           <div
-            className="absolute top-0 left-0 w-full p-4  h-full z-50"
+            className="absolute top-0 left-0 w-full p-4  h-full z-50 flex flex-col"
             onClick={() => props.onClosed()}
           >
             <div className="flex justify-end">
@@ -56,7 +55,9 @@ export default function Drawer(props: DrawerProps) {
                 onClick={() => props.onClosed()}
               />
             </div>
-            <div className="py-4 px-8">{props.children}</div>
+            <div className="py-4 px-8 overflow-y-auto flex-1 apply-scrollbar">
+              {props.children}
+            </div>
           </div>
         </CSSTransition>
       </div>
