@@ -19,11 +19,11 @@ export default function ChatBubble(props: ChatBubbleProps) {
   );
 
   return (
-    <div className="flex gap-2">
+    <div className={`flex gap-2 w-fit ${isMine ? "self-end" : "self-start"}`}>
       {!isMine ? <Profile /> : null}
       <div
         className={`p-2 flex-1 bg-gray-200 rounded-lg ${
-          isMine ? "!bg-blue-100 ml-20" : "mr-20"
+          isMine ? "!bg-blue-100" : ""
         }`}
       >
         <div className="text-sm text-gray-500">{props.message.sender}</div>
