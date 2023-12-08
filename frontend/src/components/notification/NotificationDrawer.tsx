@@ -40,7 +40,7 @@ export default function NotificationDrawer(props: NotificationDrawerProps) {
           <Icon icon="delete" className="text-[20px]" fill />
           지우기
         </Button>
-        <div className="flex justify-end">
+        <div className="flex justify-end flex-col gap-2">
           <Suspense
             isLoading={notiContext.firstFetching}
             fallback={
