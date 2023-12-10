@@ -6,6 +6,8 @@ import ac.mju.turkey.circle.domain.board.entity.Post;
 import ac.mju.turkey.circle.domain.board.repository.CommentQueryRepository;
 import ac.mju.turkey.circle.domain.board.repository.CommentRepository;
 import ac.mju.turkey.circle.domain.board.repository.PostRepository;
+import ac.mju.turkey.circle.domain.notification.dto.NotificationDto;
+import ac.mju.turkey.circle.domain.notification.service.NotificationService;
 import ac.mju.turkey.circle.system.exception.model.ErrorCode;
 import ac.mju.turkey.circle.system.exception.model.RestException;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final CommentQueryRepository commentQueryRepository;
     private final PostRepository postRepository;
+    private final NotificationService notificationService;
 
     @Transactional(readOnly = true)
     public List<CommentDto.TreeResponse> findCommentsByPost(Long postId) {
@@ -44,6 +47,12 @@ public class CommentService {
 
         Comment saved = commentRepository.save(toSave);
 
+        notificationService.sendNotification(NotificationDto.Request.of(
+                "게시물에 댓글이 달렸습니다.",
+                saved.getContent(),
+                foundPost.getCreatedBy().getEmail()
+        ));
+
         return CommentDto.Response.from(saved);
     }
 
@@ -57,6 +66,12 @@ public class CommentService {
         toSave.setPost(parent.getPost());
 
         Comment saved = commentRepository.save(toSave);
+
+        notificationService.sendNotification(NotificationDto.Request.of(
+                "댓글에 대댓글이 달렸습니다.",
+                saved.getContent(),
+                parent.getCreatedBy().getEmail()
+        ));
 
         return CommentDto.Response.from(saved);
     }
