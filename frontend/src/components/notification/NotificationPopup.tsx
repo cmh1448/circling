@@ -51,7 +51,9 @@ export default function NotificationPopup() {
   }, []);
 
   const handleClick = (noti: Notification) => {
-    api.notification.deleteNotification(noti.id);
+    api.notification
+      .deleteNotification(noti.id)
+      .then(() => notiContext.refresh());
     setShowingItems((prev) => prev.filter((item) => item.noti.id !== noti.id));
   };
   return createPortal(
