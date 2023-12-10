@@ -26,6 +26,11 @@ export interface Category {
   circle: Circle;
 }
 
+export interface CategoryRequest {
+  title?: string;
+  priority?: number;
+}
+
 export interface Comment {
   id: number;
   content?: string;

@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import CategoryItem from "../components/CategoryItem";
 import api from "@/api";
 import Suspense from "@/components/suspense/Suspense";
@@ -10,12 +10,16 @@ import { useState } from "react";
 import SlideDlialog from "@/components/dialog/SlideDialog";
 import Input from "@/components/base/Input";
 import { Category } from "@/models/Board";
+import Spinner from "@/components/base/Spinner";
+import { updateCategory } from "@/api/board";
 
 interface CategoryManagePanelProps {
   circleId: number;
 }
 
 export default function CategoryManagePanel(props: CategoryManagePanelProps) {
+  const queryClient = useQueryClient();
+
   const { data: categories, isLoading } = useQuery(
     ["fetchCategories", props.circleId],
     () => api.board.fetchCategoriesByCircleId(props.circleId)
@@ -27,12 +31,36 @@ export default function CategoryManagePanel(props: CategoryManagePanelProps) {
     useState<Category | null>(null);
 
   const [editCategoryName, setEditCategoryName] = useState("");
+  const [addCategoryName, setAddCategoryName] = useState("");
 
   const handleEditCategory = (category: Category) => {
     setEditCategoryDialogOpen(true);
     setCurrentEditCategory(category);
     setEditCategoryName(category.title);
   };
+
+  const { mutate: editCategory, isLoading: editLoading } = useMutation(
+    (categoryId: number) =>
+      api.board.updateCategory(props.circleId, categoryId, {
+        title: editCategoryName,
+      }),
+    {
+      onSuccess: () => {
+        setEditCategoryDialogOpen(false);
+        queryClient.invalidateQueries(["fetchCategories", props.circleId]);
+      },
+    }
+  );
+
+  const { mutate: createCategory, isLoading: createLoading } = useMutation(
+    (title: string) => api.board.createCategory(props.circleId, { title }),
+    {
+      onSuccess: () => {
+        setAddCategoryDialogOpen(false);
+        queryClient.invalidateQueries(["fetchCategories", props.circleId]);
+      },
+    }
+  );
 
   return (
     <div>
@@ -90,10 +118,23 @@ export default function CategoryManagePanel(props: CategoryManagePanelProps) {
           <div className="mt-4">
             <div>
               <span className="text-gray-500">게시판 이름</span>
-              <Input placeholder="열린 게시판" />
+              <Input
+                placeholder="열린 게시판"
+                onInput={(str) => setAddCategoryName(str)}
+              />
             </div>
           </div>
-          <Button className="mt-4">확인</Button>
+          <Button
+            className="mt-4 h-10"
+            onClick={() => createCategory(addCategoryName)}
+          >
+            <Suspense
+              isLoading={createLoading}
+              fallback={<Spinner size="16px" />}
+            >
+              확인
+            </Suspense>
+          </Button>
         </div>
       </SlideDlialog>
       <SlideDlialog
@@ -123,9 +164,17 @@ export default function CategoryManagePanel(props: CategoryManagePanelProps) {
               />
             </div>
           </div>
-          <Button className="mt-4">
-            <Icon icon="edit" />
-            수정
+          <Button
+            className="mt-4 h-10"
+            onClick={() => editCategory(currentEditCategory.id)}
+          >
+            <Suspense
+              isLoading={editLoading}
+              fallback={<Spinner size="16px" />}
+            >
+              <Icon icon="edit" />
+              수정
+            </Suspense>
           </Button>
         </div>
       </SlideDlialog>

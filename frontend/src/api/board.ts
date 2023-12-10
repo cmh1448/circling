@@ -1,5 +1,6 @@
 import {
   Category,
+  CategoryRequest,
   Comment,
   CommentRequest,
   Post,
@@ -11,6 +12,29 @@ import { Page, Pageable } from "@/models/Pagination";
 export const fetchCategoriesByCircleId = async (circleId: number) => {
   const response = await axios.get(`/api/circles/${circleId}/categories`);
   return response.data as Category[];
+};
+
+export const updateCategory = async (
+  circleId: number,
+  categoryId: number,
+  request: CategoryRequest
+) => {
+  const response = await axios.patch(
+    `/api/circles/${circleId}/categories/${categoryId}`,
+    request
+  );
+  return response.data as Category;
+};
+
+export const createCategory = async (
+  circleId: number,
+  request: CategoryRequest
+): Promise<Category> => {
+  const response = await axios.post(
+    `/api/circles/${circleId}/categories`,
+    request
+  );
+  return response.data as Category;
 };
 
 export const fetchPostsByCircle = async (
