@@ -22,7 +22,7 @@ export interface NotiContext {
 
   subscribeWhenNewNotification: (
     callback: (notification: Notification) => void
-  ) => () => void;
+  ) => void;
   observers: ((notification: Notification) => void)[];
 }
 
@@ -116,6 +116,8 @@ export const notificationStore = createStore<NotiContext>((set, get) => {
         }
       };
 
+      console.log("start listen");
+
       set({ eventSource, firstFetching: false });
     },
 
@@ -123,15 +125,6 @@ export const notificationStore = createStore<NotiContext>((set, get) => {
       const observers = get().observers;
       const index = observers.length;
       observers.push(callback);
-
-      return () => {
-        set((state) => ({
-          observers: [
-            ...state.observers.slice(0, index),
-            ...state.observers.slice(index + 1),
-          ],
-        }));
-      };
     },
     observers: [],
   };

@@ -4,6 +4,7 @@ import { Notification } from "@/models/Notification";
 import { useEffect, useState } from "react";
 import { useStore } from "zustand";
 import { notificationStore } from "@/stores/notiStore";
+import api from "@/api";
 
 interface ShowItem {
   noti: Notification;
@@ -13,6 +14,7 @@ interface ShowItem {
 export default function NotificationPopup() {
   const notiContext = useStore(notificationStore);
   const [showingItems, setShowingItems] = useState<ShowItem[]>([]);
+  const [isSubscribed, setIsSubscribed] = useState(false);
 
   //remove item when progress is 100
   //add each items' progress by 1 every 10ms
@@ -33,6 +35,8 @@ export default function NotificationPopup() {
   //subscribe to notification store to add new notification
   useEffect(() => {
     console.log("subscribe");
+    if (isSubscribed) return;
+
     notiContext.subscribeWhenNewNotification((noti) => {
       setShowingItems((prev) => [
         ...prev,
@@ -43,7 +47,13 @@ export default function NotificationPopup() {
       ]);
     });
     console.log("subscribed", notiContext.observers.length);
+    setIsSubscribed(true);
   }, []);
+
+  const handleClick = (noti: Notification) => {
+    api.notification.deleteNotification(noti.id);
+    setShowingItems((prev) => prev.filter((item) => item.noti.id !== noti.id));
+  };
   return createPortal(
     <div className="absolute flex flex-col items-end z-40 right-0 w-80 h-screen py-14 px-6  pointer-events-none">
       {showingItems.map((item) => (
@@ -51,6 +61,7 @@ export default function NotificationPopup() {
           <NotificationPopupItem
             noti={item.noti}
             progress={item.progress}
+            onClick={() => handleClick(item.noti)}
           ></NotificationPopupItem>
         </div>
       ))}

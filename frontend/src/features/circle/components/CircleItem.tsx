@@ -20,7 +20,7 @@ export default function CircleItem(props: CircleItemProps) {
   };
 
   const { data: posts, isLoading } = useQuery(
-    ["fetchPostsPreviewByCircle", props.circle.id],
+    ["fetchPostsPreviewByCircle", props.circle?.id],
     () => api.board.fetchPostsByCircle(props.circle.id, Pageable.of(5, 1))
   );
 
@@ -43,7 +43,7 @@ export default function CircleItem(props: CircleItemProps) {
           ))}
         >
           <Fallback
-            when={posts?.content.length === 0}
+            when={posts?.content?.length === 0}
             message="현재 아무런 게시물이 없어요"
           >
             {posts?.content.map((it) => {

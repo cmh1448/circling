@@ -3,13 +3,18 @@ import { Notification } from "@/models/Notification";
 interface NotificationPopupItemProps {
   noti: Notification;
   progress: number;
+
+  onClick?: () => void;
 }
 
 export default function NotificationPopupItem(
   props: NotificationPopupItemProps
 ) {
   return (
-    <div className="w-60 bg-white shadow-lg rounded-lg active:scale-95 transition-all select-none pointer-events-auto overflow-hidden">
+    <div
+      className=" min-w-[300px] max-w-[40%] w-fit bg-white shadow-lg rounded-lg active:scale-95 transition-all select-none pointer-events-auto overflow-hidden"
+      onClick={props.onClick}
+    >
       <div className="p-3">
         <span className="text-xl font-bold">{props.noti.title}</span>
         <div className=" text-gray-500">{props.noti.content}</div>

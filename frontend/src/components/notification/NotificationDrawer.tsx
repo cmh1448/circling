@@ -55,6 +55,7 @@ export default function NotificationDrawer(props: NotificationDrawerProps) {
               when={notiContext.notifications.length === 0}
               message="알림이 존재하지 않습니다."
               icon="notifications"
+              className="!text-white"
             >
               {notiContext.notifications.map((noti) => {
                 return <NotificationItem noti={noti} />;
