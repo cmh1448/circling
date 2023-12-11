@@ -63,7 +63,7 @@ function App() {
 
   return (
     <>
-      <div className={"h-full flex flex-col overflow-hidden"}>
+      <div className={"h-screen flex flex-col overflow-hidden"}>
         {authContext.isAuthenticated() ? (
           <NavigationBar navigations={navigations} />
         ) : null}

@@ -25,7 +25,7 @@ export default function Drawer(props: DrawerProps) {
         unmountOnExit
       >
         <div
-          className={`absolute top-0 left-0 backdrop-blur w-full h-full z-50 bg-black/10 ${props.className}`}
+          className={`absolute top-0 left-0 backdrop-blur w-full h-full z-50 bg-white/10 ${props.className}`}
           style={{
             pointerEvents: props.opened ? "all" : "none",
           }}

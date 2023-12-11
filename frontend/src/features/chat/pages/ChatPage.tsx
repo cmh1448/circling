@@ -10,12 +10,13 @@ import { useStore } from "zustand";
 import { authStore } from "@/stores/authStore";
 import ChatBubble from "../components/ChatBubble";
 import FullScreenContainer from "@/components/pages/FullScreenContainer";
-import Profile from "../components/Profile";
+import { notificationStore } from "@/stores/notiStore";
 
 export default function ChatPage() {
   const { target } = useParams();
 
   const authContext = useStore(authStore);
+  const notiContext = useStore(notificationStore);
 
   const { data: chatLogs, isLoading: isChatLogsLoading } = useQuery(
     ["fetchChatLogs"],
@@ -65,6 +66,14 @@ export default function ChatPage() {
 
     return () => {
       websocket?.close();
+    };
+  }, []);
+
+  useEffect(() => {
+    notiContext.disableNotiPopup();
+
+    return () => {
+      notiContext.enableNotiPopup();
     };
   }, []);
 

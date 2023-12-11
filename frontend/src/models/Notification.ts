@@ -4,6 +4,7 @@ export interface Notification {
   content: string;
   targetEmail: string;
   createdAt: string;
+  link?: string;
 }
 
 export interface NotificationRequest {

@@ -24,6 +24,10 @@ export interface NotiContext {
     callback: (notification: Notification) => void
   ) => void;
   observers: ((notification: Notification) => void)[];
+
+  notiPopupEnabled: boolean;
+  enableNotiPopup: () => void;
+  disableNotiPopup: () => void;
 }
 
 export const notificationStore = createStore<NotiContext>((set, get) => {
@@ -127,5 +131,13 @@ export const notificationStore = createStore<NotiContext>((set, get) => {
       observers.push(callback);
     },
     observers: [],
+
+    notiPopupEnabled: false,
+    enableNotiPopup: () => {
+      set({ notiPopupEnabled: true });
+    },
+    disableNotiPopup: () => {
+      set({ notiPopupEnabled: false });
+    },
   };
 });
