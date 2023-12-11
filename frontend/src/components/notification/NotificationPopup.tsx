@@ -42,7 +42,8 @@ export default function NotificationPopup() {
     if (isSubscribed) return;
 
     notiContext.subscribeWhenNewNotification((noti) => {
-      if (notiContext.notiPopupEnabled) {
+      const enabled = notificationStore.getState().notiPopupEnabled;
+      if (enabled) {
         setShowingItems((prev) => [
           ...prev,
           {

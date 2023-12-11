@@ -11,6 +11,7 @@ import NotificationButton from "../notification/NotificationButton";
 import NavigationDrawer from "./NavigationDrawer";
 import NotificationDrawer from "../notification/NotificationDrawer";
 import NotificationPopup from "../notification/NotificationPopup";
+import { notificationStore } from "@/stores/notiStore";
 
 export interface NavBarProps {
   navigations: Navigation[];
@@ -22,6 +23,7 @@ export default function NavigationBar(props: NavBarProps) {
 
   const location = useLocation();
   const navigate = useNavigate();
+  const notiContext = useStore(notificationStore);
 
   const uiContext = useStore(uiStore);
 
@@ -69,7 +71,6 @@ export default function NavigationBar(props: NavBarProps) {
           <Logo size="small" />
         )}
         <div className="flex-1" />
-
         <div className="flex-1" />
         <img className=" h-full opacity-80 mr-4 p-1" src={mjuLogo} />
         <div className="flex gap-2 items-center text-gray-700">
