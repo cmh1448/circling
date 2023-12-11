@@ -132,7 +132,7 @@ export const notificationStore = createStore<NotiContext>((set, get) => {
     },
     observers: [],
 
-    notiPopupEnabled: false,
+    notiPopupEnabled: true,
     enableNotiPopup: () => {
       set({ notiPopupEnabled: true });
     },
