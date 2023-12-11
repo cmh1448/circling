@@ -2,7 +2,9 @@ package ac.mju.turkey.circle.domain.chat.websocket;
 
 import ac.mju.turkey.circle.domain.chat.service.ChatService;
 import ac.mju.turkey.circle.domain.chat.websocket.dto.MessageDto;
+import ac.mju.turkey.circle.domain.notification.dto.NotificationDto;
 import ac.mju.turkey.circle.domain.notification.service.NotificationService;
+import ac.mju.turkey.circle.domain.notification.util.LinkBuilder;
 import ac.mju.turkey.circle.system.security.model.CircleUserDetails;
 import ac.mju.turkey.circle.system.security.provider.JwtTokenProvider;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -89,7 +91,7 @@ public class ChatWebsocketHandler extends TextWebSocketHandler {
             });
 
             chatService.saveChatLog(request, connections.get(session.getId()).getUser());
-            notificationService.sendNotification("새로운 메시지가 도착했습니다.", request.getContent(), request.getReceiver());
+            notificationService.sendNotification(NotificationDto.Request.of("새로운 메시지가 도착했습니다.", request.getContent(), request.getReceiver()), LinkBuilder.fromChat(request.getReceiver()));
         } catch (JsonProcessingException e) {
             session.sendMessage(new TextMessage("ERROR: 올바른 연결 요청이 아닙니다."));
         }
