@@ -26,14 +26,17 @@ public class Notification {
     @Indexed
     private String targetEmail;
 
+    private String link;
+
     private LocalDateTime createdAt;
 
-    public static Notification of(String title, String content, String targetEmail) {
+    public static Notification of(String title, String content, String targetEmail, String link) {
         return Notification.builder()
                 .title(title)
                 .content(content)
                 .targetEmail(targetEmail)
                 .createdAt(LocalDateTime.now())
+                .link(link)
                 .build();
     }
 }

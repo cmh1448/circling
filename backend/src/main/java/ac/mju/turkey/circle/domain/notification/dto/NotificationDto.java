@@ -18,6 +18,7 @@ public class NotificationDto {
         private String title;
         private String content;
         private String targetEmail;
+        private String link;
 
         private LocalDateTime createdAt;
 
@@ -27,6 +28,7 @@ public class NotificationDto {
                     .title(notification.getTitle())
                     .content(notification.getContent())
                     .targetEmail(notification.getTargetEmail())
+                    .link(notification.getLink())
                     .createdAt(notification.getCreatedAt())
                     .build();
         }
