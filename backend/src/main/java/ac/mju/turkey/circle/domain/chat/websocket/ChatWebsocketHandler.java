@@ -80,18 +80,20 @@ public class ChatWebsocketHandler extends TextWebSocketHandler {
                     .toList();
 
 
+            String myEmail = connections.get(session.getId()).getUser().getEmail();
 
             receiverConnections.forEach(connection -> {
                 try {
                     connection.getSession().sendMessage(new TextMessage(objectMapper.writeValueAsString(MessageDto.Response.builder()
                             .content(request.getContent())
-                            .sender(connections.get(session.getId()).getUser().getEmail())
+                            .sender(myEmail)
                             .build())));
                 } catch (IOException ignored) {}
             });
 
             chatService.saveChatLog(request, connections.get(session.getId()).getUser());
-            notificationService.sendNotification(NotificationDto.Request.of("새로운 메시지가 도착했습니다.", request.getContent(), request.getReceiver()), LinkBuilder.fromChat(request.getReceiver()));
+            notificationService.sendNotification(NotificationDto.Request.of("새로운 메시지가 도착했습니다.", request.getContent(), request.getReceiver()),
+                    LinkBuilder.fromChat(myEmail));
         } catch (JsonProcessingException e) {
             session.sendMessage(new TextMessage("ERROR: 올바른 연결 요청이 아닙니다."));
         }
