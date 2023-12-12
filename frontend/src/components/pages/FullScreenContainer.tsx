@@ -29,14 +29,14 @@ export default function FullScreenContainer(props: FullScreenContainer) {
   return (
     <div
       {...attrs}
-      className={`h-full flex flex-col overflow-hidden ${attrs.className}`}
+      className={`flex-1 flex flex-col overflow-hidden ${attrs.className}`}
     >
       <ScrollContext.Provider value={scrollRef}>
         <div
-          className={`w-full px-4 flex justify-center overflow-y-auto apply-scrollbar h-full`}
+          className={`w-full px-4 flex justify-center overflow-y-scroll apply-scrollbar h-full`}
           ref={scrollRef}
         >
-          <div className="w-full pt-[50px] md:w-[600px] lg:w-[800px] xl:w-[1000px] h-full flex flex-col">
+          <div className="w-full pt-[50px] md:w-[600px] lg:w-[800px] xl:w-[1000px] flex flex-col">
             {children}
           </div>
         </div>

@@ -7,15 +7,16 @@
 
 html,
 body {
-  height: 100%;
   width: 100%;
-  -webkit-overflow-scrolling: touch;
-  overflow-x: hidden;
+  height: 100%;
+  display: flex;
+  overflow: hidden;
 }
 
 #root {
   height: 100%;
   width: 100vw;
+  overflow: hidden;
 }
 
 * {

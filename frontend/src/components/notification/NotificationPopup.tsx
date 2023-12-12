@@ -68,7 +68,7 @@ export default function NotificationPopup() {
     }
   };
   return createPortal(
-    <div className="absolute flex flex-col items-end z-40 right-0 top-0 w-80 h-screen py-14 px-6  pointer-events-none">
+    <div className="absolute flex flex-col items-end z-40 right-0 top-0 w-80 py-14 px-6 h-full overflow-hidden  pointer-events-none">
       {showingItems.map((item) => (
         <div className="mt-2" key={item.noti.id}>
           <NotificationPopupItem
