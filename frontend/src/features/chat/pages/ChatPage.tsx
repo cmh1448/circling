@@ -98,7 +98,7 @@ export default function ChatPage() {
 
   return (
     <FullScreenContainer>
-      <div className="flex flex-col !h-full">
+      <div className="flex flex-col flex-1">
         <div
           className="flex-1 flex flex-col gap-2 overflow-auto apply-scrollbar"
           ref={scrollRef}

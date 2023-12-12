@@ -36,7 +36,7 @@ export default function FullScreenContainer(props: FullScreenContainer) {
           className={`w-full px-4 flex justify-center overflow-y-auto apply-scrollbar h-full`}
           ref={scrollRef}
         >
-          <div className="w-full pt-[50px] md:w-[600px] lg:w-[800px] xl:w-[1000px] h-full">
+          <div className="w-full pt-[50px] md:w-[600px] lg:w-[800px] xl:w-[1000px] h-full flex flex-col">
             {children}
           </div>
         </div>
