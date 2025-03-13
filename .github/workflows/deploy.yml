@@ -85,7 +85,7 @@ jobs:
             docker stop circling || true
             docker rm circling || true
             docker run -d --name circling --network mariadb_net -p 1489:1489 circling:latest
-            docker network connect redis-net circling
+            docker network connect redis_redis-net circling
             echo "Docker container deployed on remote server"
           EOF
 
