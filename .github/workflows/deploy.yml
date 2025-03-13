@@ -1,25 +1,25 @@
-name: Build and Deploy Docker Image
+name: Build and Deploy to Ubuntu Server with Docker
 
 on:
   push:
     branches:
       - develop
-  workflow_dispatch:
+  workflow_dispatch: # 수동 실행 가능
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. 리포지토리 체크아웃
-      - name: Checkout code
+      # 1. 코드 체크아웃
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # 2. Node.js 설정 (pnpm 사용을 위해)
+      # 2. Node.js 환경 설정
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18" # 원하는 버전으로 변경 가능
+          node-version: "18"
 
       # 3. pnpm 설치
       - name: Install pnpm
@@ -33,11 +33,11 @@ jobs:
           pnpm install
           pnpm build
 
-      # 5. Java 설정 (Spring Boot Gradle 빌드를 위해)
+      # 5. Java 환경 설정
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
-          java-version: "17" # Spring Boot에 맞는 버전으로 변경 가능
+          java-version: "17"
           distribution: "temurin"
 
       # 6. 백엔드 빌드 (Gradle bootJar)
@@ -57,28 +57,39 @@ jobs:
         run: |
           docker save -o circling.tar circling:latest
 
-      # 9. SSH 키 설정 (Secrets에서 가져옴)
-      - name: Setup SSH Key
+      # 9. SSH 키 생성 및 설정
+      - name: Create SSH Key
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key
-          chmod 600 ssh_key
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/private-key.pem
+          chmod 600 ~/private-key.pem
+          echo "SSH key created and permissions set"
 
-      # 10. SCP로 tar 파일 전송
+      # 10. 서버를 known_hosts에 추가
+      - name: Add Known Host
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+          echo "Added ${{ secrets.SERVER_HOST }} to known_hosts"
+
+      # 11. SCP로 Docker 이미지 전송
       - name: Transfer Docker Image to Remote Server
         run: |
-          scp -i ssh_key circling.tar ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/${{ secrets.SERVER_USER }}/deploy/circling.tar
+          scp -i ~/private-key.pem -P ${{ secrets.SERVER_PORT }} circling.tar ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:${{ secrets.DEPLOY_PATH }}/circling.tar
+          echo "Docker image transferred to remote server"
 
-      # 11. SSH로 원격 서버 접속 후 이미지 로드 및 실행
+      # 12. SSH로 원격 서버 접속 후 Docker 실행
       - name: Deploy to Remote Server
         run: |
-          ssh -i ssh_key ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            docker load -i /home/${{ secrets.SERVER_USER }}/circling.tar
-            docker stop circling || true  # 기존 컨테이너 중지 (없으면 무시)
-            docker rm circling || true    # 기존 컨테이너 삭제 (없으면 무시)
+          ssh -i ~/private-key.pem -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+            docker load -i ${{ secrets.DEPLOY_PATH }}/circling.tar
+            docker stop circling || true
+            docker rm circling || true
             docker run -d --name circling -p 8080:8080 circling:latest
+            echo "Docker container deployed on remote server"
           EOF
 
-      # 12. 정리 (SSH 키 삭제)
+      # 13. 정리
       - name: Cleanup
         run: |
-          rm -f ssh_key
+          rm -f ~/private-key.pem
+          echo "Cleaned up SSH key"
