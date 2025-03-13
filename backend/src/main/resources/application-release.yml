@@ -20,6 +20,7 @@ spring:
     source:
       host: redis
       port: 6379
+      password: learnit#01
 
 server:
   port: 1489
