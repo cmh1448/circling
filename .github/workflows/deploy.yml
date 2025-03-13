@@ -66,7 +66,7 @@ jobs:
       # 10. SCP로 tar 파일 전송
       - name: Transfer Docker Image to Remote Server
         run: |
-          scp -i ssh_key circling.tar ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/home/${{ secrets.SERVER_USER }}/circling.tar
+          scp -i ssh_key circling.tar ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/${{ secrets.SERVER_USER }}/deploy/circling.tar
 
       # 11. SSH로 원격 서버 접속 후 이미지 로드 및 실행
       - name: Deploy to Remote Server
