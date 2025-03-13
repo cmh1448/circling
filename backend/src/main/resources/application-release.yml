@@ -4,7 +4,7 @@ spring:
       enabled: true
 
   datasource:
-    url: jdbc:mariadb://127.0.0.1:3306/circling
+    url: jdbc:mariadb://mariadb:3306/circling
     driver-class-name: org.mariadb.jdbc.Driver
     username: client
     password: learnit#01
@@ -18,7 +18,7 @@ spring:
         format_sql: true
   redis:
     source:
-      host: 127.0.0.1
+      host: redis
       port: 6379
 
 server:
