@@ -1,0 +1,83 @@
+name: Build and Deploy Docker Image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 리포지토리 체크아웃
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Node.js 설정 (pnpm 사용을 위해)
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18" # 원하는 버전으로 변경 가능
+
+      # 3. pnpm 설치
+      - name: Install pnpm
+        run: |
+          npm install -g pnpm
+
+      # 4. 프론트엔드 빌드
+      - name: Build Frontend
+        working-directory: ./frontend
+        run: |
+          pnpm install
+          pnpm build
+
+      # 5. Java 설정 (Spring Boot Gradle 빌드를 위해)
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: "17" # Spring Boot에 맞는 버전으로 변경 가능
+          distribution: "temurin"
+
+      # 6. 백엔드 빌드 (Gradle bootJar)
+      - name: Build Backend with Gradle
+        working-directory: ./backend
+        run: |
+          ./gradlew bootJar
+
+      # 7. Docker 이미지 빌드
+      - name: Build Docker Image
+        working-directory: ./backend
+        run: |
+          docker build -t circling:latest .
+
+      # 8. Docker 이미지를 tar 파일로 저장
+      - name: Save Docker Image
+        run: |
+          docker save -o circling.tar circling:latest
+
+      # 9. SSH 키 설정 (Secrets에서 가져옴)
+      - name: Setup SSH Key
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key
+          chmod 600 ssh_key
+
+      # 10. SCP로 tar 파일 전송
+      - name: Transfer Docker Image to Remote Server
+        run: |
+          scp -i ssh_key circling.tar ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/home/${{ secrets.SERVER_USER }}/circling.tar
+
+      # 11. SSH로 원격 서버 접속 후 이미지 로드 및 실행
+      - name: Deploy to Remote Server
+        run: |
+          ssh -i ssh_key ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+            docker load -i /home/${{ secrets.SERVER_USER }}/circling.tar
+            docker stop circling || true  # 기존 컨테이너 중지 (없으면 무시)
+            docker rm circling || true    # 기존 컨테이너 삭제 (없으면 무시)
+            docker run -d --name circling -p 8080:8080 circling:latest
+          EOF
+
+      # 12. 정리 (SSH 키 삭제)
+      - name: Cleanup
+        run: |
+          rm -f ssh_key
